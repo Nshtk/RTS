@@ -355,8 +355,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   length: 256
-  width: 256
-  height: 20
+  height: 256
+  width: 20
   scale: 20
 --- !u!154 &1512679004
 TerrainCollider:
