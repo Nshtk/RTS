@@ -5,60 +5,20 @@ using UnityEngine;
 
 namespace Libraries.Map
 {
-	// TODO: SECTOR_SIZE to struct
-	// TODO: replace sector location by proportions
-
-	public enum TILE_TYPE
-	{
-		DIRT,
-		SNOW,
-		SAND,
-		STONE,
-		ASPHALT,
-		WATER,
-		LAVA,
-		ACID,
-		DESTROYED
-	}
-	public enum SECTOR_TYPE
-	{
-		PLAIN,
-		ROAD,
-		HILL,
-		MOUNTAIN,
-		PIT,
-		RIVER,
-		LAKE,
-		SEA
-	}
-	public enum SECTOR_SHAPE
-	{
-		TRIANGLE,
-		SQUARE,
-		RECTANGLE,
-		ELLIPSE
-	}
-	public enum SECTOR_SIZE
-	{
-		TINY = 9,
-		SMALL = 25,
-		MEDIUM = 49,
-		BIG = 81,
-		HUGE = 144
-	}
-	public enum MAP_TYPE
-	{
-		PLAINS,
-		DESERT,
-		MOUNTAIN_RANGE,
-		CITY,
-		ISLAND,
-		ARCHIPELAGO,
-		OCEAN
-	}
-
 	public abstract class Tile
 	{
+		public enum TYPE
+		{
+			DIRT,
+			SNOW,
+			SAND,
+			STONE,
+			CONCRETE,
+			WATER,
+			LAVA,
+			ACID,
+			DESTROYED
+		}
 		public abstract class TileCreator
 		{
 			public abstract Tile create(Point location, float height = 0);
@@ -101,7 +61,7 @@ namespace Libraries.Map
 			return;
 		}
 	}
-	public class TileDirt : Tile
+	public sealed class TileDirt : Tile
 	{
 		public class TileDirtCreator : TileCreator
 		{
@@ -125,12 +85,45 @@ namespace Libraries.Map
 
 	public abstract class Sector
 	{
-		public struct SectorProportions
+		public enum TYPE
 		{
-			public Point center, radius, third_point;
-
-			public SectorProportions(Point center, Point radius, Point third_point)
+			PLAIN,
+			ROAD,
+			HILL,
+			MOUNTAIN,
+			PIT,
+			RIVER,
+			LAKE,
+			SEA
+		}
+		public enum SIZE
+		{
+			TINY = 6,
+			SMALL = 8,
+			MEDIUM = 10,
+			BIG = 12,
+			HUGE = 14
+		}
+		public enum FORM
+		{
+			SQUARE,
+			RECTANGLE_HORIZONTAL,
+			RECTANGLE_VERTICAL
+		}
+		public sealed class SectorFiller
+		{
+			public enum SHAPE
 			{
+				TRIANGLE,
+				SQUARE,
+				RECTANGLE,
+				ELLIPSE
+			}
+			public SHAPE shape;
+			public Point center, radius, third_point;
+			public SectorFiller(SHAPE shape, Point center, Point radius, Point third_point)
+			{
+				this.shape = shape;
 				this.center = center;
 				this.radius = radius;
 				this.third_point = third_point;
@@ -138,41 +131,58 @@ namespace Libraries.Map
 		}
 
 		public readonly Point location;
-		protected SectorProportions _proportions=new SectorProportions();
-		public readonly bool is_destructible;
+		public readonly SIZE size;
+		public readonly Vector2 proportions;
+		public readonly bool is_destructible;		// to interface IDestructible?
 		public bool is_fogged;
 		public sbyte owner;     // captured color
 
-		public abstract SECTOR_SIZE Size
+		public abstract FORM Form
 		{ get; protected set; }
-		public abstract SECTOR_SHAPE Shape
+		public abstract SectorFiller Sector_Filler
 		{ get; protected set; }
-		/*protected abstract SectorProportions Proportions
-		{ get; set; }*/
 
-		public Sector(Point location, SECTOR_SIZE size, SECTOR_SHAPE shape, bool is_destructible = true)
+		public Sector(Point location, FORM form, SIZE size, SectorFiller.SHAPE shape, bool is_destructible = true)
 		{
 			this.location = location;
-			Shape=shape;
-			Size=size;
+			this.size = size;
+			Form = form;
+			switch(form)
+			{
+				case FORM.SQUARE:
+					proportions=new Vector2(1, 1);
+					break;
+				case FORM.RECTANGLE_HORIZONTAL:
+					proportions=new Vector2(Utility.Random.Next(2, 6), 1);
+					break;
+				case FORM.RECTANGLE_VERTICAL:
+					proportions=new Vector2(1, Utility.Random.Next(2, 6));
+					break;
+				default:
+					break;
+			}
+			proportions.x*=(int)this.size;
+			proportions.y*=(int)this.size;
+
+			Sector_Filler=new SectorFiller(shape, default, default, default);
 			this.is_destructible=is_destructible;
 		}
 
 		public List<Tile> fillShape(Tile[,] tiles_map, Tile.TileCreator tile_creator)
 		{
-			switch(Shape)
+			switch(Sector_Filler.shape)
 			{
-				case SECTOR_SHAPE.TRIANGLE:
+				case SectorFiller.SHAPE.TRIANGLE:
 					return default;
-				case SECTOR_SHAPE.SQUARE:
+				case SectorFiller.SHAPE.SQUARE:
 					return default;
-				case SECTOR_SHAPE.RECTANGLE:
+				case SectorFiller.SHAPE.RECTANGLE:
 					return default;
-				case SECTOR_SHAPE.ELLIPSE:
-					_proportions.center.X = location.X+(int)Math.Sqrt((int)Size)/2;
-					_proportions.center.Y = location.Y+(int)Math.Sqrt((int)Size)/2;
-					_proportions.radius.X=Utility.Random.Next((int)Math.Sqrt((int)Size)/2, (int)Math.Sqrt((int)Size));
-					_proportions.radius.Y=Utility.Random.Next((int)Math.Sqrt((int)Size)/2, (int)Math.Sqrt((int)Size));
+				case SectorFiller.SHAPE.ELLIPSE:
+					Sector_Filler.center.X = location.X+(int)proportions.x/2;
+					Sector_Filler.center.Y = location.Y+(int)proportions.y/2;
+					Sector_Filler.radius.X=Utility.Random.Next((int)proportions.x/2, (int)proportions.x);
+					Sector_Filler.radius.Y=Utility.Random.Next((int)proportions.y/2, (int)proportions.y);
 					return fillEllipse(tiles_map, tile_creator);
 				default:
 					break;
@@ -184,14 +194,14 @@ namespace Libraries.Map
 			List<Tile> tiles_ellipse = new List<Tile>();
 			float distance;
 
-			for (int i = location.X; i<location.X+(int)Math.Sqrt((int)Size); i++)
+			for(int i=location.X; i<location.X+(int)proportions.x; i++)
 			{
-				for (int j = location.Y; j<location.Y+(int)Math.Sqrt((int)Size); j++)
+				for(int j=location.Y; j<location.Y+(int)proportions.y; j++)
 				{
-					distance=Vector2.Distance(new Vector2(_proportions.center.X, _proportions.center.Y), new Vector2(tiles_map[i, j].location.X, tiles_map[i, j].location.Y));
-					if(distance<=_proportions.radius.X && distance<=_proportions.radius.Y)
+					distance=Vector2.Distance(new Vector2(Sector_Filler.center.X, Sector_Filler.center.Y), new Vector2(tiles_map[i, j].location.X, tiles_map[i, j].location.Y));
+					if(distance<=Sector_Filler.radius.X && distance<=Sector_Filler.radius.Y)
 					{
-						tiles_map[i, j]=tile_creator.create(tiles_map[i, j].location, Math.Max(_proportions.radius.X, _proportions.radius.Y)/(10*Math.Max(distance, 1.0f)));
+						tiles_map[i, j]=tile_creator.create(tiles_map[i, j].location, Math.Max(Sector_Filler.radius.X, Sector_Filler.radius.Y)/(10*Math.Max(distance, 1.0f)));
 						tiles_ellipse.Add(tiles_map[i, j]);
 					}
 				}
@@ -200,21 +210,18 @@ namespace Libraries.Map
 			return tiles_ellipse;
 		}
 		public abstract float[,] generate(Tile[,] tiles_map);
-		public virtual void populate()          //example args: Object building
+		public virtual void populate()          //example args: GameObject building
 		{
 
 		}
 	}
-	public class SectorPlain : Sector
+	public sealed class SectorPlain : Sector
 	{
-		public override SECTOR_SIZE Size
+		public override FORM Form
 		{ get; protected set; }
-		public override SECTOR_SHAPE Shape
+		public override SectorFiller Sector_Filler
 		{ get; protected set; }
-		/*protected override SectorProportions Proportions
-		{ get; set; }*/
-
-		public SectorPlain(Point location, SECTOR_SHAPE shape, SECTOR_SIZE size=SECTOR_SIZE.MEDIUM) : base(location, size, shape, true)
+		public SectorPlain(Point location, FORM form=FORM.SQUARE, SIZE size=SIZE.MEDIUM, SectorFiller.SHAPE shape=SectorFiller.SHAPE.SQUARE) : base(location, form, size, shape)
 		{
 
 		}
@@ -227,8 +234,18 @@ namespace Libraries.Map
 		}
 	}
 
-	public class Map
+	public sealed class Map
 	{
+		public enum MAP_TYPE
+		{
+			PLAINS,
+			DESERT,
+			MOUNTAIN_RANGE,
+			CITY,
+			ISLAND,
+			ARCHIPELAGO,
+			OCEAN
+		}
 		public int length, height;
 		public readonly Tile[,] tiles;
 		private readonly List<Sector> _sectors = new List<Sector>();
@@ -246,13 +263,13 @@ namespace Libraries.Map
 		public void generateRandom()
 		{
 			Sector sector;
-			SECTOR_SIZE sector_size= Utility.getRandomEnum<SECTOR_SIZE>();
+			Vector2 sector_proportions_max_y=new Vector2(0, 0);
 
-			for(int i=0; i<length-(int)Math.Sqrt((int)sector_size); i+=(int)Math.Sqrt((int)sector_size)) //Utility.Random.Next((int)Math.Sqrt((int)SECTOR_SIZE.MEDIUM))
+			for(int i=0; i<height;)
 			{
-				for(int j=0; j<height-(int)Math.Sqrt((int)sector_size); j+=(int)Math.Sqrt((int)sector_size))
+				for(int j=0; j<length;)
 				{
-					switch(Utility.getRandomEnum<SECTOR_TYPE>())
+					switch(Utility.getRandomEnum<Sector.TYPE>())
 					{
 						/*case SECTOR_TYPE.ROAD:
 							break;
@@ -269,13 +286,23 @@ namespace Libraries.Map
 						case SECTOR_TYPE.SEA:
 							break;*/
 						default:
-							sector=new SectorPlain(new Point(i, j), SECTOR_SHAPE.ELLIPSE, sector_size);
+							sector=new SectorPlain(new Point(j, i), Sector.FORM.SQUARE, Utility.getRandomEnum<Sector.SIZE>(), Sector.SectorFiller.SHAPE.ELLIPSE);
 							break;
 					}
+					j+=(int)sector.proportions.x-1;
+					if(j>length)
+						break;
+					/*if((i+(int)sector_proportions.y)>height)
+					{
+						i=height;
+						break;
+					}*/
 					sector.generate(tiles);
 					_sectors.Add(sector);
-					sector_size= Utility.getRandomEnum<SECTOR_SIZE>();
+					if(sector_proportions_max_y.y<sector.proportions.y)
+						sector_proportions_max_y=sector.proportions;
 				}
+				i+=(int)sector_proportions_max_y.y-1;
 			}
 		}
 	}
