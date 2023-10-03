@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Collections.Generic;
 using UnityEngine;
+using static Libraries.Map.Sector;
 
 namespace Libraries.Map
 {
@@ -120,12 +121,12 @@ namespace Libraries.Map
 				ELLIPSE
 			}
 			public SHAPE shape;
-			public Point center, radius, third_point;
-			public SectorFiller(SHAPE shape, Point center, Point radius, Point third_point)
+			public Point radius, center, third_point;
+			public SectorFiller(SHAPE shape, Point radius, Point center, Point third_point)
 			{
 				this.shape = shape;
-				this.center = center;
 				this.radius = radius;
+				this.center = center;
 				this.third_point = third_point;
 			}
 		}
@@ -142,7 +143,7 @@ namespace Libraries.Map
 		public abstract SectorFiller Sector_Filler
 		{ get; protected set; }
 
-		public Sector(Point location, FORM form, SIZE size, SectorFiller.SHAPE shape, bool is_destructible = true)
+		public Sector(Point location, FORM form, SIZE size, SectorFiller.SHAPE filler_shape, bool is_destructible = true)
 		{
 			this.location = location;
 			this.size = size;
@@ -164,7 +165,7 @@ namespace Libraries.Map
 			proportions.x*=(int)this.size;
 			proportions.y*=(int)this.size;
 
-			Sector_Filler=new SectorFiller(shape, default, default, default);
+			Sector_Filler=new SectorFiller(filler_shape, default, default, default);
 			this.is_destructible=is_destructible;
 		}
 
@@ -173,20 +174,38 @@ namespace Libraries.Map
 			switch(Sector_Filler.shape)
 			{
 				case SectorFiller.SHAPE.TRIANGLE:
-					return default;
+					return fillTriangle(tiles_map, tile_creator);
 				case SectorFiller.SHAPE.SQUARE:
-					return default;
+					return fillSquare(tiles_map, tile_creator);
 				case SectorFiller.SHAPE.RECTANGLE:
-					return default;
+					return fillRectangle(tiles_map, tile_creator);
 				case SectorFiller.SHAPE.ELLIPSE:
-					Sector_Filler.center.X = location.X+(int)proportions.x/2;
-					Sector_Filler.center.Y = location.Y+(int)proportions.y/2;
 					Sector_Filler.radius.X=Utility.Random.Next((int)proportions.x/2, (int)proportions.x);
 					Sector_Filler.radius.Y=Utility.Random.Next((int)proportions.y/2, (int)proportions.y);
+					Sector_Filler.center.X = location.X+(int)proportions.x/2;
+					Sector_Filler.center.Y = location.Y+(int)proportions.y/2;
 					return fillEllipse(tiles_map, tile_creator);
 				default:
 					break;
 			}
+			return default;
+		}
+		public virtual List<Tile> fillTriangle(Tile[,] tiles_map, Tile.TileCreator tile_creator)
+		{
+			return default;		
+		}
+		public virtual List<Tile> fillSquare(Tile[,] tiles_map, Tile.TileCreator tile_creator)
+		{
+			List<Tile> tiles_ellipse = new List<Tile>();
+
+			for(int i = location.X+Sector_Filler.radius.X; i<location.X+(int)proportions.x-Sector_Filler.radius.X; i++)
+				for(int j = location.Y+Sector_Filler.radius.Y; j<location.Y+(int)proportions.y-Sector_Filler.radius.Y; j++)
+					tiles_ellipse.Add(tiles_map[i, j]=tile_creator.create(tiles_map[i, j].location));
+
+			return tiles_ellipse;
+		}
+		public virtual List<Tile> fillRectangle(Tile[,] tiles_map, Tile.TileCreator tile_creator)
+		{
 			return default;
 		}
 		public virtual List<Tile> fillEllipse(Tile[,] tiles_map, Tile.TileCreator tile_creator)
@@ -200,10 +219,7 @@ namespace Libraries.Map
 				{
 					distance=Vector2.Distance(new Vector2(Sector_Filler.center.X, Sector_Filler.center.Y), new Vector2(tiles_map[i, j].location.X, tiles_map[i, j].location.Y));
 					if(distance<=Sector_Filler.radius.X && distance<=Sector_Filler.radius.Y)
-					{
-						tiles_map[i, j]=tile_creator.create(tiles_map[i, j].location, Math.Max(Sector_Filler.radius.X, Sector_Filler.radius.Y)/(10*Math.Max(distance, 1.0f)));
-						tiles_ellipse.Add(tiles_map[i, j]);
-					}
+						tiles_ellipse.Add(tiles_map[i, j]=tile_creator.create(tiles_map[i, j].location));
 				}
 			}
 
@@ -215,17 +231,59 @@ namespace Libraries.Map
 
 		}
 	}
-	public sealed class SectorPlain : Sector
+	public class SectorPlain : Sector
 	{
-		public override FORM Form
+		public override FORM Form		// properties to validate values 
 		{ get; protected set; }
 		public override SectorFiller Sector_Filler
 		{ get; protected set; }
-		public SectorPlain(Point location, FORM form=FORM.SQUARE, SIZE size=SIZE.MEDIUM, SectorFiller.SHAPE shape=SectorFiller.SHAPE.SQUARE) : base(location, form, size, shape)
+		public SectorPlain(Point location, FORM form=FORM.SQUARE, SIZE size=SIZE.MEDIUM, SectorFiller.SHAPE filler_shape=SectorFiller.SHAPE.SQUARE) : base(location, form, size, filler_shape)
 		{
 
 		}
 
+		public override float[,] generate(Tile[,] tiles_map)
+		{
+			fillShape(tiles_map, new TileDirt.TileDirtCreator());
+
+			return default;
+		}
+	}
+	public class SectorHill : Sector
+	{
+		public override FORM Form
+		{
+			get; protected set;
+		}
+		public override SectorFiller Sector_Filler
+		{
+			get; protected set;
+		}
+		public SectorHill(Point location, FORM form = FORM.SQUARE, SIZE size = SIZE.MEDIUM, SectorFiller.SHAPE filler_shape = SectorFiller.SHAPE.ELLIPSE) : base(location, form, size, filler_shape)
+		{
+
+		}
+
+		public override List<Tile> fillEllipse(Tile[,] tiles_map, Tile.TileCreator tile_creator)
+		{
+			List<Tile> tiles_ellipse = new List<Tile>();
+			float distance;
+
+			for(int i = location.X; i<location.X+(int)proportions.x; i++)
+			{
+				for(int j = location.Y; j<location.Y+(int)proportions.y; j++)
+				{
+					distance=Vector2.Distance(new Vector2(Sector_Filler.center.X, Sector_Filler.center.Y), new Vector2(tiles_map[i, j].location.X, tiles_map[i, j].location.Y));
+					if(distance<=Sector_Filler.radius.X && distance<=Sector_Filler.radius.Y)
+					{
+						tiles_map[i, j]=tile_creator.create(tiles_map[i, j].location, (float)(1/(Math.Log(distance+2)-0.3))); //Math.Max(Sector_Filler.radius.X, Sector_Filler.radius.Y)/(10*Math.Max(distance, 1.0f))
+						tiles_ellipse.Add(tiles_map[i, j]);
+					}
+				}
+			}
+
+			return tiles_ellipse;
+		}
 		public override float[,] generate(Tile[,] tiles_map)
 		{
 			fillShape(tiles_map, new TileDirt.TileDirtCreator());
@@ -238,7 +296,7 @@ namespace Libraries.Map
 	{
 		public enum MAP_TYPE
 		{
-			PLAINS,
+			PLAIN,
 			DESERT,
 			MOUNTAIN_RANGE,
 			CITY,
@@ -289,21 +347,21 @@ namespace Libraries.Map
 							sector=new SectorPlain(new Point(j, i), Sector.FORM.SQUARE, Utility.getRandomEnum<Sector.SIZE>(), Sector.SectorFiller.SHAPE.ELLIPSE);
 							break;
 					}
-					j+=(int)sector.proportions.x-1;
-					if(j>length)
-						break;
-					/*if((i+(int)sector_proportions.y)>height)
-					{
-						i=height;
-						break;
-					}*/
-					sector.generate(tiles);
-					_sectors.Add(sector);
+					j+=(int)sector.proportions.x;
 					if(sector_proportions_max_y.y<sector.proportions.y)
 						sector_proportions_max_y=sector.proportions;
+					if(j>length || i+(int)sector.proportions.y>height)
+						break;
+
+					sector.generate(tiles);
+					_sectors.Add(sector);
 				}
-				i+=(int)sector_proportions_max_y.y-1;
+				i+=(int)sector_proportions_max_y.y;
 			}
+		}
+		public void generatePlain()		// + more methods according to map's enum
+		{
+			
 		}
 	}
 }
