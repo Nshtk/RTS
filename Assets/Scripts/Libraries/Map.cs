@@ -2,7 +2,6 @@ using System;
 using System.Drawing;
 using System.Collections.Generic;
 using UnityEngine;
-using static Libraries.Map.Sector;
 
 namespace Libraries.Map
 {
@@ -176,6 +175,8 @@ namespace Libraries.Map
 				case SectorFiller.SHAPE.TRIANGLE:
 					return fillTriangle(tiles_map, tile_creator);
 				case SectorFiller.SHAPE.SQUARE:
+					Sector_Filler.radius.X=Utility.Random.Next(1, (int)size/5);
+					Sector_Filler.radius.Y=Sector_Filler.radius.X;
 					return fillSquare(tiles_map, tile_creator);
 				case SectorFiller.SHAPE.RECTANGLE:
 					return fillRectangle(tiles_map, tile_creator);
@@ -344,7 +345,7 @@ namespace Libraries.Map
 						case SECTOR_TYPE.SEA:
 							break;*/
 						default:
-							sector=new SectorPlain(new Point(j, i), Sector.FORM.SQUARE, Utility.getRandomEnum<Sector.SIZE>(), Sector.SectorFiller.SHAPE.ELLIPSE);
+							sector=new SectorHill(new Point(j, i), Sector.FORM.RECTANGLE_HORIZONTAL, Utility.getRandomEnum<Sector.SIZE>(), Sector.SectorFiller.SHAPE.ELLIPSE);
 							break;
 					}
 					j+=(int)sector.proportions.x;
