@@ -1,5 +1,6 @@
 using UnityEngine;
 using Libraries.Terrain;
+using System;
 
 public class TerrainGenerator : MonoBehaviour
 {
@@ -16,11 +17,11 @@ public class TerrainGenerator : MonoBehaviour
 	private void Start()
 	{
 		height_map = new float[length, height];
-		alpha_map = new float[257, 257, 7];
+		alpha_map = new float[257, 257, 9];
 		_terrain = Terrain.activeTerrain; // _terrain = GetComponent<Terrain>();
 		_map = new Map(length, height);
 		//_terrain.terrainData.GetAlphamaps(0, 0, _terrain.terrainData.alphamapWidth, _terrain.terrainData.alphamapHeight);
-
+		
 		_map.generateRandom();
 
 		_terrain.terrainData.alphamapResolution=length+1;

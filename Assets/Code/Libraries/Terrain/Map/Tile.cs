@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 
 namespace Libraries.Terrain
@@ -39,6 +40,8 @@ namespace Libraries.Terrain
 		{
 			this.location=location;
 			TerrainGenerator.height_map[location.X, location.Y]=this.height=height;
+			for(int i = 0; i<TerrainGenerator.alpha_map.GetLength(2); i++)
+				TerrainGenerator.alpha_map[location.X, location.Y, i]=0;
 			TerrainGenerator.alpha_map[location.X, location.Y, (int)Type]=this.alpha=alpha;
 		}
 		public Tile()		// Workaround for map init by TileTest
