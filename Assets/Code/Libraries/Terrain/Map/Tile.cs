@@ -64,7 +64,7 @@ namespace Libraries.Terrain
 			get;
 		} = TYPE.VOID;
 
-		public TileTest(Point location, float height = 0) : base()
+		public TileTest(Point location, float height = 0) : base(location)
 		{
 			this.location=location;
 			durability=1;
