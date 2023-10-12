@@ -5,6 +5,7 @@ using System;
 public class TerrainGenerator : MonoBehaviour
 {
 	private Terrain _terrain;
+	public Transform worldbox_transform;
 	private Map _map;
 
 	public int length = 256;
@@ -29,6 +30,9 @@ public class TerrainGenerator : MonoBehaviour
 		_terrain.terrainData.size=new Vector3(length, width, height);
 		_terrain.terrainData.SetHeights(0, 0, height_map);
 		_terrain.terrainData.SetAlphamaps(0, 0, alpha_map);
+
+		worldbox_transform.position=new Vector3(length/2, width/2, height/2);
+		worldbox_transform.localScale=_terrain.terrainData.size;
 	}
 	private void Update()
 	{
