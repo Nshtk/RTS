@@ -94,8 +94,8 @@ namespace Editor
 		private static void RefreshAssets()
 		{
 			Debug.Log($"Request refresh assets. (Project changed: {_projectChanged})");
-			if(!_projectChanged)
-				return;
+			//if(!_projectChanged)
+			//	return;
 			EditorApplication.UnlockReloadAssemblies();
 			AssetDatabase.Refresh();
 		}

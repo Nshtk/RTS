@@ -126,13 +126,8 @@ namespace Libraries.Terrain
 			List<Tile> tiles_ellipse = new List<Tile>();
 
 			for(int i = location.X+Sector_Filler.radius.X; i<location.X+(int)proportions.x-Sector_Filler.radius.X; i++)
-			{
 				for(int j = location.Y+Sector_Filler.radius.Y; j<location.Y+(int)proportions.y-Sector_Filler.radius.Y; j++)
-				{
-					tiles_ellipse.Add(tiles_map[i, j]=tile_creators[0].create(tiles_map[i, j].location));       // TODO: body to overridable function 
-					TerrainGenerator.height_map[i, j]=tiles_map[i, j].height;
-				}
-			}
+					tiles_ellipse.Add(tiles_map[i, j]=tile_creators[0].create(tiles_map[i, j].location));
 
 			return tiles_ellipse;
 		}
@@ -152,8 +147,6 @@ namespace Libraries.Terrain
 					distance=Vector2.Distance(new Vector2(Sector_Filler.center.X, Sector_Filler.center.Y), new Vector2(tiles_map[i, j].location.X, tiles_map[i, j].location.Y));
 					if(distance<=Sector_Filler.radius.X && distance<=Sector_Filler.radius.Y)
 						tiles_ellipse.Add(tiles_map[i, j]=tile_creators[0].create(tiles_map[i, j].location));
-					//TerrainGenerator.alpha_map[i, j, (int)tiles_map[i, j].Type]=0;
-					TerrainGenerator.height_map[i, j]=tiles_map[i, j].height;
 				}
 			}
 
@@ -216,8 +209,6 @@ namespace Libraries.Terrain
 					{
 						tiles_map[i, j]=tile_creators[0].create(tiles_map[i, j].location, (float)(1/(Math.Log(distance+2)-0.3))); //Math.Max(Sector_Filler.radius.X, Sector_Filler.radius.Y)/(10*Math.Max(distance, 1.0f))
 						tiles_ellipse.Add(tiles_map[i, j]);
-						//TerrainGenerator.alpha_map[i, j, (int)tiles_map[i, j].Type]=0;
-						TerrainGenerator.height_map[i, j]=tiles_map[i, j].height;
 					}
 				}
 			}
@@ -258,9 +249,9 @@ namespace Libraries.Terrain
 					distance=Vector2.Distance(new Vector2(Sector_Filler.center.X, Sector_Filler.center.Y), new Vector2(tiles_map[i, j].location.X, tiles_map[i, j].location.Y));
 					if(distance<=Sector_Filler.radius.X && distance<=Sector_Filler.radius.Y)
 					{
-						height=(float)(1/(Math.Log(distance+2)-0.3));
+						height=(float)(1/Math.Log(Math.Max(distance, 0.5)+1, 1.1));//(1/(Math.Log(distance+2)-0.3));
 						if(height<0.85)
-							tiles_map[i, j]=tile_creators[0].create(tiles_map[i, j].location, height); //Math.Max(Sector_Filler.radius.X, Sector_Filler.radius.Y)/(10*Math.Max(distance, 1.0f))
+							tiles_map[i, j]=tile_creators[0].create(tiles_map[i, j].location, height);
 						else
 							tiles_map[i, j]=tile_creators[1].create(tiles_map[i, j].location, height);
 						tiles_ellipse.Add(tiles_map[i, j]);

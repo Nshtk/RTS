@@ -4,7 +4,7 @@ public class WorldBox : MonoBehaviour
 {
 	public void initialise(int length, int width, int height, Vector3 terrain_data_size)
 	{
-		Transform transform = GetComponent<Transform>();
+		//Transform transform = GetComponent<Transform>();
 		transform.position=new Vector3(length/2, -width, height/2);
 		transform.localScale=new Vector3(terrain_data_size.x, terrain_data_size.y*4, terrain_data_size.z);
 	}

@@ -5,6 +5,7 @@ using System;
 public class TerrainGenerator : MonoBehaviour
 {
 	private Terrain _terrain;
+	public static TerrainGenerator instance;
 	[SerializeField] private WorldBox _worldbox;
 	private Map _map;
 
@@ -14,6 +15,11 @@ public class TerrainGenerator : MonoBehaviour
 	public float scale = 20f;
 	public static float[,] height_map;
 	public static float[,,] alpha_map;
+
+	public TerrainGenerator()
+	{
+		instance=this;
+	}
 
 	private void Start()
 	{

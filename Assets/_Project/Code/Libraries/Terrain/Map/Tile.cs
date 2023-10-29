@@ -35,17 +35,14 @@ namespace Libraries.Terrain
 			get;
 		}
 
-
 		public Tile(Point location, float height = 0, float alpha=1)
 		{
 			this.location=location;
 			TerrainGenerator.height_map[location.X, location.Y]=this.height=height;
-			for(int i = 0; i<TerrainGenerator.alpha_map.GetLength(2); i++)
-				TerrainGenerator.alpha_map[location.X, location.Y, i]=0;
+			TerrainGenerator.alpha_map[location.X, location.Y, 0]=0;
 			TerrainGenerator.alpha_map[location.X, location.Y, (int)Type]=this.alpha=alpha;
 		}
-		public Tile()		// Workaround for map init by TileTest
-		{}
+
 
 		public virtual void destroy()
 		{
@@ -56,7 +53,7 @@ namespace Libraries.Terrain
 	{
 		public class TileTestCreator : TileCreator
 		{
-			public override Tile create(Point location, float height = 0)
+			public override Tile create(Point location, float height=0)
 			{
 				return new TileTest(location, height);
 			}
