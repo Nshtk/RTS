@@ -15,12 +15,11 @@ public class CameraControls : MonoBehaviour
 	}
 	void Update()
 	{
-		
 		_position_increment=new Vector3(0, Input.GetAxis("Mouse ScrollWheel")*-speed_zoom*MathF.Log(transform.position.y+1), 0);
 		{
 			Vector3 _pos_temp=transform.forward;
 			_pos_temp.y=0;
-			_pos_temp.Normalize();
+			//_pos_temp.Normalize();
 			_position_increment+=transform.right*Input.GetAxis("Horizontal")*transform.position.y*speed_move
 								+_pos_temp*Input.GetAxis("Vertical")*transform.position.y*speed_move;
 		}

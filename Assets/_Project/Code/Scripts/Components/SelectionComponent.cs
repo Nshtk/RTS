@@ -1,20 +1,22 @@
+using cakeslice;
 using UnityEngine;
 
 public class SelectionComponent : MonoBehaviour
 {
-	private Material _default;
+	//private Color _color_default;
 
-	public SelectionComponent()
+	private void Awake()
 	{
-		_default=GetComponent<Renderer>().material;
+		//_color_default = GetComponent<Renderer>().material.color;	// NOTE: Not allowed in constructor
 	}
-
 	private void Start()
     {
-		GetComponent<Renderer>().material.color=Color.red;
+		//GetComponent<Renderer>().material.color=Color.red;
+		gameObject.AddComponent<Outline>();
 	}
-    private void Update()
+    private void OnDestroy()
     {
-		GetComponent<Renderer>().material.color=_default.color;
+		Destroy(GetComponent<Outline>());
+		//GetComponent<Renderer>().material.color=_color_default;
 	}
 }
