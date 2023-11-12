@@ -9,6 +9,7 @@ public class TerrainGenerator : MonoBehaviour
 	[SerializeField] private WorldBox _worldbox;
 	private Map _map;
 
+	[Header("Generation parametrs")]
 	public int length = 256;
 	public int height = 256;
 	public int width = 20;
