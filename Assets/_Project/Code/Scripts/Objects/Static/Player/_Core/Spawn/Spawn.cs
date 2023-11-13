@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Spawn : MonoBehaviour
 {
-    Collider collider1 = null;
+    Collider collider = null;
 
     private void Start()
     {

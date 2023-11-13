@@ -1,32 +1,49 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using static UnityEngine.EventSystems.EventTrigger;
+
+
 
 public class MainLoop : MonoBehaviour
 {
-
+	[SerializeField] private Gamemode gamemode;
 	[SerializeField] private Human _human_prefab;
-	//private Bot _bot_prefab;
+	//[SerializeField] private Bot _bot_prefab;
 	private List<Player> players=new List<Player>(2);	//NOTE: initial capacity reduces memory reallocations
 
 	private void Awake()
 	{
 		for(int i=0; i<1; i++)
 		{
-			Human human = Instantiate(_human_prefab); human.initialise();
+			Human human = Instantiate(_human_prefab);
 			players.Add(human);
 		}
 			
 	}
     private void Start()
     {
-        
+		foreach(Player player in players)
+		{
+			player.StartManual();	// pass args
+		}
     }
     private void Update()
     {
-        
-    }
+		Game.ticks++;
+        foreach(Player player in players)
+		{
+			player.UpdateManual();
+		}
+		foreach(Player player in players)
+		{
+			foreach(Unit unit in player.units)
+			{
+				unit.UpdateManual(); 
+			}
+		}
+		/*if(player.goal.is_reached)	// TODO: + stop updating
+			ScreenEnd.show();*/
+	}
 	private void LateUpdate()
 	{
 

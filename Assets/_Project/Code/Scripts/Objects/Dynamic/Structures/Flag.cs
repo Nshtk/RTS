@@ -1,8 +1,9 @@
 using UnityEngine;
 
-/*public class Tree : MonoBehaviour
+public class Flag : Structure
 {
-    
+    public int owner_id;
+    public int status;
 
     private void Start()
     {
@@ -13,4 +14,3 @@ using UnityEngine;
         
     }
 }
-*/

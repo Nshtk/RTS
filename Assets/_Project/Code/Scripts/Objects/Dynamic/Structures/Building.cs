@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Building : MonoBehaviour
+public class Building : Structure
 {
     
 

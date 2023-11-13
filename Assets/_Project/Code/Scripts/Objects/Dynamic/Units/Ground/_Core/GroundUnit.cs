@@ -1,14 +1,14 @@
 using UnityEngine;
 
-public class GroundUnit : MonoBehaviour
+public class GroundUnit : Unit
 {
-    
+    public float traction;
 
-    private void Start()
+	protected override void Start()
     {
         
     }
-    private void Update()
+    protected override void Update()
     {
         
     }

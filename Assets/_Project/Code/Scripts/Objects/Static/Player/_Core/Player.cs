@@ -4,29 +4,35 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
 	[Header("Player Body Parts")]
+	public int id;
 	public string nickname;
 	public Team team;
 	public Faction faction;
 	private Spawn spawn;
 
-	public int money, momey_income, money_limit;
+	public int money, money_income, money_pool;
 	public int difficulty_multiplier;
 
-	private List<Unit> _units=new List<Unit>();
+	public List<Unit> units=new List<Unit>();
 
 	protected virtual void Start()
     {
         
     }
+	public virtual void StartManual()
+	{
+		
+	}
 	protected virtual void Update()
     {
-        
+		money+=money_income;
+		money_pool-=money_income;
     }
-
-	public virtual void initialise()
+	public virtual void UpdateManual()
 	{
 
 	}
+
 	/*public void SaveDetails(JsonWriter writer)
 	{
 		SaveManager.WriteString(writer, "Username", username);

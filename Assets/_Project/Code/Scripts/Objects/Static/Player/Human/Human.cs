@@ -13,7 +13,7 @@ public sealed class Human : Player
         
     }
 
-	public override void initialise()
+	public override void StartManual()
 	{
 
 	}

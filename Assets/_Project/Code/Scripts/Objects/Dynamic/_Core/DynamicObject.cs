@@ -41,7 +41,15 @@ public class DynamicObject : MonoBehaviour
 	{
 
 	}
+	public virtual void StartManual()
+	{
+
+	}
 	protected virtual void Update()
+	{
+
+	}
+	public virtual void UpdateManual()
 	{
 
 	}

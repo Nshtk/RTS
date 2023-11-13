@@ -1,15 +1,15 @@
 using UnityEngine;
 
-public class AirUnit : MonoBehaviour
+public class AirUnit : Unit
 {
-    
 
-    private void Start()
-    {
-        
-    }
-    private void Update()
-    {
-        
-    }
+
+	protected override void Start()
+	{
+
+	}
+	protected override void Update()
+	{
+
+	}
 }

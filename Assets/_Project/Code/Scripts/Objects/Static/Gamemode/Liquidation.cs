@@ -1,6 +1,6 @@
 using UnityEngine;
 
-/*public class Tree : MonoBehaviour
+public class Liquidation : MonoBehaviour
 {
     
 
@@ -13,4 +13,3 @@ using UnityEngine;
         
     }
 }
-*/

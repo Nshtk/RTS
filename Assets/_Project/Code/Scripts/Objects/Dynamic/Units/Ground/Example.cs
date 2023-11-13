@@ -1,17 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class ExampleUnit : Unit
+namespace Units
 {
-        
+	public class Example : GroundUnit
+	{
 
-    private void Start()
-    {
-        
-    }
-	private void Update()
-    {
-        
-    }
+
+		protected override void Start()
+		{
+
+		}
+		protected override void Update()
+		{
+			
+		}
+	}
 }
+
+

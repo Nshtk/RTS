@@ -15,6 +15,7 @@ public class Unit : DynamicObject
 		SPECIAL
 	}
 
+	public float acceleration;
     public float speed_move, speed_rotate;
     public AudioClip sound_voiceover, sound_idle, sound_move;
 
@@ -25,6 +26,7 @@ public class Unit : DynamicObject
 	public int limit;
 	public int cost;
 	public int charge_time, recharge_time;
+	public float experience;
 
 	protected override void Start()
     {
@@ -34,6 +36,10 @@ public class Unit : DynamicObject
     {
         
     }
+	public void setChargeTimer()
+	{
+	
+	}
 
 	/*public override void MouseClick(GameObject hitObject, Vector3 hitPoint, Player controller)
 	{
