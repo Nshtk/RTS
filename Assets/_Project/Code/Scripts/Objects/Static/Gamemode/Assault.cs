@@ -1,15 +1,28 @@
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
-public class Assaul : MonoBehaviour
+public class Assault : Gamemode
 {
-    
+	/*public override string GetDescription()
+	{
+		return "Conquest";
+	}
 
-    private void Start()
-    {
-        
-    }
-    private void Update()
-    {
-        
-    }
+	public override bool GameFinished()
+	{
+		if(players == null)
+			return true;
+		int playersLeft = players.Length;
+		foreach(Player player in players)
+		{
+			if(!PlayerMeetsConditions(player))
+				playersLeft--;
+		}
+		return playersLeft == 1;
+	}
+
+	public override bool PlayerMeetsConditions(Player player)
+	{
+		return player && !player.IsDead();
+	}*/
 }

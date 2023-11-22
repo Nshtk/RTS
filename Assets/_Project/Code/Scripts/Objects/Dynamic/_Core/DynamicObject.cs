@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class DynamicObject : MonoBehaviour
 {
-	//Public variables
 	public string object_name = "WorldObject";
-	public Texture2D image;
+	public Texture2D icon;
 	public int hit_points = 100, hit_points_max = 100;
 	public float detectionRange = 20.0f;
 	public AudioClip select_sound;
@@ -28,6 +27,11 @@ public class DynamicObject : MonoBehaviour
 	//private int loadedTargetId = -1;
 
 	public int ObjectId
+	{
+		get;
+		set;
+	}
+	public Texture2D Icon
 	{
 		get;
 		set;
@@ -60,7 +64,7 @@ public class DynamicObject : MonoBehaviour
 	protected virtual void OnDestroy()
 	{
 	}
-	public virtual void initialise()
+	public virtual void initialise(Player owner, Vector3 obj_position)
 	{
 	}
 	protected virtual void InitialiseAudio()

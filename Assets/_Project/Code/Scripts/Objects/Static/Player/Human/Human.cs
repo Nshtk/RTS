@@ -1,9 +1,7 @@
 using UnityEngine;
 
-public sealed class Human : Player
+public sealed partial class Human : Player
 {
-
-
     protected override void Start()
     {
         

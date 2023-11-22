@@ -1,8 +1,8 @@
 using UnityEngine;
 
-namespace Units
+namespace Units.Ground
 {
-	public class Example : GroundUnit
+	public class ExampleGround : GroundUnit
 	{
 
 

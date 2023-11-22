@@ -10,15 +10,16 @@ public class Unit : DynamicObject
 		VEHICLE,
 		TANK,
 		ARTILLERY,
-		AIRPLANE,
-		BOMBER,
+		AIRPLANE_FIGHTER,
+		AIRPLANE_BOMBER,
 		SPECIAL
 	}
+
 
 	public float acceleration;
     public float speed_move, speed_rotate;
     public AudioClip sound_voiceover, sound_idle, sound_move;
-
+	private Player _player_owner;
 	private Vector3 destination;
 	private Quaternion target_rotation;
 	private GameObject destination_target;
@@ -40,6 +41,12 @@ public class Unit : DynamicObject
 	{
 	
 	}
+	public override void initialise(Player owner, Vector3 position)
+	{
+		_player_owner=owner;
+		gameObject.transform.position = position;
+	}
+
 
 	/*public override void MouseClick(GameObject hitObject, Vector3 hitPoint, Player controller)
 	{

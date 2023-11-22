@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
 	public string nickname;
 	public Team team;
 	public Faction faction;
-	private Spawn spawn;
+	public Spawn spawn=new Spawn();
 
 	public int money, money_income, money_pool;
 	public int difficulty_multiplier;
@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     }
 	public virtual void StartManual()
 	{
+		spawn=Instantiate(spawn); spawn.initialise(this, new Vector3(0, 0, 0));
 		
 	}
 	protected virtual void Update()
@@ -32,7 +33,11 @@ public class Player : MonoBehaviour
 	{
 
 	}
-
+	public virtual void spawnUnit(int id, Vector3? position=null)
+	{
+		if(position!=null)
+			spawn.spawnUnit(faction.units[id]);
+	}
 	/*public void SaveDetails(JsonWriter writer)
 	{
 		SaveManager.WriteString(writer, "Username", username);
