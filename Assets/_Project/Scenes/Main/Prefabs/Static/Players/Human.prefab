@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &5560135935941642642
+--- !u!1001 &2064498831863740072
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -50,41 +50,41 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5473300677854467972, guid: 07ced4e9bd1685c41a0e2c12a7e041e7, type: 3}
       propertyPath: m_Name
-      value: Bot
+      value: Human
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -6246638797281175989, guid: 07ced4e9bd1685c41a0e2c12a7e041e7, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5473300677854467972, guid: 07ced4e9bd1685c41a0e2c12a7e041e7, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5016951127588050576}
+      addedObject: {fileID: -2473226187342654154}
   m_SourcePrefab: {fileID: 100100000, guid: 07ced4e9bd1685c41a0e2c12a7e041e7, type: 3}
---- !u!1 &494415037751107094 stripped
+--- !u!1 &6292517451307016492 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5473300677854467972, guid: 07ced4e9bd1685c41a0e2c12a7e041e7, type: 3}
-  m_PrefabInstance: {fileID: 5560135935941642642}
+  m_PrefabInstance: {fileID: 2064498831863740072}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5016951127588050576
+--- !u!114 &-2473226187342654154
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 494415037751107094}
+  m_GameObject: {fileID: 6292517451307016492}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa24703a3ffc2cd41a026a48c051fe87, type: 3}
+  m_Script: {fileID: 11500000, guid: a3a5a272b05a5014094da46ec94f3e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
   nickname: 
   team: {fileID: 0}
-  faction: {fileID: 0}
+  faction: {fileID: -7295293109342190302, guid: 7624a950747a87c4baadc72ea434909c, type: 3}
+  spawn: {fileID: 8676175143632865250, guid: 8350b8f16bc53ec499f51d2b91ddeca3, type: 3}
   money: 0
   money_income: 0
-  money_pool: 0
+  money_pool: 1000
   difficulty_multiplier: 0
   units: []
-  strategy: 
-  doctrine: 

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Frontlines : Gamemode
+public class Demolition : Gamemode
 {
 	/*public Vector3 destination = new Vector3(0.0f, 0.0f, 0.0f);
 	public Texture2D highlight;

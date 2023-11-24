@@ -3,31 +3,29 @@ using UnityEngine;
 
 public partial class Human
 {
-	public class HumanInput : MonoBehaviour
+	public class HumanInput
 	{
 		private Human _human;
-		Transform transform_camera;     //TODO: feature split screen between multiple cameras
+		private Transform transform_camera;     //TODO: feature split screen between multiple cameras
 		public float speed_move = 3f, speed_zoom = 40f, speed_rotate = 0.05f;
 		private Vector3 _limits;
 		private Vector3 _position_increment, _rotation_increment, _position_next;
 		private Vector3 _mouse_position_1, _mouse_position_2;
 
-		private void Awake()
+		public HumanInput(Human human)
 		{
+			_human=human;
 			transform_camera=Camera.main.GetComponentsInParent<Transform>()[1];
-		}
-		void Start()
-		{
-			_human = transform.root.GetComponent<Human>();
 			_limits = new Vector3(TerrainGenerator.instance.length, TerrainGenerator.instance.width, TerrainGenerator.instance.height);
 			transform_camera.position = new Vector3(10, 15, 10);
 		}
-		void Update()
+
+		public void updateManual()
 		{
 			updateCamera();
 			if(Input.GetKey(KeyCode.LeftControl))
 				if(Input.GetMouseButtonUp(0))
-					_human.spawnUnit(Libraries.Utility.Random.Next(_human.faction.units.Count), Input.mousePosition);
+					_human.buyUnit(Libraries.Utility.Random.Next(_human.faction.units.Count));
 		}
 		private void updateCamera()
 		{

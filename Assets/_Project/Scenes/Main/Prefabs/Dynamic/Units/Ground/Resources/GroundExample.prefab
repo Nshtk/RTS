@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7775694429691970826, guid: c366b0dcc7d4e6b4f97909e257fd8b7f, type: 3}
       propertyPath: m_Name
-      value: Cube
+      value: GroundExample
       objectReference: {fileID: 0}
     - target: {fileID: 8787330126327599141, guid: c366b0dcc7d4e6b4f97909e257fd8b7f, type: 3}
       propertyPath: m_LocalPosition.x

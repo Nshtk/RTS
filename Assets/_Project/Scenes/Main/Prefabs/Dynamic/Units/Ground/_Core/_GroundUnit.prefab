@@ -54,10 +54,74 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4337557459969207916, guid: 3834fd718bf9c9140a6b30e6b22e3c87, type: 3}
       propertyPath: m_Name
-      value: ExampleGround
+      value: _GroundUnit
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -7422494032093854961, guid: 3834fd718bf9c9140a6b30e6b22e3c87, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4337557459969207916, guid: 3834fd718bf9c9140a6b30e6b22e3c87, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6793757094597244200}
+    - targetCorrespondingSourceObject: {fileID: 4337557459969207916, guid: 3834fd718bf9c9140a6b30e6b22e3c87, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8615172667869942314}
   m_SourcePrefab: {fileID: 100100000, guid: 3834fd718bf9c9140a6b30e6b22e3c87, type: 3}
+--- !u!1 &7775694429691970826 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4337557459969207916, guid: 3834fd718bf9c9140a6b30e6b22e3c87, type: 3}
+  m_PrefabInstance: {fileID: 6330593664561671014}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6793757094597244200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7775694429691970826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe202e69ab77fd343b1389272bdc500b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  object_name: WorldObject
+  icon: {fileID: 0}
+  hit_points: 100
+  hit_points_max: 100
+  detectionRange: 20
+  select_sound: {fileID: 0}
+  select_volume: 1
+  acceleration: 0
+  move_speed: 0
+  rotate_speed: 0
+  sound_voiceover: {fileID: 0}
+  sound_idle: {fileID: 0}
+  sound_move: {fileID: 0}
+  limit: 0
+  cost: 0
+  charge_time: 0
+  recharge_time: 0
+  experience: 0
+  traction: 0
+--- !u!65 &8615172667869942314
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7775694429691970826}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}

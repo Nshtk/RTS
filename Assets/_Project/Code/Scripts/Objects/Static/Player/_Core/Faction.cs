@@ -1,24 +1,19 @@
 using System.Collections.Generic;
+using System.Linq;
+using Units.Ground;
 using UnityEngine;
 
-public class Faction : MonoBehaviour
+public class Faction     // TODO faction-specific modifiers?
 {
-    [SerializeField] public Texture2D flag;
-    // TODO faction-specific modifiers?
-    public List<Unit> units;
-    private void Awake()
-    {
-        units= new List<Unit>() {
-            new Units.Ground.ExampleGround(),
-			new Units.Air.ExampleAir()
-		};
-    }
-    private void Start()
-    {
-        
-    }
-    private void Update()
-    {
-        
-    }
+	public string name;
+    public Texture2D? flag;
+	public List<Unit>? units=new List<Unit>();
+
+	public Faction(string name, Texture2D? flag =null, List<Unit>? units=null)
+	{
+		this.name = name;
+		this.flag = flag;
+		this.units = units;
+		;
+	}
 }

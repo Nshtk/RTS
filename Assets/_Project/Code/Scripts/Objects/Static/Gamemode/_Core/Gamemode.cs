@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Gamemode : MonoBehaviour
+public class Gamemode
 {
     public struct Goal
     {

@@ -14,4 +14,17 @@ public class Team : MonoBehaviour
 		if(flag!=null)
 			this.flag=flag;
 	}
+
+	public void getUnitInfo()
+	{
+	
+	}
+	public void haveUnit() // args find units by such properties as name, cost etc
+	{
+
+	}
+	public void getFlagUnits()
+	{
+
+	}
 }

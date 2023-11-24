@@ -7,36 +7,47 @@ public class Player : MonoBehaviour
 	public int id;
 	public string nickname;
 	public Team team;
-	public Faction faction;
-	public Spawn spawn=new Spawn();
+	public Faction faction;		//FIXME: dont store it  use gamedata
+	public Spawn spawn;
 
-	public int money, money_income, money_pool;
+	public int money, money_income, money_pool=1000;
 	public int difficulty_multiplier;
 
 	public List<Unit> units=new List<Unit>();
 
+	protected virtual void Awake()
+	{
+
+	}
 	protected virtual void Start()
     {
         
     }
-	public virtual void StartManual()
+	public virtual void StartManual(Faction faction)
 	{
-		spawn=Instantiate(spawn); spawn.initialise(this, new Vector3(0, 0, 0));
-		
+		spawn=Instantiate(spawn); spawn.initialise(this);
+		this.faction=faction;
 	}
 	protected virtual void Update()
     {
-		money+=money_income;
-		money_pool-=money_income;
+
     }
 	public virtual void UpdateManual()
 	{
-
+		if(money_pool>=money_income)
+		{
+			money+=money_income;
+			money_pool-=money_income;
+		}
 	}
-	public virtual void spawnUnit(int id, Vector3? position=null)
+	public virtual void buyUnit(int id)
 	{
-		if(position!=null)
+		if(money>=faction.units[id].cost)
+		{
+			money-=faction.units[id].cost;
 			spawn.spawnUnit(faction.units[id]);
+		}
+
 	}
 	/*public void SaveDetails(JsonWriter writer)
 	{

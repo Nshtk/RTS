@@ -17,7 +17,7 @@ public class Unit : DynamicObject
 
 
 	public float acceleration;
-    public float speed_move, speed_rotate;
+    public float move_speed, rotate_speed;
     public AudioClip sound_voiceover, sound_idle, sound_move;
 	private Player _player_owner;
 	private Vector3 destination;
@@ -35,16 +35,15 @@ public class Unit : DynamicObject
     }
 	protected override void Update()
     {
-        
+        base.Update();
     }
 	public void setChargeTimer()
 	{
 	
 	}
-	public override void initialise(Player owner, Vector3 position)
+	public override void initialise(Player owner)
 	{
 		_player_owner=owner;
-		gameObject.transform.position = position;
 	}
 
 

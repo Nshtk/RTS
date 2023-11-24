@@ -64,7 +64,7 @@ public class DynamicObject : MonoBehaviour
 	protected virtual void OnDestroy()
 	{
 	}
-	public virtual void initialise(Player owner, Vector3 obj_position)
+	public virtual void initialise(Player owner)
 	{
 	}
 	protected virtual void InitialiseAudio()

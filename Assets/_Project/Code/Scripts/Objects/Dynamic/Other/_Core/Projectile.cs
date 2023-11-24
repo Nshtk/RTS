@@ -6,9 +6,9 @@ public class Projectile : DynamicObject
 	public int damage = 1;
 
 	private float range = 1;
-	private DynamicObject target;
+	//private DynamicObject target;
 
-	void Update()
+	protected override void Update()
 	{
 		if(HitSomething())
 		{
