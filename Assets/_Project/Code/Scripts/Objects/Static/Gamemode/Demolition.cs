@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class Demolition : Gamemode
+/*public class Demolition : Gamemode
 {
-	/*public Vector3 destination = new Vector3(0.0f, 0.0f, 0.0f);
+	public Vector3 destination = new Vector3(0.0f, 0.0f, 0.0f);
 	public Texture2D highlight;
 
 	void Start()
@@ -36,5 +36,5 @@ public class Demolition : Gamemode
 		bool xInPos = truckPos.x > destination.x - closeEnough && truckPos.x < destination.x + closeEnough;
 		bool zInPos = truckPos.z > destination.z - closeEnough && truckPos.z < destination.z + closeEnough;
 		return xInPos && zInPos;
-	}*/
-}
+	}
+}*/

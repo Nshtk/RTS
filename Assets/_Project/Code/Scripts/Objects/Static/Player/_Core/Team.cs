@@ -1,20 +1,60 @@
 using UnityEngine;
+using System.Collections.Generic;
+using System;
 
-public class Team : MonoBehaviour
+public class Team
 {
-	public int id;
-	public Texture2D? flag;
-	public Color color;
-	//public Goal goal; TODO 
+	string[] team_names = new string[] {	//UNUSED
+		"Свинорез",
+		"Товарищи",
+		"Пажилые",
+		"Сухачи"
+	};
+	public enum TEAM_TYPE
+	{
+		ATACKER,
+		DEFENDER,
+		TACTICIAN		// Free acting team
+	}
+	public class TeamGoal
+	{
+		public int score;
+		public bool is_reached=false;
+		public string description;
+		public Action setScore;
 
-	public Team(int id, Color color, Texture2D? flag=null)
+        public TeamGoal(string description)
+        {
+			this.description=description;
+		}
+
+		public void unitDiedEventHandler(Unit sender, Unit.UnitDiedEventArgs e)
+		{
+			score+=sender.cost;
+			//sender.unit
+		}
+    }
+	public string name;
+	public TeamGoal goal;
+	public int id;
+	public Color color;
+	public TEAM_TYPE type;
+	public List<Player> players=new List<Player>();
+
+	public Team(int id, string name, Color color)
 	{
 		this.id=id;
 		this.color=color;
-		if(flag!=null)
-			this.flag=flag;
+		this.name=name;
 	}
 
+	public void setGoal(TeamGoal goal, Action subscribe, TEAM_TYPE type, int score=0)
+	{
+		this.goal=goal;
+		this.goal.score = score;
+		this.type=type;
+		subscribe();
+	}
 	public void getUnitInfo()
 	{
 	

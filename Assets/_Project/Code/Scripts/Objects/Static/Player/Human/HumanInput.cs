@@ -26,6 +26,7 @@ public partial class Human
 			if(Input.GetKey(KeyCode.LeftControl))
 				if(Input.GetMouseButtonUp(0))
 					_human.buyUnit(Libraries.Utility.Random.Next(_human.faction.units.Count));
+			updateSelection();
 		}
 		private void updateCamera()
 		{
@@ -47,7 +48,7 @@ public partial class Human
 			_position_next=transform_camera.position+_position_increment;
 			if(_position_next.x<_limits.x && _position_next.x>0 && _position_next.y<_limits.y && _position_next.z<_limits.z&&_position_next.z>0 && _position_next.y>TerrainGenerator.height_map[(int)_position_next.x, (int)_position_next.z]*_limits.y+5)
 			{
-				//if(_position_next.y<=TerrainGenerator.height_map[(int)_position_next.x, (int)_position_next.z])
+				//if(_position_next.y<=TerrainGenerator.height_map[(int)_position_next.x, (int)_position_next.z])	//REVIEW:
 				//_position_next.y=Math.Min(TerrainGenerator.height_map[(int)_position_next.x, (int)_position_next.z]+5, _limits.y);
 				transform_camera.position=_position_next;
 			}
@@ -63,6 +64,27 @@ public partial class Human
 				transform_camera.rotation*=Quaternion.Euler(new Vector3(0, _rotation_increment.x, 0));
 				transform_camera.GetChild(0).transform.rotation*=Quaternion.Euler(new Vector3(-_rotation_increment.y, 0, 0));
 				_mouse_position_1=_mouse_position_2;
+			}
+		}
+		private void updateSelection()
+		{
+			if(Input.GetMouseButtonDown(0))
+				_human._selection._mouse_position_1 = Input.mousePosition;
+			if(Input.GetMouseButton(0))
+			{
+				if((_human._selection._mouse_position_1-Input.mousePosition).magnitude>40)
+				{
+					_human._selection.is_select_on_click=false;
+					_human._selection._mouse_position_2=Input.mousePosition;
+				}
+			}
+			if(Input.GetMouseButtonUp(0))
+			{
+				if(_human._selection.is_select_on_click)
+					_human._selection.selectOnClick(Input.GetKey(KeyCode.LeftControl));
+				else
+					_human._selection.selectOnDrag(Input.GetKey(KeyCode.LeftControl));
+				_human._selection.is_select_on_click=true;
 			}
 		}
 	}

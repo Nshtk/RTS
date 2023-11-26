@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
 	public int id;
 	public string nickname;
 	public Team team;
-	public Faction faction;		//FIXME: dont store it  use gamedata
+	public Faction faction;		//FIXME: dont store it use gamedata
 	public Spawn spawn;
 
 	public int money, money_income, money_pool=1000;
@@ -15,17 +15,20 @@ public class Player : MonoBehaviour
 
 	public List<Unit> units=new List<Unit>();
 
+	
 	protected virtual void Awake()
 	{
-
+	
 	}
 	protected virtual void Start()
     {
-        
+
     }
-	public virtual void StartManual(Faction faction)
+	public virtual void AwakeManual(string nickname, Team team, Faction faction)
 	{
-		spawn=Instantiate(spawn); spawn.initialise(this);
+		spawn=Instantiate(spawn); spawn.AwakeManual(this);
+		this.nickname = nickname;
+		this.team = team;
 		this.faction=faction;
 	}
 	protected virtual void Update()

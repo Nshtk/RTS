@@ -60,6 +60,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5473300677854467972, guid: 07ced4e9bd1685c41a0e2c12a7e041e7, type: 3}
       insertIndex: -1
       addedObject: {fileID: -2473226187342654154}
+    - targetCorrespondingSourceObject: {fileID: 5473300677854467972, guid: 07ced4e9bd1685c41a0e2c12a7e041e7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6846248514143308805}
   m_SourcePrefab: {fileID: 100100000, guid: 07ced4e9bd1685c41a0e2c12a7e041e7, type: 3}
 --- !u!1 &6292517451307016492 stripped
 GameObject:
@@ -80,11 +83,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   nickname: 
-  team: {fileID: 0}
-  faction: {fileID: -7295293109342190302, guid: 7624a950747a87c4baadc72ea434909c, type: 3}
   spawn: {fileID: 8676175143632865250, guid: 8350b8f16bc53ec499f51d2b91ddeca3, type: 3}
   money: 0
   money_income: 0
   money_pool: 1000
   difficulty_multiplier: 0
   units: []
+--- !u!114 &6846248514143308805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6292517451307016492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4585da26875cd445a776242857fff28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

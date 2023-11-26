@@ -1,9 +1,8 @@
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
-public class Conquest : Gamemode
+/*public class Conquest : Gamemode
 {
-	/*public override string GetDescription()
+	public override string GetDescription()
 	{
 		return "Conquest";
 	}
@@ -24,5 +23,5 @@ public class Conquest : Gamemode
 	public override bool PlayerMeetsConditions(Player player)
 	{
 		return player && !player.IsDead();
-	}*/
-}
+	}
+}*/

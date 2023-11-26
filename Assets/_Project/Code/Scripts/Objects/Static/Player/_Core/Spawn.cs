@@ -9,7 +9,15 @@ public class Spawn : MonoBehaviour
 	private Player _player_owner;
 	private BoxCollider _collider;
 
-    private void Start()
+	public void AwakeManual(Player owner)
+	{
+		_player_owner = owner;
+	}
+	private void Awake()
+	{
+		
+	}
+	private void Start()
     {
 		gameObject.transform.localScale=new Vector3(length, width, height);
 		_collider=gameObject.GetComponent<BoxCollider>();
@@ -25,10 +33,6 @@ public class Spawn : MonoBehaviour
 			//if(unit.player_id==_player_id)		// TODO: repair units
 		}
 
-	}
-	public void initialise(Player owner)
-	{
-		_player_owner = owner;
 	}
 	public Unit spawnUnit(Unit unit, Vector3? position=null) //NOTE: cant have one var of type Vector3
     {

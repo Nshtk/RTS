@@ -1,16 +1,29 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class Gamemode
+public abstract class Gamemode		//TODO: nested class difficulty
 {
-    public struct Goal
+	public int score_max;
+	public string description;
+	public List<Team> teams;
+	public readonly int count_teams_max;
+
+	/*protected int _count_teams;
+	public abstract int Count_Teams
+	{
+		get;
+		protected set;
+	}*/
+
+	protected Gamemode(int score_max)
     {
-        public bool is_reached;
-        public string description;
+		//Game.GameData.instance;
+		this.score_max=score_max;
     }
-
-    public Goal goal;
-
-	/*protected Player[] players;
+	public abstract void setTeams();
+	public abstract void updateTeamGoals();
+	public abstract void setGenerationParameters(TerrainGenerator terrain_generator);
+    /*protected Player[] players;
 
 	public void SetPlayers(Player[] players)
 	{

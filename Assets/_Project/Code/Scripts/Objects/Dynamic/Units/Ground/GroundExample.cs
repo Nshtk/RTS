@@ -2,10 +2,14 @@ using UnityEngine;
 
 namespace Units.Ground
 {
-	public class GroundExample : GroundUnit
+	public sealed class GroundExample : GroundUnit
 	{
 
-
+		protected override void Awake()
+		{
+			base.Awake();
+			cost=15;
+		}
 		protected override void Start()
 		{
 			base.Start();

@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using Units.Ground;
 using UnityEngine;
 
 public class Faction     // TODO faction-specific modifiers?
@@ -9,11 +7,12 @@ public class Faction     // TODO faction-specific modifiers?
     public Texture2D? flag;
 	public List<Unit>? units=new List<Unit>();
 
-	public Faction(string name, Texture2D? flag =null, List<Unit>? units=null)
+	public Faction(string name, Texture2D? flag=null)
 	{
 		this.name = name;
-		this.flag = flag;
-		this.units = units;
-		;
+		if(flag!=null)		//REVIEW:
+			this.flag=flag;
+		units.AddRange(new List<GroundUnit>(Resources.LoadAll<GroundUnit>(name)));
+		units.AddRange(new List<AirUnit>(Resources.LoadAll<AirUnit>(name)));
 	}
 }

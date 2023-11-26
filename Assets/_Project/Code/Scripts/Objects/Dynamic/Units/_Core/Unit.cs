@@ -1,4 +1,4 @@
-using System.Dynamic;
+using System;
 using UnityEngine;
 
 public class Unit : DynamicObject
@@ -14,7 +14,14 @@ public class Unit : DynamicObject
 		AIRPLANE_BOMBER,
 		SPECIAL
 	}
-
+	public enum UNIT_STATUS
+	{
+		IDLE,
+		FOLLOWING,
+		EVADING,
+		PATROLING,
+		ENGAGING
+	}
 
 	public float acceleration;
     public float move_speed, rotate_speed;
@@ -32,7 +39,8 @@ public class Unit : DynamicObject
 	protected override void Start()
     {
         base.Start();
-    }
+		unitDied+=Game.GameData.instance.handleUnitDied;
+	}
 	protected override void Update()
     {
         base.Update();
@@ -45,8 +53,26 @@ public class Unit : DynamicObject
 	{
 		_player_owner=owner;
 	}
+	protected override void OnDestroy()
+	{
+		base.OnDestroy();
+		unitDied?.Invoke(this, new UnitDiedEventArgs("unit died"));
+	}
 
-
+	public delegate void unitDiedEventHandler(Unit sender, UnitDiedEventArgs e);
+	public static event unitDiedEventHandler unitDied;
+	public class UnitDiedEventArgs : EventArgs
+	{
+		public string Message
+		{
+			get;
+			set;
+		}
+		public UnitDiedEventArgs(string message)
+		{
+			Message = message;
+		}
+	}
 	/*public override void MouseClick(GameObject hitObject, Vector3 hitPoint, Player controller)
 	{
 		base.MouseClick(hitObject, hitPoint, controller);

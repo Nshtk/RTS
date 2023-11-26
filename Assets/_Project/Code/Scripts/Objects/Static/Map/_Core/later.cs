@@ -45,7 +45,7 @@ public class AssignSplatMap : MonoBehaviour
 				splatWeights[1] = Mathf.Clamp01((terrainData.heightmapResolution - height));
 
 				// Texture[2] stronger on flatter terrain
-				// Note "steepness" is unbounded, so we "normalise" it by dividing by the extent of heightmap height and scale factor
+				// "steepness" is unbounded, so we "normalise" it by dividing by the extent of heightmap height and scale factor
 				// Subtract result from 1.0 to give greater weighting to flat surfaces
 				splatWeights[2] = 1.0f - Mathf.Clamp01(steepness*steepness/(terrainData.heightmapResolution/5.0f));
 

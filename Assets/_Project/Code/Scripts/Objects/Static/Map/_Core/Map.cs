@@ -39,7 +39,7 @@ namespace Libraries.Terrain
 			{
 				for(int j=0; j<length;)
 				{
-					switch(Utility.getRandomEnum<Sector.TYPE>())
+					switch(Utility.Random.NextEnum<Sector.TYPE>())
 					{
 						/*case SECTOR_TYPE.ROAD:
 							break;
@@ -56,7 +56,7 @@ namespace Libraries.Terrain
 						case SECTOR_TYPE.SEA:
 							break;*/
 						default:
-							sector=new SectorMountain(new Point(j, i), Sector.FORM.RECTANGLE_HORIZONTAL, Utility.getRandomEnum<Sector.SIZE>(), Sector.SectorFiller.SHAPE.ELLIPSE);
+							sector=new SectorMountain(new Point(j, i), Sector.FORM.RECTANGLE_HORIZONTAL, Utility.Random.NextEnum<Sector.SIZE>(), Sector.SectorFiller.SHAPE.ELLIPSE);
 							break;
 					}
 					j+=(int)sector.proportions.x;

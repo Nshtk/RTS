@@ -1,23 +1,21 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using Units.Ground;
-using Units.Air;
+
 
 public class Game : MonoBehaviour	//Class containing main loop.
 {
-	public class GameData
+	public class GameData			//TODO: add Debug class?
 	{
-		//TODO: add statistics
-		//TODO: add Debug class?
-		public static GameData _instance;
+		public static GameData instance;
 		private Game _game;
 
-		public ulong ticks = 0; // FIXME: to BigInt
+		public ulong ticks = 0;		// FIXME: to BigInt
+		public int count_units_died;
 
-		public IList<Player> Players
+		public IList<Team> Teams	//REVIEW: other objects normaly should not have access to this
 		{
-			get { return _game._players.AsReadOnly(); }
+			get { return _game._teams.AsReadOnly(); }
 		}
 		public IList<Faction> Factions
 		{
@@ -26,8 +24,28 @@ public class Game : MonoBehaviour	//Class containing main loop.
 
 		public GameData(Game game)
 		{
-			_instance=this;
+			instance=this;
 			_game=game;
+		}
+
+		public void handleUnitDied(Unit sender, Unit.UnitDiedEventArgs e)
+		{
+			count_units_died++;
+		}
+
+		public event FlagCapturedEventHandler flagCaptured;
+		public delegate void FlagCapturedEventHandler(Flag sender, FlagCapturedEventArgs e);
+		public class FlagCapturedEventArgs : EventArgs
+		{
+			public string Message
+			{
+				get;
+				set;
+			}
+			public FlagCapturedEventArgs(string message)
+			{
+				Message = message;
+			}
 		}
 	}
 
@@ -36,52 +54,58 @@ public class Game : MonoBehaviour	//Class containing main loop.
 
 	public GameData game_data;
 	private Gamemode gamemode;
-	private List<Player> _players = new List<Player>(1); //NOTE: initial capacity reduces memory reallocations
 	private List<Faction> _factions;
+	private List<Team> _teams;
+	private TerrainGenerator terrain_generator;
 
 	private void Awake()
 	{
-		game_data=new GameData(this);
-		gamemode=new Liquidation();
-		/*new List<Faction> {	//TODO: to game data?
-			new Faction("A", null, new List<Unit> {
-				new GroundExample(),
-				new AirExample()
-			})
-		};*/
-		var grd = new List<GroundUnit>(Resources.LoadAll<GroundUnit>(""));
-		var air = new List<AirUnit>(Resources.LoadAll<AirUnit>(""));
-		List<Unit> units=new List<Unit>();
-		units.AddRange(grd);
-		units.AddRange(air);
+		terrain_generator=Terrain.activeTerrain.GetComponent<TerrainGenerator>();
+		terrain_generator.AwakeManual();
+		game_data =new GameData(this);
+		_teams= new List<Team>() { 
+			new Team(0, "Свинорез", Color.red)
+		}; 
 		_factions = new List<Faction>() {
-			new Faction("A", null, units)
+			new Faction("ExampleFaction")
 		};
-		for(int i = 0; i<_players.Capacity; i++)
+		gamemode=new Liquidation(_teams, 1000);
+		foreach(Team team in _teams)
 		{
-			//Human human = gameObject.AddComponent<Human>();
-			_players.Add(Instantiate(_human_prefab));
-		}
+			Player player = Instantiate(_human_prefab);
+			player.AwakeManual("Товарищ", team, _factions[0]);
+			team.players.Add(player);
+		}	
 	}
     private void Start()
     {
-		foreach(Player player in _players)
+		terrain_generator.StartManual();
+		/*foreach(Team team in _teams)
 		{
-			player.StartManual(_factions[0]);   // pass args
-		}
+			foreach(Player player in team.players)
+			{
+				  // pass args
+			}
+		}*/
     }
     private void Update()
     {
 		game_data.ticks++;
-        foreach(Player player in _players)
+		foreach(Team team in _teams)
 		{
-			player.UpdateManual();
-		}
-		foreach(Player player in _players)
-		{
-			foreach(Unit unit in player.units)
+			foreach(Player player in team.players)
 			{
-				unit.UpdateManual(); 
+				player.UpdateManual();
+			}
+		}
+		foreach(Team team in _teams)
+		{
+			foreach(Player player in team.players)
+			{
+				foreach(Unit unit in player.units)
+				{
+					unit.UpdateManual();
+				}
 			}
 		}
 		/*if(player.goal.is_reached)	// TODO: + stop updating
