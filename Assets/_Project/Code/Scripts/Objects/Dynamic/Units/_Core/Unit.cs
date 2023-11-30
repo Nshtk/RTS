@@ -14,14 +14,6 @@ public class Unit : DynamicObject
 		AIRPLANE_BOMBER,
 		SPECIAL
 	}
-	public enum UNIT_STATUS
-	{
-		IDLE,
-		FOLLOWING,
-		EVADING,
-		PATROLING,
-		ENGAGING
-	}
 
 	public float acceleration;
     public float move_speed, rotate_speed;

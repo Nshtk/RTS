@@ -4,27 +4,51 @@ public partial class UnitBehavior
 {
 	public abstract class UnitBehaviorState
 	{
-		protected UnitBehavior unit_behavior;
+		protected UnitBehavior _unit_behavior;
+		public float angular;
+		public Vector3 linear;
+		public float weight;
 
 		public UnitBehaviorState(UnitBehavior unit_behavior)
 		{
-			this.unit_behavior=unit_behavior;
+			_unit_behavior=unit_behavior;
 		}
 
-		public virtual void OnEnter()
+		public virtual void enter()
 		{
+
 		}
-		public virtual void OnUpdate()
+		public void update()
 		{
+
 		}
-		public virtual void OnHurt()
-		{
-		}
-		public virtual void OnExit()
+		public virtual void exit()
 		{
 		}
 	}
+	public class IdleState : UnitBehaviorState
+	{
+		public IdleState(UnitBehavior unit_behavior) : base(unit_behavior)
+		{
 
+		}
+	}
+	public class FollowState : UnitBehaviorState
+	{
+		public DynamicObject _dynamic_object_target;
+
+		public FollowState(UnitBehavior unit_behavior) : base(unit_behavior)
+		{
+			//unit_behavior.navmesh_agent.destination=;
+		}
+	}
+	public class EvadeState : UnitBehaviorState
+	{
+		public EvadeState(UnitBehavior unit_behavior) : base(unit_behavior)
+		{
+
+		}
+	}
 	public class PatrolState : UnitBehaviorState
 	{
 		float timeBeforeSleep;
@@ -39,22 +63,29 @@ public partial class UnitBehavior
 		}
 		public void UpdateState()
 		{
-			if(Physics.Raycast(unit_behavior.transform.position, unit_behavior.transform.forward))
+			if(Physics.Raycast(_unit_behavior.transform.position, _unit_behavior.transform.forward))
 			{
-				unit_behavior.ChangeState(unit_behavior.chaseState);
+				//_unit_behavior.ChangeState(_unit_behavior.chaseState);
 			}
 			if(timeBeforeSleep < 0)
 			{
-				unit_behavior.ChangeState(unit_behavior.sleepState);
+				//_unit_behavior.ChangeState(_unit_behavior.sleepState);
 			}
 			timeBeforeSleep -= Time.deltaTime;
 		}
 		public void OnHurt()
 		{
-			unit_behavior.ChangeState(unit_behavior.hurtState);
+			//_unit_behavior.ChangeState(_unit_behavior.hurtState);
 		}
 		public void OnExit()
 		{
+		}
+	}
+	public class EngageState : UnitBehaviorState
+	{
+		public EngageState(UnitBehavior unit_behavior) : base(unit_behavior)
+		{
+
 		}
 	}
 }

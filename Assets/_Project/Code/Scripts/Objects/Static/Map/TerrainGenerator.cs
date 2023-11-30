@@ -1,6 +1,7 @@
 using UnityEngine;
 using Libraries.Terrain;
 using Libraries;
+using Unity.AI.Navigation;
 
 public class TerrainGenerator : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class TerrainGenerator : MonoBehaviour
 	public static TerrainGenerator instance;
 	private Terrain _terrain;
 	private Map _map;
+	private NavMeshSurface _navmesh_surface;
 
 	[Header("Generation parametrs")]
 	public int length = 256;
@@ -48,6 +50,7 @@ public class TerrainGenerator : MonoBehaviour
 	}
 	private void Start()
 	{
+		_navmesh_surface.BuildNavMesh();
 	}
 	public void StartManual()
 	{
