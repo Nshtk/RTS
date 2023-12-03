@@ -27,6 +27,9 @@ public partial class Human
 				if(Input.GetMouseButtonUp(0))
 					_human.buyUnit(Libraries.Utility.Random.Next(_human.faction.units.Count));
 			updateSelection();
+			if(Input.GetMouseButtonDown(1))
+				if(_human.units_selected.Count>0)
+					_human.giveOrder(Input.mousePosition);
 		}
 		private void updateCamera()
 		{
@@ -69,7 +72,10 @@ public partial class Human
 		private void updateSelection()
 		{
 			if(Input.GetMouseButtonDown(0))
+			{
+				_human._selection.is_select_on_click=true;
 				_human._selection._mouse_position_1 = Input.mousePosition;
+			}
 			if(Input.GetMouseButton(0))
 			{
 				if((_human._selection._mouse_position_1-Input.mousePosition).magnitude>40)

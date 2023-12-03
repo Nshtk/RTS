@@ -1,10 +1,8 @@
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class DynamicObject : MonoBehaviour
 {
-	public string object_name = "WorldObject";
 	public Texture2D icon;
 	public int hit_points = 100, hit_points_max = 100;
 	public float detectionRange = 20.0f;
@@ -13,15 +11,14 @@ public class DynamicObject : MonoBehaviour
 
 	protected Player player;
 	protected string[] actions = { };
-	protected bool currentlySelected = false;
-	protected Bounds selectionBounds;
 	protected Rect playingArea = new Rect(0.0f, 0.0f, 0.0f, 0.0f);
 	protected GUIStyle healthStyle = new GUIStyle();
 	protected float healthPercentage = 1.0f;
 	protected DynamicObject target = null;
-	protected bool attacking = false, movingIntoPosition = false, aiming = false;
 	protected bool loadedSavedValues = false;
 	protected List<DynamicObject> nearbyObjects;
+
+	public Vector3? destination=null;
 
 	private List<Material> oldMaterials = new List<Material>();
 	//private int loadedTargetId = -1;
@@ -94,14 +91,6 @@ public class DynamicObject : MonoBehaviour
 	public void setSelected(bool is_selected)
 	{
 		
-	}
-	public void CalculateBounds()
-	{
-		selectionBounds = new Bounds(transform.position, Vector3.zero);
-		foreach(Renderer r in GetComponentsInChildren<Renderer>())
-		{
-			selectionBounds.Encapsulate(r.bounds);
-		}
 	}
 	public void SetTransparentMaterial(Material material, bool storeExistingMaterial)
 	{

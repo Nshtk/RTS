@@ -16,7 +16,7 @@ public class TerrainGenerator : MonoBehaviour
 	public static TerrainGenerator instance;
 	private Terrain _terrain;
 	private Map _map;
-	private NavMeshSurface _navmesh_surface;
+	private NavMeshSurface[] _navmesh_surfaces;
 
 	[Header("Generation parametrs")]
 	public int length = 256;
@@ -28,7 +28,7 @@ public class TerrainGenerator : MonoBehaviour
 
 	private void Awake()
 	{
-
+		_navmesh_surfaces=GetComponents<NavMeshSurface>();
 	}
 	public void AwakeManual()
 	{
@@ -50,7 +50,8 @@ public class TerrainGenerator : MonoBehaviour
 	}
 	private void Start()
 	{
-		_navmesh_surface.BuildNavMesh();
+		for(int i=0; i<_navmesh_surfaces.Length; i++)
+			_navmesh_surfaces[i].BuildNavMesh();
 	}
 	public void StartManual()
 	{

@@ -19,7 +19,12 @@ namespace Libraries
 
 	public static class Utility
 	{
-		public static readonly System.Random Random =new System.Random();
+		public static readonly System.Random Random = new System.Random();
+
+		static Utility()
+		{
+			UnityEngine.Random.InitState(DateTime.Now.Millisecond);
+		}
 
 		public static Vector3 getRangedVector3(float x_min, float x_max, float y_min, float y_max, float z_min, float z_max)
 		{

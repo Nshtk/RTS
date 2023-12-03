@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AirUnit : Unit
+public partial class AirUnit : Unit
 {
 
 

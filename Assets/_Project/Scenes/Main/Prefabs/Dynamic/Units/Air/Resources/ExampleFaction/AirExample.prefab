@@ -61,7 +61,7 @@ PrefabInstance:
       addedObject: {fileID: 8774280893539032069}
     - targetCorrespondingSourceObject: {fileID: 6474304828690615015, guid: f97b60fbfe9151e4f9c2d90f7f0d533c, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -4360041158373166799}
+      addedObject: {fileID: 8238431649118216153}
   m_SourcePrefab: {fileID: 100100000, guid: f97b60fbfe9151e4f9c2d90f7f0d533c, type: 3}
 --- !u!1 &5763626506899592408 stripped
 GameObject:
@@ -76,7 +76,7 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5763626506899592408}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!195 &-4360041158373166799
+--- !u!195 &8238431649118216153
 NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

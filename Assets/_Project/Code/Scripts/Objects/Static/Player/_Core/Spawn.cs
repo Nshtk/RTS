@@ -40,7 +40,7 @@ public class Spawn : MonoBehaviour
 		Vector3 obj_position;
 		if(position==null)
 		{
-			obj_position=Utility.getRandomPointInCollider(GetComponent<BoxCollider>());
+			obj_position=Utility.getRandomPointInCollider(_collider);
 			obj_position.y = Terrain.activeTerrain.SampleHeight(obj_position) + Terrain.activeTerrain.GetPosition().y;
 			obj_position.y += 0.5f;
 		}

@@ -49,9 +49,8 @@ public class HumanSelection : MonoBehaviour
 		}
 	}
 
-	//private Human _human;
+	private Human _human;
 	private HumanSelectionDrawer _drawer;
-	public Dictionary<int, DynamicObject> selected_objects = new Dictionary<int, DynamicObject>();
 	private MeshCollider _selection_collider;
 	private RaycastHit _raycast_hit;
 	private Ray _ray;
@@ -59,93 +58,44 @@ public class HumanSelection : MonoBehaviour
 	public Vector3 _mouse_position_1, _mouse_position_2;
 	private Vector3 _selection_collider_corner_left_bottom, _selection_collider_corner_right_top;
 	private Vector3[] _vertices = new Vector3[4], _lines = new Vector3[4];
-	public bool is_select_on_click;
+	public bool is_select_on_click=true;
 
 	void Start()
 	{
+		_human=gameObject.GetComponent<Human>();
 		_drawer=new HumanSelectionDrawer(Color.green);
 		_selection_collider=gameObject.AddComponent<MeshCollider>();
 		_selection_collider.convex=true;
 		_selection_collider.isTrigger=true;
 	}
-	/*void Update()
-	{
-		if(Input.GetMouseButtonDown(0))
-			_mouse_position_1 = Input.mousePosition;
-		if(Input.GetMouseButton(0))
-			if((_mouse_position_1-Input.mousePosition).magnitude>40)
-				_select_multiple=true;
-		_selection_collider.enabled=true;
-		if(Input.GetMouseButtonUp(0))
-		{
-			if(!_select_multiple)
-			{
-				_ray = Camera.main.ScreenPointToRay(_mouse_position_1);
-				if(Physics.Raycast(_ray, out _raycast_hit, 50000.0f))
-				{
-					if(Input.GetKey(KeyCode.LeftControl))
-						addSelectedObject(_raycast_hit.transform.gameObject);
-					else
-						deselectAllObjects();
-					addSelectedObject(_raycast_hit.transform.gameObject);
-				}
-				else
-					if(!Input.GetKey(KeyCode.LeftControl))
-					deselectAllObjects();
-			}
-			else
-			{
-				_mouse_position_2 = Input.mousePosition;
-				_selection_collider_corner_left_bottom = Vector3.Min(_mouse_position_1, _mouse_position_2);
-				_selection_collider_corner_right_top = Vector3.Max(_mouse_position_1, _mouse_position_2);
-				_selection_collider_corners=new Vector2[] {
-					new Vector2(_selection_collider_corner_left_bottom.x, _selection_collider_corner_right_top.y),		//top left
-					new Vector2(_selection_collider_corner_right_top.x, _selection_collider_corner_right_top.y),		//top right
-					new Vector2(_selection_collider_corner_left_bottom.x, _selection_collider_corner_left_bottom.y),	//bottom left
-					new Vector2(_selection_collider_corner_right_top.x, _selection_collider_corner_left_bottom.y)		//bottom right
-				};
 
-				int i = 0;
-				foreach(Vector2 corner in _selection_collider_corners)
-				{
-					_ray=Camera.main.ScreenPointToRay(corner);
-					if(Physics.Raycast(_ray, out _raycast_hit, 50000.0f, 3))        //TODO: deal with layers
-					{
-						_vertices[i]=new Vector3(_raycast_hit.point.x, _raycast_hit.point.y, _raycast_hit.point.z);
-						_lines[i]=_ray.origin - _raycast_hit.point;
-						Debug.DrawLine(Camera.main.ScreenToWorldPoint(corner), _raycast_hit.point, Color.red, 10.0f, true);
-					}
-					i++;
-				}
-				_selection_collider.sharedMesh = _drawer.generateSelectionMesh(_vertices, _lines);
-				_selection_collider.enabled=true;
-
-				if(!Input.GetKey(KeyCode.LeftControl))
-					deselectAllObjects();
-
-				_select_multiple = false;
-			}
-		}
-	}*/
-
-	private void OnGUI()	//NOTE no ways to call OnGUI manually
+	private void OnGUI()	//NOTE: no ways to call OnGUI manually
 	{
 		if(!is_select_on_click)
-		{
 			_drawer.drawUiRectangle(_mouse_position_1, _mouse_position_2);
-		}
 	}
 	private void OnTriggerEnter(Collider collider)
 	{
-		addSelectedObject(collider.gameObject.GetComponent<DynamicObject>());
+		DynamicObject obj = collider.gameObject.GetComponent<DynamicObject>();
+		if(obj!=null)
+		{
+			if (obj is Unit unit)
+			{
+				if(unit._player_owner.id==_human.id)
+					selectObject(unit);
+			}
+			else
+				selectObject(obj);
+		}
 	}
 
 	public void selectOnClick(bool is_adding_to_current_selection)
 	{
 		if(!is_adding_to_current_selection)
 			deselectObjects();
-		if(Physics.Raycast(Camera.main.ScreenPointToRay(_mouse_position_1), out _raycast_hit, 50000.0f))
-			addSelectedObject(_raycast_hit.transform.gameObject.GetComponent<DynamicObject>());
+		Debug.DrawLine(Camera.main.ScreenToWorldPoint(_mouse_position_1), _raycast_hit.point, Color.red, 10.0f, true);
+		if (Physics.Raycast(Camera.main.ScreenPointToRay(_mouse_position_1), out _raycast_hit, 50000.0f))
+			selectObject(_raycast_hit.transform.gameObject.GetComponent<DynamicObject>(), is_adding_to_current_selection);
 	}
 	public void selectOnDrag(bool is_adding_to_current_selection)
 	{
@@ -179,36 +129,41 @@ public class HumanSelection : MonoBehaviour
 
 	private IEnumerator disableSelectionCollider()
 	{
-		yield return new WaitForSeconds(1.0f);
+		yield return new WaitForSeconds(1f);
 		_selection_collider.enabled = false;
+		is_select_on_click=true; //REVIEW
 	}
-	public void addSelectedObject(DynamicObject obj)
+	public void selectObject(DynamicObject obj, bool is_adding_to_current_selection=false)
 	{
 		if(obj!=null)
 		{
-			int id = obj.GetInstanceID();
-
-			if(!selected_objects.ContainsKey(id))
+			if (obj is Unit unit)
 			{
-				selected_objects.Add(id, obj);
-				obj.gameObject.AddComponent<SelectionComponent>();
-				Debug.Log("Added " + id + " to selected dict");
+				int id = unit.GetInstanceID();
+				if (!_human.units_selected.ContainsKey(id))
+					_human.units_selected.Add(id, unit);
+				else
+					if(is_adding_to_current_selection)
+						deselectObjects(id);
 			}
+			else
+				_human.object_selected=obj;
+			obj.gameObject.AddComponent<SelectionComponent>();
 		}
 	}
 	public void deselectObjects(int id=-1)	//Remove one or remove all 
 	{
 		if(id>-1)
 		{
-			Destroy(selected_objects[id].GetComponent<SelectionComponent>());
-			selected_objects.Remove(id);
+			Destroy(_human.units_selected[id].GetComponent<SelectionComponent>());
+			_human.units_selected.Remove(id);
 		}
 		else
 		{
-			foreach(KeyValuePair<int, DynamicObject> obj in selected_objects)
+			foreach(KeyValuePair<int, Unit> obj in _human.units_selected)
 				if(obj.Value != null)
-					Destroy(selected_objects[obj.Key].GetComponent<SelectionComponent>());
-			selected_objects.Clear();
+					Destroy(_human.units_selected[obj.Key].GetComponent<SelectionComponent>());
+			_human.units_selected.Clear();
 		}
 	}
 }

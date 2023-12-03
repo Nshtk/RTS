@@ -1,9 +1,14 @@
+using System.Collections.Generic;
+
 using UnityEngine;
 
 public sealed partial class Human : Player
 {
     private HumanInput _input;
 	private HumanSelection _selection;
+	private RaycastHit _raycast_hit;
+	public Dictionary<int, Unit> units_selected = new Dictionary<int, Unit>();
+	public DynamicObject object_selected;
 
 	public override void AwakeManual(string nickname, Team team, Faction faction)
 	{
@@ -24,6 +29,17 @@ public sealed partial class Human : Player
     {
         base.Update();
 		_input.updateManual();
+	}
+	public override void giveOrder(Vector3 position)
+	{
+		if(Physics.Raycast(Camera.main.ScreenPointToRay(position), out _raycast_hit, 5000.0f))
+		{
+			DynamicObject target=_raycast_hit.transform.gameObject.GetComponent<DynamicObject>();
+			foreach(Unit unit in units_selected.Values)
+			{
+				unit.setOrder(_raycast_hit.point, target);
+			}
+		}
 	}
 
 }

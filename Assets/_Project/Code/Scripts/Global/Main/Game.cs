@@ -5,10 +5,13 @@ using System.Collections.Generic;
 
 public class Game : MonoBehaviour	//Class containing main loop.
 {
-	public class GameData			//TODO: add Debug class?
+	public class GameData           //TODO: add Debug class? //Class for statistics
 	{
 		public static GameData instance;
 		private Game _game;
+
+		public Human prefab_human;
+		public Spawn prefab_spawn;
 
 		public ulong ticks = 0;		// FIXME: to BigInt
 		public int count_units_died;
@@ -26,6 +29,8 @@ public class Game : MonoBehaviour	//Class containing main loop.
 		{
 			instance=this;
 			_game=game;
+			prefab_human=game._human_prefab;
+			prefab_spawn=game._spawn_prefab;
 		}
 
 		public void handleUnitDied(Unit sender, Unit.UnitDiedEventArgs e)
@@ -50,6 +55,7 @@ public class Game : MonoBehaviour	//Class containing main loop.
 	}
 
 	[SerializeField] private Human _human_prefab;
+	[SerializeField] public Spawn _spawn_prefab;	
 	//[SerializeField] private Bot _bot_prefab;
 
 	public GameData game_data;

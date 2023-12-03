@@ -1,5 +1,4 @@
 ﻿[*.cs]
-
 # CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 dotnet_diagnostic.CS8632.severity = none
 
@@ -194,3 +193,4 @@ dotnet_style_object_initializer = true:suggestion
 dotnet_style_prefer_collection_expression = true:suggestion
 dotnet_style_collection_initializer = true:suggestion
 dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
+dotnet_style_prefer_conditional_expression_over_assignment = true:silent

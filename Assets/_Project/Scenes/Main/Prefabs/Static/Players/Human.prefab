@@ -89,6 +89,7 @@ MonoBehaviour:
   money_pool: 1000
   difficulty_multiplier: 0
   units: []
+  object_selected: {fileID: 0}
 --- !u!114 &6846248514143308805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,3 +102,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4585da26875cd445a776242857fff28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mouse_position_1: {x: 0, y: 0, z: 0}
+  _mouse_position_2: {x: 0, y: 0, z: 0}
+  is_select_on_click: 1

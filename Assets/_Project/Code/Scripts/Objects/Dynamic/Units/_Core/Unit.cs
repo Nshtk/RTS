@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class Unit : DynamicObject
+public partial class Unit : DynamicObject
 {
 	public enum UNIT_CLASS
 	{
@@ -14,36 +15,60 @@ public class Unit : DynamicObject
 		AIRPLANE_BOMBER,
 		SPECIAL
 	}
+	public enum UNIT_STATE
+	{
+		IDLE,
+		FOLLOWING,
+		EVADING,
+		PATROLING,
+		ENGAGING
+	}
 
-	public float acceleration;
-    public float move_speed, rotate_speed;
     public AudioClip sound_voiceover, sound_idle, sound_move;
-	private Player _player_owner;
-	private Vector3 destination;
-	private Quaternion target_rotation;
-	private GameObject destination_target;
-	//private int loadedDestinationTargetId = -1;
+	public Player _player_owner;
 	public int limit;
 	public int cost;
 	public int charge_time, recharge_time;
 	public float experience;
 
+
+	protected UnitState state_current;
+	private UnitIdleState state_idle;
+	private UnitFollowState state_follow;
+	private UnitEvadeState state_evade;
+	private UnitPatrolState state_patrol;
+	private UnitEngageState state_engage;
+
+	public float speed_move = 1f, speed_rotate = 45f;
+	public float acceleration = 30f, acceleration_angular = 45f;
+	public float orientation;
+	public Vector3 velocity = Vector3.one;
+
+	protected NavMeshAgent navmesh_agent;
+
+	protected override void Awake()
+	{
+		base.Awake();
+		navmesh_agent = GetComponent<NavMeshAgent>();
+	}
 	protected override void Start()
     {
         base.Start();
 		unitDied+=Game.GameData.instance.handleUnitDied;
+		setStates();
+
+	}
+	public override void StartManual()
+	{
+
 	}
 	protected override void Update()
     {
         base.Update();
     }
-	public void setChargeTimer()
+	public override void UpdateManual()
 	{
-	
-	}
-	public override void initialise(Player owner)
-	{
-		_player_owner=owner;
+		state_current?.update();
 	}
 	protected override void OnDestroy()
 	{
@@ -51,19 +76,40 @@ public class Unit : DynamicObject
 		unitDied?.Invoke(this, new UnitDiedEventArgs("unit died"));
 	}
 
-	public delegate void unitDiedEventHandler(Unit sender, UnitDiedEventArgs e);
-	public static event unitDiedEventHandler unitDied;
-	public class UnitDiedEventArgs : EventArgs
+	public override void initialise(Player owner)
 	{
-		public string Message
+		_player_owner=owner;
+	}
+	public void setChargeTimer()
+	{
+
+	}
+	public virtual void setStates()
+	{
+		state_idle=     new UnitIdleState(this);
+		state_follow=   new UnitFollowState(this);
+		state_evade=    new UnitEvadeState(this);
+		state_patrol=   new UnitPatrolState(this);
+		state_engage=   new UnitEngageState(this);
+		changeState(state_idle);
+	}
+
+	public virtual void setOrder(Vector3 position, DynamicObject target=null)
+	{
+		destination=position;
+		if (target!=null)
 		{
-			get;
-			set;
+			this.target=target;
+			changeState(state_follow);
 		}
-		public UnitDiedEventArgs(string message)
-		{
-			Message = message;
-		}
+		else
+			changeState(state_idle);
+	}
+	public void changeState(UnitState state_next)
+	{
+		state_current?.exit();
+		state_current = state_next;
+		state_current.enter();
 	}
 	/*public override void MouseClick(GameObject hitObject, Vector3 hitPoint, Player controller)
 	{
@@ -220,4 +266,18 @@ public class Unit : DynamicObject
 		}
 		CalculateBounds();
 	}*/
+	public delegate void unitDiedEventHandler(Unit sender, UnitDiedEventArgs e);
+	public static event unitDiedEventHandler unitDied;
+	public class UnitDiedEventArgs : EventArgs
+	{
+		public string Message
+		{
+			get;
+			set;
+		}
+		public UnitDiedEventArgs(string message)
+		{
+			Message = message;
+		}
+	}
 }
