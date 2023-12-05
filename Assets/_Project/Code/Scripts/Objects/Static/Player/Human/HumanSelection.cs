@@ -48,7 +48,7 @@ public class HumanSelection : MonoBehaviour
 			GUI.Box(_rect, GUIContent.none, _style);
 		}
 	}
-
+	private LayerMask _layer_mask_click_selection, _layer_mask_drag_selection;
 	private Human _human;
 	private HumanSelectionDrawer _drawer;
 	private MeshCollider _selection_collider;
@@ -67,6 +67,7 @@ public class HumanSelection : MonoBehaviour
 		_selection_collider=gameObject.AddComponent<MeshCollider>();
 		_selection_collider.convex=true;
 		_selection_collider.isTrigger=true;
+		_layer_mask_click_selection=1<<3 | 1<<7 | 1<<8; _layer_mask_drag_selection=1<<3 | 1<<8;	//PlaneRaycast, Building, Unit
 	}
 
 	private void OnGUI()	//NOTE: no ways to call OnGUI manually
@@ -93,9 +94,9 @@ public class HumanSelection : MonoBehaviour
 	{
 		if(!is_adding_to_current_selection)
 			deselectObjects();
-		Debug.DrawLine(Camera.main.ScreenToWorldPoint(_mouse_position_1), _raycast_hit.point, Color.red, 10.0f, true);
-		if (Physics.Raycast(Camera.main.ScreenPointToRay(_mouse_position_1), out _raycast_hit, 50000.0f))
+		if (Physics.Raycast(Camera.main.ScreenPointToRay(_mouse_position_1), out _raycast_hit, 50000.0f, _layer_mask_click_selection))
 			selectObject(_raycast_hit.transform.gameObject.GetComponent<DynamicObject>(), is_adding_to_current_selection);
+		Debug.DrawLine(Camera.main.ScreenToWorldPoint(_mouse_position_1), _raycast_hit.point, Color.red, 10.0f, true);
 	}
 	public void selectOnDrag(bool is_adding_to_current_selection)
 	{
@@ -114,7 +115,7 @@ public class HumanSelection : MonoBehaviour
 		foreach(Vector2 corner in _selection_collider_corners)
 		{
 			_ray=Camera.main.ScreenPointToRay(corner);
-			if(Physics.Raycast(_ray, out _raycast_hit, 50000.0f, 3))        //TODO: deal with layers
+			if (Physics.Raycast(_ray, out _raycast_hit, 50000.0f, _layer_mask_drag_selection))        //TODO: deal with layers
 			{
 				_vertices[i]=new Vector3(_raycast_hit.point.x, _raycast_hit.point.y, _raycast_hit.point.z);
 				_lines[i]=_ray.origin - _raycast_hit.point;

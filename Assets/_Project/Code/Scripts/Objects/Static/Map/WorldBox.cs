@@ -24,10 +24,6 @@ public class WorldBox : MonoBehaviour
     {
 
 	}
-    private void Update()
-    {
-        
-    }
 
 	public void initialise(int length, int width, int height, Vector3 terrain_data_size)
 	{

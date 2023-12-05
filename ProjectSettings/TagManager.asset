@@ -8,12 +8,12 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Collision
+  - PlaneRaycast
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Terrain
+  - Building
+  - Unit
   - 
   - 
   - 

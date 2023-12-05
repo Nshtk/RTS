@@ -5,12 +5,27 @@ public partial class Human
 {
 	public class HumanInput
 	{
+		private struct MouseBehavior
+		{
+			public float time_rmb_pressed;
+			public float duration_rmb_held;
+			public bool is_rmb_held;
+
+			public MouseBehavior(float time_rmb_pressed, float duration_rmb_held, bool is_rmb_held)
+			{
+				this.time_rmb_pressed=time_rmb_pressed;
+				this.duration_rmb_held=duration_rmb_held;
+				this.is_rmb_held=is_rmb_held;
+			}
+		}
+
 		private Human _human;
 		private Transform transform_camera;     //TODO: feature split screen between multiple cameras
 		public float speed_move = 3f, speed_zoom = 40f, speed_rotate = 0.05f;
 		private Vector3 _limits;
 		private Vector3 _position_increment, _rotation_increment, _position_next;
 		private Vector3 _mouse_position_1, _mouse_position_2;
+		private MouseBehavior _mouse_behavior=new MouseBehavior(0f, 0.25f, false);
 
 		public HumanInput(Human human)
 		{
@@ -27,9 +42,7 @@ public partial class Human
 				if(Input.GetMouseButtonUp(0))
 					_human.buyUnit(Libraries.Utility.Random.Next(_human.faction.units.Count));
 			updateSelection();
-			if(Input.GetMouseButtonDown(1))
-				if(_human.units_selected.Count>0)
-					_human.giveOrder(Input.mousePosition);
+			updateControls();
 		}
 		private void updateCamera()
 		{
@@ -92,6 +105,24 @@ public partial class Human
 					_human._selection.selectOnDrag(Input.GetKey(KeyCode.LeftControl));
 				_human._selection.is_select_on_click=true;
 			}
+		}
+		private void updateControls()
+		{
+			if(Input.GetMouseButtonDown(1))
+			{
+				_mouse_behavior.time_rmb_pressed = Time.timeSinceLevelLoad;
+				_mouse_behavior.is_rmb_held = false;
+			}
+			else if(Input.GetMouseButtonUp(1))
+			{
+				if(!_mouse_behavior.is_rmb_held)
+					if(_human.units_selected.Count>0)
+						_human.giveOrder(Input.mousePosition);
+				_mouse_behavior.is_rmb_held = false;
+			}
+			if(Input.GetMouseButton(1))
+				if(Time.timeSinceLevelLoad-_mouse_behavior.time_rmb_pressed > _mouse_behavior.duration_rmb_held)
+					_mouse_behavior.is_rmb_held = true;
 		}
 	}
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 480745650110942834}
   - component: {fileID: 8258583115112468072}
   - component: {fileID: 414183241838094701}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: WorldBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -13,6 +13,7 @@ public class TerrainGenerator : MonoBehaviour
 		EAST
 	}
 	[SerializeField] private WorldBox _worldbox;
+	[SerializeField] private PlaneRaycast _plane_raycast;
 	public static TerrainGenerator instance;
 	private Terrain _terrain;
 	private Map _map;
@@ -47,6 +48,7 @@ public class TerrainGenerator : MonoBehaviour
 		_terrain.terrainData.SetAlphamaps(0, 0, alpha_map);
 
 		Instantiate(_worldbox).initialise(length, width, height, _terrain.terrainData.size);
+		Instantiate(_plane_raycast).initialise(length, width, height, _terrain.terrainData.size);
 	}
 	private void Start()
 	{

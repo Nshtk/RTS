@@ -50,7 +50,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4792948412797342493, guid: 801af4d46e479d94faa9457200f020cf, type: 3}
       propertyPath: m_Name
-      value: Structure
+      value: Building
+      objectReference: {fileID: 0}
+    - target: {fileID: 4792948412797342493, guid: 801af4d46e479d94faa9457200f020cf, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

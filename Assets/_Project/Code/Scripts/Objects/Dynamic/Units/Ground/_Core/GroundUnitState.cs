@@ -48,10 +48,19 @@ public partial class GroundUnit : Unit
 		}
 		public override void enter()
 		{
-			var a =_unit_ground.navmesh_agent.SetDestination(_unit_ground.destination.Value);
+			if (_unit_ground.target==null)
+				_unit_ground.navmesh_agent.SetDestination(_unit_ground.destination.Value);
 		}
 		public override void update()
 		{
+			if (_unit_ground.navmesh_agent.remainingDistance>2)
+			{
+				if (_unit_ground.target!=null)
+					_unit_ground.navmesh_agent.SetDestination(_unit_ground.target.transform.position);
+			}
+			else
+				_unit.changeState(_unit_ground.state_idle);
+
 			/*var heading = target.Value.transform.position - transform.position;
 			var distance = heading.magnitude;
 			var direction = heading / distance;
