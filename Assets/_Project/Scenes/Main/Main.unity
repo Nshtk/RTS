@@ -760,6 +760,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 162b973695b8f0a4394fb1971a5a146a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefab_water: {fileID: 11400000, guid: 9485b0c79d11e2e4d0007da98d76c639, type: 3}
   _worldbox: {fileID: 414183241838094701, guid: 6e0753084feb51a4fa22da9982295205, type: 3}
   _plane_raycast: {fileID: 5098369373016663354, guid: b7b5523b52f78fe498a482153a7cefb8, type: 3}
   length: 256
@@ -864,8 +865,8 @@ MonoBehaviour:
   m_GenerateLinks: 0
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
+  m_OverrideTileSize: 1
+  m_TileSize: 128
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
@@ -895,8 +896,8 @@ MonoBehaviour:
   m_GenerateLinks: 0
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 0
-  m_TileSize: 256
+  m_OverrideTileSize: 1
+  m_TileSize: 128
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2

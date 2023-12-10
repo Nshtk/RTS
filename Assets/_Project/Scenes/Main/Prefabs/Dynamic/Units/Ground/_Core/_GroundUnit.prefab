@@ -85,24 +85,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe202e69ab77fd343b1389272bdc500b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  object_name: WorldObject
   icon: {fileID: 0}
   hit_points: 100
   hit_points_max: 100
   detectionRange: 20
   select_sound: {fileID: 0}
   select_volume: 1
-  acceleration: 0
-  move_speed: 0
-  rotate_speed: 0
   sound_voiceover: {fileID: 0}
   sound_idle: {fileID: 0}
   sound_move: {fileID: 0}
+  _player_owner: {fileID: 0}
   limit: 0
   cost: 0
   charge_time: 0
   recharge_time: 0
   experience: 0
+  layerNames: []
   traction: 0
 --- !u!65 &8615172667869942314
 BoxCollider:

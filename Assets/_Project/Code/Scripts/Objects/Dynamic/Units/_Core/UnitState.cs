@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public partial class Unit : DynamicObject
 {
@@ -30,7 +31,7 @@ public partial class Unit : DynamicObject
 		{
 		}
 	}
-	
+
 	public class UnitIdleState : UnitState
 	{
 		public UnitIdleState(Unit unit) : base(unit)
@@ -41,7 +42,7 @@ public partial class Unit : DynamicObject
 		public override void update()
 		{
 			base.update();
-			if(_unit.destination!=null)
+			if (_unit.destination!=null)
 			{
 				_unit.changeState(_unit.state_follow);
 			}
@@ -49,72 +50,59 @@ public partial class Unit : DynamicObject
 	}
 	public class UnitFollowState : UnitState
 	{
-		public DynamicObject _dynamic_object_target;
+		private float time_elapsed_since_path_update;
 
 		public UnitFollowState(Unit unit) : base(unit)
 		{
-			
 		}
 		public override void enter()
 		{
-			_unit.navmesh_agent.destination=_unit.destination.Value;
+			bool path_found;
+
+			if (_unit.target==null)
+				path_found=NavMesh.CalculatePath(_unit.transform.position, _unit.destination.Value, _unit.navmesh_query_filter, _unit.navmesh_path);
+			else
+				path_found=NavMesh.CalculatePath(_unit.transform.position, _unit.target.transform.position, _unit.navmesh_query_filter, _unit.navmesh_path);
+			if (path_found)
+			{
+				time_elapsed_since_path_update=0f;
+				_unit._unit_controller.Is_Destination_Reached=false;
+			}
+			else
+				_unit.changeState(_unit.state_idle);
 		}
 		public override void update()
 		{
-			Vector3 displacement = _unit.velocity * Time.deltaTime;
-			displacement.y = 0;
-			_unit.transform.rotation = new Quaternion();
-
-			_unit.orientation += _unit.speed_rotate * Time.deltaTime;
-			if(_unit.orientation < 0.0f)
+			for (int i = 1; i<_unit.navmesh_path.corners.Length; ++i)
+				Debug.DrawLine(_unit.navmesh_path.corners[i-1], _unit.navmesh_path.corners[i], Color.green);
+			if (_unit.target!=null)      //TODO NavMesh.SamplePosition() check if unit is outside of navmesh 
 			{
-				_unit.orientation += 360.0f;
+				time_elapsed_since_path_update += Time.deltaTime;
+				if (time_elapsed_since_path_update>1f && Vector3.Distance(_unit.transform.position, _unit.target.transform.position)>5)
+				{
+					if (!NavMesh.CalculatePath(_unit.transform.position, _unit.target.transform.position, _unit.navmesh_query_filter, _unit.navmesh_path))
+					{
+						_unit.changeState(_unit.state_idle);
+						return;
+					}
+				}
 			}
-			else if(_unit.orientation > 360.0f)
+			else
 			{
-				_unit.orientation -= 360.0f;
+				if (_unit._unit_controller.Is_Destination_Reached)//_unit.navmesh_agent.remainingDistance<2)
+				{
+					_unit.changeState(_unit.state_idle);
+					return;
+				}
 			}
-			_unit.transform.Translate(displacement, Space.World);
-			_unit.transform.Rotate(Vector3.up, _unit.orientation);
+			_unit._unit_controller.moveByPath();
 		}
 		public override void exit()
 		{
-
+			_unit.target=null;
+			_unit.destination=null;
+			_unit._unit_controller.Is_Destination_Reached=false;
 		}
-		/*public virtual void LateUpdate()
-	{
-		velocity += steer.linear * Time.deltaTime;
-		speed_rotate += steer.angular * Time.deltaTime;
-		if(velocity.magnitude > maxSpeed)
-		{
-			velocity.Normalize();
-			velocity = velocity * maxSpeed;
-		}
-
-		if(steer.linear.magnitude == 0.0f)
-		{
-			velocity = Vector3.zero;
-		}
-		steer = new steering();
-	}*/
-
-		/*public float MapToRange(float rotation)
-		{
-			rotation %= 360.0f;
-			if(Mathf.Abs(rotation) > 180.0f)
-			{
-				if(rotation < 0.0f)
-				{
-					rotation += 360.0f;
-				}
-				else
-				{
-					rotation -= 360.0f;
-				}
-			}
-
-			return rotation;
-		}*/
 	}
 	public class UnitEvadeState : UnitState
 	{

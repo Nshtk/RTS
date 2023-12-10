@@ -32,7 +32,7 @@ public sealed partial class Human : Player
 	}
 	public override void giveOrder(Vector3 position)
 	{
-		if(Physics.Raycast(Camera.main.ScreenPointToRay(position), out _raycast_hit, 5000.0f, 1<<3 | 1<<7 | 1<<8))
+		if(Physics.Raycast(Camera.main.ScreenPointToRay(position), out _raycast_hit, 5000.0f, 1<<6 | 1<<3 | 1<<7 | 1<<8))
 		{
 			DynamicObject target=_raycast_hit.transform.gameObject.GetComponent<DynamicObject>();
 			foreach(Unit unit in units_selected.Values)

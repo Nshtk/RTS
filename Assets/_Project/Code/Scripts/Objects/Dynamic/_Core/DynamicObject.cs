@@ -54,6 +54,10 @@ public class DynamicObject : MonoBehaviour
 	{
 
 	}
+	protected virtual void FixedUpdate()
+	{
+
+	}
 	protected virtual void OnGUI()
 	{
 	

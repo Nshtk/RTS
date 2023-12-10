@@ -2,9 +2,11 @@ using UnityEngine;
 using Libraries.Terrain;
 using Libraries;
 using Unity.AI.Navigation;
+using UnityStandardAssets.Water;
 
 public class TerrainGenerator : MonoBehaviour
 {
+	[SerializeField] private WaterBasic prefab_water;
 	public enum POSITION_DOCK_SIDE	//REVIEW:
 	{
 		NORTH,
@@ -97,5 +99,9 @@ public class TerrainGenerator : MonoBehaviour
 			default:
 				break;
 		}
+	}
+	public void createWater(Vector3 position, float water_level)
+	{
+
 	}
 }

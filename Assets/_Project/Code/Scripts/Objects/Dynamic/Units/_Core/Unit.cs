@@ -4,7 +4,15 @@ using UnityEngine.AI;
 
 public partial class Unit : DynamicObject
 {
-	public enum UNIT_CLASS
+	public enum UNIT_STATE
+	{
+		IDLE,
+		FOLLOWING,
+		EVADING,
+		PATROLING,
+		ENGAGING
+	}
+	public enum UNIT_TYPE
 	{
 		INFANTRY,
 		INFANTRY_AT,
@@ -15,48 +23,159 @@ public partial class Unit : DynamicObject
 		AIRPLANE_BOMBER,
 		SPECIAL
 	}
-	public enum UNIT_STATE
+	public enum UNIT_MOVEMENT_TYPE
 	{
-		IDLE,
-		FOLLOWING,
-		EVADING,
-		PATROLING,
-		ENGAGING
+		TRACKED,
+		FOOTED,
+		WHEELED,
+
 	}
 
-    public AudioClip sound_voiceover, sound_idle, sound_move;
+	public class UnitController
+	{
+		private struct Waypoint
+		{
+			public int id;
+			public Vector3 position;
+			public float remaining_distance;
+
+			public Waypoint(Vector3? position = null, int id=0) 
+			{
+				this.position = position.Value;
+				this.id=id;
+				remaining_distance = -1f;
+			}
+
+			public void setPosition(Vector3 waypoint, Vector3 position_current)
+			{
+				position = waypoint;
+				updateRemainingDistance(position_current);
+			}
+			public void updateRemainingDistance(Vector3 position_current)
+			{
+				remaining_distance=Vector3.Distance(position_current, position);
+			}
+		}
+
+		private Unit _unit;
+		public float speed_move = 10f, speed_move_max = 15f;    //TODO to ctor
+		public float speed_rotate = 15f, speed_rotate_max = 45f;
+		public float acceleration = 10f, acceleration_angular = 45f;
+		public float orientation;
+		public Vector3 velocity = Vector3.one;
+		public Vector3 direction;
+		private Waypoint _waypoint;
+		private bool _is_destination_reached;
+		private Quaternion rotation_direction;
+
+		public bool Is_Destination_Reached
+		{
+			get { return _is_destination_reached; }
+			set
+			{
+				if(!value)
+				{
+					_waypoint.id=0;
+					_waypoint.remaining_distance=-1f;
+				}
+				_is_destination_reached=value;
+			}
+		}
+
+		public UnitController(Unit unit)
+		{
+			_unit=unit;
+		}
+
+		private void turn(Quaternion direction)		//REVIEW
+		{
+			_unit.transform.rotation = Quaternion.RotateTowards(_unit.transform.rotation, direction, speed_rotate_max*Time.deltaTime);
+		}
+		public virtual void move()
+		{
+			direction = (_waypoint.position-_unit.transform.position).normalized;
+			rotation_direction= Quaternion.FromToRotation(Vector3.forward, direction);
+
+			turn(rotation_direction);
+			if (_unit.movement_type==UNIT_MOVEMENT_TYPE.TRACKED && Quaternion.Angle(_unit.transform.rotation, rotation_direction)>90)
+			{
+				return;
+			}
+			//_unit.transform.rotation = Quaternion.LookRotation(direction);
+
+			_unit._rigid_body.AddForce(direction.normalized*speed_move);   //REVIEW * Time.fixedDeltaTime?
+			if (_unit._rigid_body.velocity.magnitude > speed_move_max)
+				_unit._rigid_body.velocity = _unit._rigid_body.velocity.normalized * speed_move_max;
+			_waypoint.updateRemainingDistance(_unit.transform.position);
+		}
+		public void moveToPosition(float remaining_distance_accuracy = 2f)
+		{
+			if (_waypoint.remaining_distance<remaining_distance_accuracy)
+			{
+				Is_Destination_Reached = true;
+				return;
+			}
+			move();
+		}
+		public void moveByPath(float remaining_distance_accuracy=2f)
+		{
+			if(_waypoint.remaining_distance<remaining_distance_accuracy)
+			{
+				if (_waypoint.id>=_unit.navmesh_path.corners.Length)
+				{
+					Is_Destination_Reached = true;
+					return;
+				}
+				_waypoint.setPosition(_unit.navmesh_path.corners[_waypoint.id], _unit.transform.position);
+				++_waypoint.id;
+			}
+			move();
+		}
+		public void stop()
+		{
+
+		}
+	}
+
+	public AudioClip sound_voiceover, sound_idle, sound_move;
 	public Player _player_owner;
+	UNIT_STATE state;
+	UNIT_TYPE type;
+	UNIT_MOVEMENT_TYPE movement_type;
 	public int limit;
 	public int cost;
 	public int charge_time, recharge_time;
 	public float experience;
 
-
+	protected UnitController _unit_controller;	//TODO to private
 	protected UnitState state_current;
-	private UnitIdleState state_idle;
-	private UnitFollowState state_follow;
-	private UnitEvadeState state_evade;
-	private UnitPatrolState state_patrol;
-	private UnitEngageState state_engage;
+	protected UnitIdleState state_idle;
+	protected UnitFollowState state_follow;
+	protected UnitEvadeState state_evade;
 
-	public float speed_move = 1f, speed_rotate = 45f;
-	public float acceleration = 30f, acceleration_angular = 45f;
-	public float orientation;
-	public Vector3 velocity = Vector3.one;
+	protected Rigidbody _rigid_body;
+	protected NavMeshPath navmesh_path;
+	protected NavMeshQueryFilter navmesh_query_filter;
+	public string[] layerNames; //REVIEW
 
-	protected NavMeshAgent navmesh_agent;
+	public virtual string Name
+	{
+		get { return "Unit"; }
+	}
 
 	protected override void Awake()
 	{
 		base.Awake();
-		navmesh_agent = GetComponent<NavMeshAgent>();
+		_rigid_body = GetComponent<Rigidbody>();
+		navmesh_query_filter=new NavMeshQueryFilter() { agentTypeID=GetNavMeshAgentID(), areaMask= 1<<0 | 1<<3};
+		navmesh_path =new NavMeshPath();
+		_unit_controller=new UnitController(this);
 	}
 	protected override void Start()
     {
         base.Start();
 		unitDied+=Game.GameData.instance.handleUnitDied;
 		setStates();
-
 	}
 	public override void StartManual()
 	{
@@ -70,6 +189,10 @@ public partial class Unit : DynamicObject
 	{
 		state_current?.update();
 	}
+	protected override void FixedUpdate()
+	{
+		
+	}
 	protected override void OnDestroy()
 	{
 		base.OnDestroy();
@@ -80,6 +203,16 @@ public partial class Unit : DynamicObject
 	{
 		_player_owner=owner;
 	}
+	protected int GetNavMeshAgentID()
+	{
+		for(int i=0; i<NavMesh.GetSettingsCount(); i++)
+		{
+			NavMeshBuildSettings settings = NavMesh.GetSettingsByIndex(index: i);
+			if (Name == NavMesh.GetSettingsNameFromID(agentTypeID: settings.agentTypeID))
+				return settings.agentTypeID;
+		}
+		return 1;
+	}
 	public void setChargeTimer()
 	{
 
@@ -89,19 +222,15 @@ public partial class Unit : DynamicObject
 		state_idle=     new UnitIdleState(this);
 		state_follow=   new UnitFollowState(this);
 		state_evade=    new UnitEvadeState(this);
-		state_patrol=   new UnitPatrolState(this);
-		state_engage=   new UnitEngageState(this);
 		changeState(state_idle);
 	}
 
 	public virtual void setOrder(Vector3 position, DynamicObject target=null)
 	{
 		destination=position;
+		this.target=target;
 		if (target!=null)
-		{
-			this.target=target;
 			changeState(state_follow);
-		}
 		else
 			changeState(state_idle);
 	}
@@ -199,23 +328,6 @@ public partial class Unit : DynamicObject
 		if(moving || rotating)
 			return false;
 		return base.ShouldMakeDecision();
-	}*/
-
-	/*private void TurnToTarget()
-	{
-		transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed);
-		CalculateBounds();
-		//sometimes it gets stuck exactly 180 degrees out in the calculation and does nothing, this check fixes that
-		Quaternion inverseTargetRotation = new Quaternion(-targetRotation.x, -targetRotation.y, -targetRotation.z, -targetRotation.w);
-		if(transform.rotation == targetRotation || transform.rotation == inverseTargetRotation)
-		{
-			rotating = false;
-			moving = true;
-			if(destinationTarget)
-				CalculateTargetDestination();
-			if(audioElement != null)
-				audioElement.Play(driveSound);
-		}
 	}*/
 
 	/*private void CalculateTargetDestination()
