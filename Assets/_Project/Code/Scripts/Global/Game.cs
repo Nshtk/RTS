@@ -4,15 +4,16 @@ using System.Collections.Generic;
 using Libraries.Terrain;
 
 
-public class Game : MonoBehaviour	//Class containing main loop.
+public class Game : MonoBehaviour	//Class containing main loop
 {
 	public class GameData          //Class for statistics
 	{                              //TODO event aggregator (e.g. flag captured -> update team's captured flags)  
 		public static GameData instance;
 		private Game _game;
 
-		public ulong ticks = 0;		// FIXME: to BigInt
+		public ulong ticks = 0;		// FIXME to BigInt
 		public int count_units_died;
+		private float time_elapsed_since_update;
 
 		public GameData(Game game)
 		{
@@ -20,6 +21,15 @@ public class Game : MonoBehaviour	//Class containing main loop.
 			_game=game;
 		}
 
+		public void update() 
+		{
+			time_elapsed_since_update += Time.deltaTime;
+			if (time_elapsed_since_update>0.01f)
+			{
+				time_elapsed_since_update=0f;
+				ticks++;
+			}
+		}
 		public void handleUnitDied(Unit sender, Unit.UnitDiedEventArgs e)
 		{
 			count_units_died++;
@@ -52,6 +62,17 @@ public class Game : MonoBehaviour	//Class containing main loop.
 	private List<Faction> _factions;
 	private List<Team> _teams;
 
+	public LayerMask Layer_Mask_Terrain		//Singleton structs
+	{
+		get;
+		private set;
+	}
+	public LayerMask Layer_Mask_Human_Order
+	{
+		get;
+		private set;
+	}
+
 	public Human Prefab_Human
 	{
 		get { return _prefab_human; }
@@ -64,7 +85,7 @@ public class Game : MonoBehaviour	//Class containing main loop.
 	{
 		get { return _prefab_terrain_generator; }
 	}
-	public IList<Team> Teams    //REVIEW: other objects normaly should not have access to this
+	public IList<Team> Teams
 	{
 		get { return _teams.AsReadOnly(); }
 	}
@@ -73,21 +94,28 @@ public class Game : MonoBehaviour	//Class containing main loop.
 		get { return _factions.AsReadOnly(); }
 	}
 
-	private void Awake()
+	private void initialise() 
 	{
 		instance=this;
+		game_data=new GameData(this);
 		_prefab_terrain_generator=Terrain.activeTerrain.GetComponent<TerrainGenerator>();
 		_prefab_terrain_generator.AwakeManual();
-		game_data =new GameData(this);
+
+		Layer_Mask_Terrain=1<<LayerMask.NameToLayer("Terrain");
+		Layer_Mask_Human_Order=Layer_Mask_Terrain | 1<<LayerMask.NameToLayer("PlaneRaycast") | 1 << LayerMask.NameToLayer("Building") | 1 << LayerMask.NameToLayer("Unit");
+	}
+
+	private void Awake()
+	{
+		initialise();
 
 		_factions = new List<Faction>() {
 			new Faction("ExampleFaction")
 		};
 		_teams= new List<Team>() { 
-			new Team(0, null, Color.red, TerrainGenerator.POSITION_DOCK_SIDE.SOUTH),
-			new Team(0, null, Color.blue, TerrainGenerator.POSITION_DOCK_SIDE.NORTH)
+			new Team(0, null, Color.blue, TerrainGenerator.POSITION_DOCK_SIDE.SOUTH),
+			new Team(0, null, Color.red, TerrainGenerator.POSITION_DOCK_SIDE.NORTH)
 		};
-
 		gamemode=new Liquidation(_teams, 1000);
 
 		Human human = Instantiate(_prefab_human);
@@ -114,26 +142,21 @@ public class Game : MonoBehaviour	//Class containing main loop.
     }
     private void Update()
     {
-		game_data.ticks++;
+		game_data.update();
+
 		foreach(Team team in _teams)
+		{
+			team.updatePlayers();
+			/*if(team.goal.is_reached)	// TODO + stop updating
+				screen_end.show();*/
+		}
+		foreach (Team team in _teams)
 		{
 			foreach(Player player in team.players)
 			{
-				player.UpdateManual();
+				player.updateUnits();
 			}
 		}
-		foreach(Team team in _teams)
-		{
-			foreach(Player player in team.players)
-			{
-				foreach(Unit unit in player.units)
-				{
-					unit.UpdateManual();
-				}
-			}
-		}
-		/*if(player.goal.is_reached)	// TODO: + stop updating
-			ScreenEnd.show();*/
 	}
 	private void LateUpdate()
 	{

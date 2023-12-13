@@ -1,11 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
-using Libraries;
+using Libraries.Utility;
 
 public class Team
 {
-	readonly string[] team_names = new string[] {	//UNUSED
+	readonly string[] team_names = new string[] {
 		"Свинорез",
 		"Товарищи",
 		"Пажилые",
@@ -56,7 +56,13 @@ public class Team
 			this.color=color.Value;
 		this.position_dock_side=position_dock_side.Value;
 	}
-
+	public void updatePlayers()
+	{
+		foreach (Player player in players)
+		{
+			player.UpdateManual();
+		}
+	}
 	public void setGoal(TeamGoal goal, Action subscribe, TEAM_TYPE type, int score=0)
 	{
 		this.goal=goal;
@@ -68,12 +74,41 @@ public class Team
 	{
 	
 	}
-	public void haveUnit() // args find units by such properties as name, cost etc
+	public bool haveUnit(int count, string property_name, params string[] values) // args find units by such properties as name, cost etc
 	{
-
-	}
-	public void getFlagUnits()
-	{
-
+		foreach(Player player in players)
+		{
+			foreach(Dictionary<int, Unit> units in player.units)
+			{
+				foreach(Unit unit in units.Values)
+				{
+					string value;
+					switch (property_name)
+					{
+						case "type":
+						value=unit.type.ToString();
+							break;
+						case "movement_type":
+							value=unit.movement_type.ToString();
+							break;
+						default:
+							value="";
+							break;
+					}
+					for(int i=0; i<values.Length; i++)
+					{
+						if (values[i]==value)		//REVIEW find by criterias other than unit members?
+						{
+							count-=1;
+							break;
+						}
+					}
+						
+					if (count==0)
+						return true;
+				}
+			}
+		}
+		return false;
 	}
 }

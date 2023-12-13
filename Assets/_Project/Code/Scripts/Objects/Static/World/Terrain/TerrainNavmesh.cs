@@ -128,7 +128,7 @@ public class NavMeshGenA : MonoBehaviour
 				}
 				catch (Exception e)
 				{
-
+					Debug.LogError(e.ToString());
 				}
 			}
 		}

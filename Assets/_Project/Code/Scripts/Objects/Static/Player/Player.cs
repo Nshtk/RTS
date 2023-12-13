@@ -10,17 +10,12 @@ public class Player : MonoBehaviour
 	public Faction faction;     //TODO: dont store it use gamedata
 	public Spawn spawn;
 
-	public int money, money_income, money_pool = 1000;
+	public int money=0, money_income=5, money_pool = 1000;	//TODO set this by gamemode
 	public int difficulty_multiplier;
 
-	public List<Unit> units = new List<Unit>();
-
+	public List<Dictionary<int, Unit>> units = new List<Dictionary<int, Unit>>();
 
 	protected virtual void Awake()
-	{
-
-	}
-	protected virtual void Start()
 	{
 
 	}
@@ -35,6 +30,13 @@ public class Player : MonoBehaviour
 		this.nickname = nickname;
 		this.faction=faction;
 	}
+	protected virtual void Start()
+	{
+		foreach(Unit unit in faction.units)
+		{
+			units.Add(new Dictionary<int, Unit>());
+		}
+	}
 	protected virtual void Update()
 	{
 
@@ -46,13 +48,29 @@ public class Player : MonoBehaviour
 			money+=money_income;
 			money_pool-=money_income;
 		}
+		else
+		{
+			money+=money_pool;
+			money_pool=0;
+		}
+	}
+	public virtual void updateUnits()
+	{
+		foreach (Dictionary<int, Unit> units_of_name in units)
+		{
+			foreach(Unit unit in units_of_name.Values)
+			{
+				unit.UpdateManual();
+			}
+		}
 	}
 	public virtual void buyUnit(int id)
 	{
-		if (money>=faction.units[id].cost)
+		if (money>=faction.units[id].cost && (faction.units[id].limit==-1 || faction.units[id].limit>units[id].Count))
 		{
 			money-=faction.units[id].cost;
-			spawn.spawnUnit(faction.units[id]);
+			Unit unit=spawn.spawnUnit(faction.units[id]);
+			units[id].Add(unit.gameObject.GetInstanceID(), unit);
 		}
 
 	}
@@ -60,66 +78,4 @@ public class Player : MonoBehaviour
 	{
 		
 	}
-	/*public void SaveDetails(JsonWriter writer)
-	{
-		SaveManager.WriteString(writer, "Username", username);
-		SaveManager.WriteBoolean(writer, "Human", human);
-		SaveManager.WriteColor(writer, "TeamColor", teamColor);
-		SaveManager.SavePlayerResources(writer, resources, resourceLimits);
-		SaveManager.SavePlayerBuildings(writer, GetComponentsInChildren<Building>());
-		SaveManager.SavePlayerUnits(writer, GetComponentsInChildren<Unit>());
-	}*/
-
-	/*public void LoadDetails(JsonTextReader reader)
-	{
-		if(reader == null)
-			return;
-		string currValue = "";
-		while(reader.Read())
-		{
-			if(reader.Value!=null)
-			{
-				if(reader.TokenType == JsonToken.PropertyName)
-				{
-					currValue = (string)reader.Value;
-				}
-				else
-				{
-					switch(currValue)
-					{
-						case "Username":
-							username = (string)reader.Value;
-							break;
-						case "Human":
-							human = (bool)reader.Value;
-							break;
-						default:
-							break;
-					}
-				}
-			}
-			else if(reader.TokenType == JsonToken.StartObject || reader.TokenType == JsonToken.StartArray)
-			{
-				switch(currValue)
-				{
-					case "TeamColor":
-						teamColor = LoadManager.LoadColor(reader);
-						break;
-					case "Resources":
-						LoadResources(reader);
-						break;
-					case "Buildings":
-						LoadBuildings(reader);
-						break;
-					case "Units":
-						LoadUnits(reader);
-						break;
-					default:
-						break;
-				}
-			}
-			else if(reader.TokenType==JsonToken.EndObject)
-				return;
-		}
-	}*/
 }

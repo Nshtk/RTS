@@ -6,7 +6,7 @@ public class Faction     // TODO faction-specific modifiers?
 	public string name;
     public Texture2D? flag;
 	public List<Unit>? units=new List<Unit>();
-	string path = "Objects\\Dynamic\\Derived\\Units\\Derived\\";
+	string path = "Objects\\Dynamic\\Derived\\Mobile\\Derived\\Units\\Derived\\";	//REVIEW pathing
 
 	public Faction(string name, Texture2D? flag=null)
 	{

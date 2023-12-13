@@ -3,25 +3,24 @@ using UnityEngine;
 
 public class DynamicObject : MonoBehaviour
 {
-	public Texture2D icon;
-	public int hit_points = 100, hit_points_max = 100;
-	public float detectionRange = 20.0f;
-	public AudioClip select_sound;
-	public float select_volume = 1f;
-
-	protected Player player;
 	protected string[] actions = { };
 	protected Rect playingArea = new Rect(0.0f, 0.0f, 0.0f, 0.0f);
 	protected GUIStyle healthStyle = new GUIStyle();
-	protected float healthPercentage = 1.0f;
-	protected DynamicObject target = null;
-	protected bool loadedSavedValues = false;
-	protected List<DynamicObject> nearbyObjects;
+	protected Rigidbody _rigid_body;
 
-	public Vector3? destination=null;
-
+	public Texture2D icon;
+	public AudioClip select_sound;
 	private List<Material> oldMaterials = new List<Material>();
-	//private int loadedTargetId = -1;
+
+	public ulong id;
+	public int hit_points = 100, hit_points_max = 100;
+	protected float healthPercentage = 1.0f;
+	public int repair_rate;
+	public float hardness;
+	public float resistance;
+	public float mass;
+	public float temperature;
+	public float select_volume = 1f;
 
 	public int ObjectId
 	{
@@ -120,95 +119,4 @@ public class DynamicObject : MonoBehaviour
 			}
 		}
 	}
-
-	/*public virtual void SaveDetails(JsonWriter writer)
-	{
-		SaveManager.WriteString(writer, "Type", name);
-		SaveManager.WriteString(writer, "Name", objectName);
-		SaveManager.WriteInt(writer, "Id", ObjectId);
-		SaveManager.WriteVector(writer, "Position", transform.position);
-		SaveManager.WriteQuaternion(writer, "Rotation", transform.rotation);
-		SaveManager.WriteVector(writer, "Scale", transform.localScale);
-		SaveManager.WriteInt(writer, "HitPoints", hitPoints);
-		SaveManager.WriteBoolean(writer, "Attacking", attacking);
-		SaveManager.WriteBoolean(writer, "MovingIntoPosition", movingIntoPosition);
-		SaveManager.WriteBoolean(writer, "Aiming", aiming);
-		if(attacking)
-		{
-			//only save if attacking so that we do not end up storing massive numbers for no reason
-			SaveManager.WriteFloat(writer, "CurrentWeaponChargeTime", currentWeaponChargeTime);
-		}
-		if(target != null)
-			SaveManager.WriteInt(writer, "TargetId", target.ObjectId);
-	}
-
-	public void LoadDetails(JsonTextReader reader)
-	{
-		while(reader.Read())
-		{
-			if(reader.Value != null)
-			{
-				if(reader.TokenType == JsonToken.PropertyName)
-				{
-					string propertyName = (string)reader.Value;
-					reader.Read();
-					HandleLoadedProperty(reader, propertyName, reader.Value);
-				}
-			}
-			else if(reader.TokenType == JsonToken.EndObject)
-			{
-				//loaded position invalidates the selection bounds so they must be recalculated
-				selectionBounds = ResourceManager.InvalidBounds;
-				CalculateBounds();
-				loadedSavedValues = true;
-				return;
-			}
-		}
-		//loaded position invalidates the selection bounds so they must be recalculated
-		selectionBounds = ResourceManager.InvalidBounds;
-		CalculateBounds();
-		loadedSavedValues = true;
-	}
-
-	protected virtual void HandleLoadedProperty(JsonTextReader reader, string propertyName, object readValue)
-	{
-		switch(propertyName)
-		{
-			case "Name":
-				objectName = (string)readValue;
-				break;
-			case "Id":
-				ObjectId = (int)(System.Int64)readValue;
-				break;
-			case "Position":
-				transform.localPosition = LoadManager.LoadVector(reader);
-				break;
-			case "Rotation":
-				transform.localRotation = LoadManager.LoadQuaternion(reader);
-				break;
-			case "Scale":
-				transform.localScale = LoadManager.LoadVector(reader);
-				break;
-			case "HitPoints":
-				hitPoints = (int)(System.Int64)readValue;
-				break;
-			case "Attacking":
-				attacking = (bool)readValue;
-				break;
-			case "MovingIntoPosition":
-				movingIntoPosition = (bool)readValue;
-				break;
-			case "Aiming":
-				aiming = (bool)readValue;
-				break;
-			case "CurrentWeaponChargeTime":
-				currentWeaponChargeTime = (float)(double)readValue;
-				break;
-			case "TargetId":
-				loadedTargetId = (int)(System.Int64)readValue;
-				break;
-			default:
-				break;
-		}
-	}*/
 }
