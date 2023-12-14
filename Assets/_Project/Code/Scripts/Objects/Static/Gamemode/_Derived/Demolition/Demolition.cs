@@ -1,8 +1,39 @@
 using UnityEngine;
 
-/*public class Demolition : Gamemode
+public class Demolition : Gamemode
 {
-	public Vector3 destination = new Vector3(0.0f, 0.0f, 0.0f);
+	public override int Count_Teams
+	{
+		get { return _count_teams; }
+		protected set
+		{
+			if (value>10)
+				_count_teams=10;
+			else
+				_count_teams=value;
+		}
+	}
+
+	public Demolition(int score_max) : base(score_max)
+	{
+	}
+
+	public override void setGenerationParameters(TerrainGenerator terrain_generator)
+	{
+		throw new System.NotImplementedException();
+	}
+
+	public override void setTeams()
+	{
+		throw new System.NotImplementedException();
+	}
+
+	public override void updateTeamGoals()
+	{
+		throw new System.NotImplementedException();
+	}
+
+	/*public Vector3 destination = new Vector3(0.0f, 0.0f, 0.0f);
 	public Texture2D highlight;
 
 	void Start()
@@ -36,5 +67,5 @@ using UnityEngine;
 		bool xInPos = truckPos.x > destination.x - closeEnough && truckPos.x < destination.x + closeEnough;
 		bool zInPos = truckPos.z > destination.z - closeEnough && truckPos.z < destination.z + closeEnough;
 		return xInPos && zInPos;
-	}
-}*/
+	}*/
+}

@@ -5,7 +5,7 @@ using Unity.AI.Navigation;
 using UnityStandardAssets.Water;
 using Libraries.Utility;
 
-public class TerrainGenerator : MonoBehaviour
+public sealed class TerrainGenerator : MonoBehaviour
 {
 	[SerializeField] private WaterBasic prefab_water;
 	public enum POSITION_DOCK_SIDE	//REVIEW:

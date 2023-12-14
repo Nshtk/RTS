@@ -56,11 +56,14 @@ public class Game : MonoBehaviour	//Class containing main loop
 	[SerializeField] private Bot _prefab_bot;
 	[SerializeField] private TerrainGenerator _prefab_terrain_generator;
 
+
 	public static Game instance;
 	public GameData game_data;
-	private Gamemode gamemode;
+	public Gamemode gamemode;
 	private List<Faction> _factions;
 	private List<Team> _teams;
+
+
 
 	public LayerMask Layer_Mask_Terrain		//Singleton structs
 	{

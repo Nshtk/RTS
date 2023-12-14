@@ -18,12 +18,16 @@ public class Flag : Structure
 
 	public int status;
 	public Player player_owner;
-    public HashSet<Unit> units_flag;
+    public HashSet<Unit> flag_units;
     public float progress;
 
+    public void initialise(Vector3 size)
+    {
+        transform.localScale = size;
+    }
     private void Awake()
     {
-		units_flag=new HashSet<Unit>();
+		flag_units=new HashSet<Unit>();
         progress=0;
 	}
     private void Start()
@@ -38,20 +42,30 @@ public class Flag : Structure
 	{
 		if (collider.gameObject.GetComponent<Unit>() is Unit unit && unit!=null) 
         {
-			units_flag.Add(unit);
+			flag_units.Add(unit);
 		}
 	}
 	private void OnTriggerExit(Collider collider)
 	{
 		if (collider.gameObject.GetComponent<Unit>() is Unit unit && unit!=null)
 		{
-            if(units_flag.Contains(unit))
-				units_flag.Remove(unit);
+            if(flag_units.Contains(unit))
+				flag_units.Remove(unit);
 		}
 	}
-
+    public void updateStatus()
+    {
+        foreach (Unit unit in flag_units) 
+        {
+            //if(unit.)
+        }
+    }
+    public void updateFlagUnits()
+    {
+		Collider[] colliders = Physics.OverlapBox(GetComponent<Renderer>().bounds.center, transform.localScale);
+	}
 	public List<Unit> getFlagUnits()
 	{
-        return units_flag.ToList();
+        return flag_units.ToList();
 	}
 }

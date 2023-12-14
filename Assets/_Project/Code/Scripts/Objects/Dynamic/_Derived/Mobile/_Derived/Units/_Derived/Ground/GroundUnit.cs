@@ -12,6 +12,10 @@ public partial class GroundUnit : Unit
 		get { return "VehicleGround"; }
 	}
 
+	protected override void Awake()
+	{
+		base.Awake();
+	}
 	protected override void Start()
     {
         base.Start();

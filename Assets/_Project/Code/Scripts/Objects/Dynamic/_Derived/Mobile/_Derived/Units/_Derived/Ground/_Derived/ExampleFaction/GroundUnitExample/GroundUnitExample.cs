@@ -14,6 +14,7 @@ namespace Units.Ground
 			base.Awake();
 			cost=15;
 			movement_type=MOBILE_OBJECT_MOVEMENT_TYPE.TRACKED;
+			type=UNIT_TYPE.VEHICLE_LIGHT;
 		}
 		protected override void Start()
 		{

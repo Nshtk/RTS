@@ -1,38 +1,38 @@
-using System;
 using System.Collections.Generic;
 
-public sealed class Liquidation : Gamemode
+public sealed partial class Liquidation : Gamemode
 {
-	/*public override int Count_Teams
+	public override int Count_Teams
 	{
 		get { return _count_teams; }
 		protected set
 		{
-			if(value>10)
+			if (value>10)
 				_count_teams=10;
 			else
 				_count_teams=value;
 		}
-	}*/
+	}
 
 	public Liquidation(List<Team> teams, int score_max) : base(score_max)
 	{
+		bot_data=new LiquidationBotData();
 		description="Each team should score a higher number by killing enemy units!";
-		//Count_Teams=count_teams;
+		Count_Teams=teams.Count;
 		this.teams = teams;
 		this.score_max=score_max;
 	}
 	public override void setTeams()
 	{
-		Team.TeamGoal[] team_goals = new Team.TeamGoal[] {
-			new Team.TeamGoal("Kill them all!")
+		GamemodeGoal[] team_goals = new GamemodeGoal[] {
+			new LiquidationGoal(this, "Kill them all!")
 		};
-		Action[] actions = new Action[] {	//REVIEW:
-			() => { Unit.unitDied+=team_goals[0].unitDiedEventHandler; }
-		};
+		/*Action[] actions = new Action[] {	//REVIEW:
+			() => {  }
+		};*/
 		foreach(Team team in teams)		//TODO set goals by proportions
 		{
-			team.setGoal(team_goals[0], actions[0], Team.TEAM_TYPE.TACTICIAN, score_max/teams.Count);
+			team.setGoal(team_goals[0], Team.TEAM_TYPE.TACTICIAN);
 		}
 	}
 	public override void updateTeamGoals()

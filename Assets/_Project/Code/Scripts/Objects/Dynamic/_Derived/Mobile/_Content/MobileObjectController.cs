@@ -91,7 +91,7 @@ public partial class MobileObject
 		}
 		public virtual void stop()
 		{
-			if ((_mobile_object.transform.forward * Vector3.Dot(_mobile_object.transform.forward, _mobile_object._rigid_body.velocity)).magnitude>0)
+			if ((_mobile_object.transform.forward * Vector3.Dot(_mobile_object.transform.forward, _mobile_object._rigidbody.velocity)).magnitude>0)
 				accelerate(-_mobile_object.transform.forward, speed_stop, speed_stop_max);
 		}
 		public virtual void moveToPosition(float remaining_distance_accuracy = 2f)

@@ -16,12 +16,16 @@ public partial class MobileObject : DynamicObject
 	public float maneuverability;
 	public Vector3? destination = null;
 
+	protected override void Awake()
+	{
+		base.Awake();
+	}
 	protected override void Start()
     {
-        
-    }
+		base.Start();
+	}
     protected override void Update()
     {
-        
-    }
+		base.Update();
+	}
 }

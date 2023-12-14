@@ -1,3 +1,5 @@
+using Libraries;
+
 using System;
 using System.Collections.Generic;
 
@@ -14,16 +16,27 @@ public partial class Unit : MobileObject
 		PATROLING,
 		ENGAGING
 	}
-	public enum UNIT_TYPE
+	public enum UNIT_TYPE	//Unit classes
 	{
-		INFANTRY,
-		INFANTRY_AT,
-		VEHICLE,
-		TANK,
-		ARTILLERY,
+		INFANTRY_COMMON,
+		INFANTRY_TACTICAL,		//Primary anti-infantry
+		INFANTRY_VANGUARD,		//Primarily anti-all
+		INFANTRY_SABOTEUR,
+		INFANTRY_SUPPORT,		//Medics, engineers, scouts, etc.
+
+		VEHICLE_COMMON,			//MG Jeeps, etc.
+		VEHICLE_LIGHT,			//APVs, light tanks etc.
+		VEHICLE_HEAVY,			//Medium and heavy tanks, etc.
+		VEHICLE_ARTILLERY,
+		VEHICLE_SUPPORT,		//Transport, repair
+
+		HELICOPTER_SCOUT,		//Light helicopters
+		HELICOPTER_ATTACK,
+
 		AIRPLANE_FIGHTER,
 		AIRPLANE_BOMBER,
-		SPECIAL
+
+		ULTIMATE
 	}
 
 	public Player _player_owner;
@@ -33,10 +46,11 @@ public partial class Unit : MobileObject
 	public AudioClip sound_voiceover, sound_idle, sound_move;
 	protected NavMeshPath navmesh_path;
 	protected NavMeshQueryFilter navmesh_query_filter;
-	public string[] layerNames; //REVIEW
 	public UNIT_STATE state;
 	public UNIT_TYPE type;
-	
+	public string group;    //For group timers
+
+	public int id_in_faction;
 	public int limit=-1;
 	public int cost=5;
 	public int charge_time=0, recharge_time=0;
@@ -71,7 +85,7 @@ public partial class Unit : MobileObject
 	protected override void Awake()
 	{
 		base.Awake();
-		_rigid_body = GetComponent<Rigidbody>();
+		_rigidbody = GetComponent<Rigidbody>();
 		navmesh_query_filter=new NavMeshQueryFilter() { agentTypeID=GetNavMeshAgentID(), areaMask= 1<<0 | 1<<3};
 		navmesh_path =new NavMeshPath();
 		_unit_controller=new UnitController(this);
@@ -99,7 +113,16 @@ public partial class Unit : MobileObject
 	protected override void FixedUpdate()
 	{}
 	protected void OnCollisionEnter(Collision collision)
-	{}
+	{
+		if (collision.gameObject.GetComponent<MobileObject>() is MobileObject mobile_object)
+		{
+			hurt((int)(collision.relativeVelocity.magnitude*(mobile_object.Rigidbody.getKineticEnergy()+_rigidbody.getKineticEnergy())));
+		}
+		else if (collision.gameObject.GetComponent<Projectile>() is Projectile projectile)
+		{
+			hurt(projectile.damage);
+		}
+	}
 	protected void OnCollisionStay(Collision collision)
 	{
 		if (collision.gameObject.layer==LayerMask.NameToLayer("Terrain"))	//TODO store in GameData
@@ -119,7 +142,6 @@ public partial class Unit : MobileObject
 	protected override void OnDestroy()
 	{
 		base.OnDestroy();
-		unitDied?.Invoke(this, new UnitDiedEventArgs($"{Name} has died."));
 	}
 	protected int GetNavMeshAgentID()
 	{
@@ -160,8 +182,16 @@ public partial class Unit : MobileObject
 			destination=position;
 			this.target=target;
 			if (target!=null)
-				changeState(state_follow);
-			else
+			{
+				if(target.GetComponent<Unit>() is Unit unit)
+				{
+					if(unit._player_owner.team==_player_owner.team)
+						changeState(state_follow);
+					/*else				//FIXME add all possible states in unit for derived to override?
+						changeState(state_engage);*/
+				}
+			}
+			else if(destination!=null)
 				changeState(state_evade);
 		}
 		else
@@ -179,12 +209,15 @@ public partial class Unit : MobileObject
 		if(hit_points!=hit_points_max)
 			hit_points+=repair_rate;
 	}
-	public void hurt()
+	public void hurt(int damage)
 	{
-		if (hit_points>0)
-			hit_points+=repair_rate;
-		else
-			Destroy(this);
+		hit_points-=damage;
+		if (hit_points<=0)
+		{
+			Destroy(gameObject);
+			unitDied?.Invoke(this, new UnitDiedEventArgs($"{Name} has died."));
+		}
+
 	}
 
 	public delegate void unitDiedEventHandler(Unit sender, UnitDiedEventArgs e);

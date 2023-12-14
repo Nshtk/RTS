@@ -1,41 +1,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Gamemode		//TODO: nested class difficulty
+public abstract partial class Gamemode
 {
+	public GamemodeBotData bot_data;
 	public int score_max;
 	public string description;
 	public List<Team> teams;
 	public readonly int count_teams_max;
 
-	/*protected int _count_teams;
+	protected int _count_teams;
 	public abstract int Count_Teams
 	{
 		get;
 		protected set;
-	}*/
+	}
 
 	protected Gamemode(int score_max)
     {
-		//Game.GameData.instance;
 		this.score_max=score_max;
     }
 	public abstract void setTeams();
 	public abstract void updateTeamGoals();
 	public abstract void setGenerationParameters(TerrainGenerator terrain_generator);
-    /*protected Player[] players;
-
-	public void SetPlayers(Player[] players)
-	{
-		this.players = players;
-	}
-
-	public Player[] GetPlayers()
-	{
-		return players;
-	}
-
-	public virtual bool GameFinished()
+    /*public virtual bool GameFinished()
 	{
 		if(players == null)
 			return true;

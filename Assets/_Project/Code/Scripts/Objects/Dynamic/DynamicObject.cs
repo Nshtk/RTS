@@ -6,13 +6,12 @@ public class DynamicObject : MonoBehaviour
 	protected string[] actions = { };
 	protected Rect playingArea = new Rect(0.0f, 0.0f, 0.0f, 0.0f);
 	protected GUIStyle healthStyle = new GUIStyle();
-	protected Rigidbody _rigid_body;
+	protected Rigidbody _rigidbody;
 
 	public Texture2D icon;
 	public AudioClip select_sound;
 	private List<Material> oldMaterials = new List<Material>();
 
-	public ulong id;
 	public int hit_points = 100, hit_points_max = 100;
 	protected float healthPercentage = 1.0f;
 	public int repair_rate;
@@ -22,7 +21,7 @@ public class DynamicObject : MonoBehaviour
 	public float temperature;
 	public float select_volume = 1f;
 
-	public int ObjectId
+	public int Object_Id
 	{
 		get;
 		set;
@@ -32,10 +31,13 @@ public class DynamicObject : MonoBehaviour
 		get;
 		set;
 	}
-
+	public Rigidbody Rigidbody
+	{
+		get { return _rigidbody; }
+	}
 	protected virtual void Awake()
 	{
-
+		_rigidbody=GetComponent<Rigidbody>();
 	}
 	protected virtual void Start()
 	{

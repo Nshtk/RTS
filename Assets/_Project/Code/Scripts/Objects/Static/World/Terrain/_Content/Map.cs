@@ -19,9 +19,14 @@ namespace Libraries.Terrain
 		public int length, height;
 		public readonly Tile[,] tiles;
 		private readonly List<Sector> _sectors = new List<Sector>();
+		public HashSet<Structure> structures = new HashSet<Structure>();
+		public HashSet<Building> buildings = new HashSet<Building>();
+		public HashSet<Flag> flags;
 
 		public Map(int length, int height)
 		{
+			if(Game.instance.gamemode is Assault || Game.instance.gamemode is Conquest)
+				flags=new HashSet<Flag>();
 			this.length = length;
 			this.height = height;
 			tiles=new Tile[length, height];

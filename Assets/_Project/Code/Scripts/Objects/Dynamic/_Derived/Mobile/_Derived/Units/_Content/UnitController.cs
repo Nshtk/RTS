@@ -19,9 +19,9 @@ public partial class Unit : MobileObject
 		{
 			if (!_unit.Is_Grounded)		//TODO To GroundUnit 
 				return;
-			_unit._rigid_body.AddForce(direction*speed*Game.instance.Terrain_Generator.map.tiles[(int)_unit.transform.position.x, (int)_unit.transform.position.z].traction);   //REVIEW * Time.fixedDeltaTime?
-			if (_unit._rigid_body.velocity.magnitude > speed_max)
-				_unit._rigid_body.velocity = _unit._rigid_body.velocity.normalized * speed_max;
+			_unit._rigidbody.AddForce(direction*speed*Game.instance.Terrain_Generator.map.tiles[(int)_unit.transform.position.x, (int)_unit.transform.position.z].traction);   //REVIEW * Time.fixedDeltaTime?
+			if (_unit._rigidbody.velocity.magnitude > speed_max)
+				_unit._rigidbody.velocity = _unit._rigidbody.velocity.normalized * speed_max;
 		}
 		protected override void move()
 		{

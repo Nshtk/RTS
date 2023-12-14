@@ -64,13 +64,17 @@ public class Player : MonoBehaviour
 			}
 		}
 	}
+	public virtual bool isAvailableUnit(Unit unit)
+	{
+		return money>=unit.cost && (unit.limit==-1 || unit.limit>units[id].Count);
+	}
 	public virtual void buyUnit(int id)
 	{
-		if (money>=faction.units[id].cost && (faction.units[id].limit==-1 || faction.units[id].limit>units[id].Count))
+		if (isAvailableUnit(faction.units[id]))
 		{
 			money-=faction.units[id].cost;
 			Unit unit=spawn.spawnUnit(faction.units[id]);
-			units[id].Add(unit.gameObject.GetInstanceID(), unit);
+			units[unit.id_in_faction].Add(unit.gameObject.GetInstanceID(), unit);
 		}
 
 	}

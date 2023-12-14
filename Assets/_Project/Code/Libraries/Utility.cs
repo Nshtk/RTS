@@ -15,6 +15,10 @@ namespace Libraries
 			Array enum_values = Enum.GetValues(typeof(T));
 			return (T)enum_values.GetValue(random.Next(enum_values.Length));
 		}
+		public static float getKineticEnergy(this Rigidbody rigidbody)
+		{
+			return 0.5f*rigidbody.mass*Mathf.Pow(rigidbody.velocity.magnitude, 2);
+		}
 	}
 
 	namespace Utility
