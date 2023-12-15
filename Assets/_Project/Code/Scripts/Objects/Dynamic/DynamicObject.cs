@@ -21,10 +21,14 @@ public class DynamicObject : MonoBehaviour
 	public float temperature;
 	public float select_volume = 1f;
 
-	public int Object_Id
+	public int Id
 	{
 		get;
 		set;
+	}
+	public virtual string Name
+	{
+		get { return "Dynamic object"; }
 	}
 	public Texture2D Icon
 	{

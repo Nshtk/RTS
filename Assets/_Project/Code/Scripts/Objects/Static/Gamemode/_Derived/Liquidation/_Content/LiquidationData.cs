@@ -2,10 +2,33 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Units.Air;
+
 using UnityEngine;
 
 public sealed partial class Liquidation
 {
+	public sealed class LiquidationGoal : GamemodeGoal
+	{
+		new Liquidation gamemode;
+
+		public LiquidationGoal(Liquidation gamemode, string description) : base(gamemode, description)
+		{
+
+		}
+
+		public override bool update()
+		{
+			if (score>gamemode.score_max)
+				return is_reached = true;
+			return false;
+		}
+
+		public void handleAirExampleUnitDied(AirUnitExample sender, AirUnitExample.AirUnitExampleDiedEventArgs e)	//TEMP kill this special unit and goal will be reached
+		{
+			is_reached = true;
+		}
+	}
 	public sealed class LiquidationBotData : GamemodeBotData
 	{
 		public class LiqudationStrategy : Strategy
@@ -25,7 +48,7 @@ public sealed partial class Liquidation
 
 			public override void updatePriorities()
 			{
-				throw new NotImplementedException();
+
 			}
 
 			public override DynamicObject getPriorityTarget(int total_rate)
@@ -65,26 +88,6 @@ public sealed partial class Liquidation
 					priority+=2)}
 				}),	
 			};
-		}
-	}
-	public sealed class LiquidationGoal : GamemodeGoal
-	{
-		new Liquidation gamemode;
-		public LiquidationGoal(Liquidation gamemode, string description) : base(gamemode, description)
-		{
-			Unit.unitDied+=unitDiedEventHandler;
-		}
-
-		public override bool update()
-		{
-			if (score>gamemode.score_max)
-				return is_reached = true;
-			return false;
-		}
-
-		public void unitDiedEventHandler(Unit sender, Unit.UnitDiedEventArgs e)
-		{
-			score+=sender.cost;
 		}
 	}
 }

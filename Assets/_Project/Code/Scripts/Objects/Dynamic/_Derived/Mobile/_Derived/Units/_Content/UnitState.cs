@@ -94,7 +94,6 @@ public partial class Unit : MobileObject
 		public override void enter()
 		{
 			base.enter();
-			//bool path_found=false;
 
 			if (_unit.target!=null)
 			{
@@ -128,41 +127,6 @@ public partial class Unit : MobileObject
 			_unit.target=null;
 			_unit._unit_controller.Is_Destination_Reached=false;
 		}
-		/*private void CalculateTargetDestination()		//TODO follow until target bounds
-		{
-			//calculate number of unit vectors from unit centre to unit edge of bounds
-			Vector3 originalExtents = selectionBounds.extents;
-			Vector3 normalExtents = originalExtents;
-			normalExtents.Normalize();
-			float numberOfExtents = originalExtents.x / normalExtents.x;
-			int unitShift = Mathf.FloorToInt(numberOfExtents);
-		
-			//calculate number of unit vectors from target centre to target edge of bounds
-			WorldObject worldObject = destinationTarget.GetComponent<WorldObject>();
-			if(worldObject)
-				originalExtents = worldObject.GetSelectionBounds().extents;
-			else
-				originalExtents = new Vector3(0.0f, 0.0f, 0.0f);
-			normalExtents = originalExtents;
-			normalExtents.Normalize();
-			numberOfExtents = originalExtents.x / normalExtents.x;
-			int targetShift = Mathf.FloorToInt(numberOfExtents);
-		
-			//calculate number of unit vectors between unit centre and destination centre with bounds just touching
-			int shiftAmount = targetShift + unitShift;
-		
-			//calculate direction unit needs to travel to reach destination in straight line and normalize to unit vector
-			Vector3 origin = transform.position;
-			Vector3 direction = new Vector3(destination.x - origin.x, 0.0f, destination.z - origin.z);
-			direction.Normalize();
-		
-			//destination = center of destination - number of unit vectors calculated above
-			//this should give us a destination where the unit will not quite collide with the target
-			//giving the illusion of moving to the edge of the target and then stopping
-			for(int i = 0; i<shiftAmount; i++)
-				destination -= direction;
-			destination.y = destinationTarget.transform.position.y;
-		}*/
 	}
 	public class UnitPatrolState : UnitState
 	{
@@ -197,3 +161,39 @@ public partial class Unit : MobileObject
 		}
 	}
 }
+
+/*private void CalculateTargetDestination()		//TODO follow until target bounds
+{
+	//calculate number of unit vectors from unit centre to unit edge of bounds
+	Vector3 originalExtents = selectionBounds.extents;
+	Vector3 normalExtents = originalExtents;
+	normalExtents.Normalize();
+	float numberOfExtents = originalExtents.x / normalExtents.x;
+	int unitShift = Mathf.FloorToInt(numberOfExtents);
+
+	//calculate number of unit vectors from target centre to target edge of bounds
+	WorldObject worldObject = destinationTarget.GetComponent<WorldObject>();
+	if(worldObject)
+		originalExtents = worldObject.GetSelectionBounds().extents;
+	else
+		originalExtents = new Vector3(0.0f, 0.0f, 0.0f);
+	normalExtents = originalExtents;
+	normalExtents.Normalize();
+	numberOfExtents = originalExtents.x / normalExtents.x;
+	int targetShift = Mathf.FloorToInt(numberOfExtents);
+
+	//calculate number of unit vectors between unit centre and destination centre with bounds just touching
+	int shiftAmount = targetShift + unitShift;
+
+	//calculate direction unit needs to travel to reach destination in straight line and normalize to unit vector
+	Vector3 origin = transform.position;
+	Vector3 direction = new Vector3(destination.x - origin.x, 0.0f, destination.z - origin.z);
+	direction.Normalize();
+
+	//destination = center of destination - number of unit vectors calculated above
+	//this should give us a destination where the unit will not quite collide with the target
+	//giving the illusion of moving to the edge of the target and then stopping
+	for(int i = 0; i<shiftAmount; i++)
+		destination -= direction;
+	destination.y = destinationTarget.transform.position.y;
+}*/

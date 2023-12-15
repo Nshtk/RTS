@@ -34,7 +34,7 @@ public class Spawn : MonoBehaviour
 	{
 		if(collider.gameObject.GetComponent<Unit>() is Unit unit && unit!=null)
 		{
-			if(unit._player_owner.id==_player_owner.id)
+			if(unit.owner.id==_player_owner.id)
 				unit.repair();
 		}
 

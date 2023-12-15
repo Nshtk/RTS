@@ -67,18 +67,23 @@ public abstract partial class Gamemode
 		public GamemodeDifficulty()
 		{ }
 	}
-	public abstract class GamemodeGoal
+	public abstract class GamemodeGoal : ICloneable	//REVIEW to struct?
 	{
 		protected Gamemode gamemode;
 		public int score;
 		public bool is_reached = false;
 		public string description;
-		public Action setScore;
+		//public Action setScore;
 
 		public GamemodeGoal(Gamemode gamemode, string description)
 		{
 			this.gamemode = gamemode;
 			this.description=description;
+		}
+
+		public object Clone()
+		{
+			return MemberwiseClone();
 		}
 
 		public abstract bool update();

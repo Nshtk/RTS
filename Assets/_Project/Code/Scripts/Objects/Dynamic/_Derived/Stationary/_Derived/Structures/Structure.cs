@@ -4,12 +4,12 @@ public class Structure : StationaryObject
 {
 	public Vector3 size;
 
-	private void Start()
+	protected override void Start()
     {
-        
+        base.Start();
     }
-    private void Update()
+	protected override void Update()
     {
-        
+        base.Update();
     }
 }

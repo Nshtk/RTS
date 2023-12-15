@@ -1,15 +1,15 @@
 using UnityEngine;
 
-public class StationaryObject : MonoBehaviour
+public class StationaryObject : DynamicObject
 {
     
 
-    private void Start()
+    protected override void Start()
     {
-        
+        base.Start();
     }
-    private void Update()
+	protected override void Update()
     {
-        
+        base .Update();
     }
 }

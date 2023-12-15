@@ -54,16 +54,6 @@ public sealed class Bot : Player
 	{
 
 	}
-	private void getPriorityFlag(int total_rate)
-	{
-		foreach(Flag flag in Game.instance.Terrain_Generator.map.flags)
-		{
-
-		}
-	}
-	private void getSpecificFlag()
-	{
-	}
 	public override void buyUnit(int id)
 	{
 		base.buyUnit(id);

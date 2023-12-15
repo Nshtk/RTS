@@ -35,15 +35,4 @@ public partial class GroundUnit : Unit
 		state_engage=   new UnitEngageState(this);
 		changeState(state_idle);
 	}
-	/*public override void setOrder(Vector3 position, DynamicObject target = null)
-	{
-		destination=position;
-		if (target!=null)
-		{
-			this.target=target;
-			changeState(state_follow);
-		}
-		else
-			changeState(state_idle);
-	}*/
 }

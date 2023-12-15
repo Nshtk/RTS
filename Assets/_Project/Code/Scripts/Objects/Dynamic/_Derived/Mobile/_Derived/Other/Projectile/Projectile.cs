@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Projectile : MobileObject
 {
+	public DynamicObject owner;
 	public float velocity = 1;
 	public int damage = 1;
 	private float range = 1;

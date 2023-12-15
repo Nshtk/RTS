@@ -19,18 +19,18 @@ public partial class Unit : MobileObject
 	public enum UNIT_TYPE	//Unit classes
 	{
 		INFANTRY_COMMON,
-		INFANTRY_TACTICAL,		//Primary anti-infantry
-		INFANTRY_VANGUARD,		//Primarily anti-all
+		INFANTRY_TACTICAL,	//Primarily anti-infantry
+		INFANTRY_VANGUARD,	//Primarily anti-all
 		INFANTRY_SABOTEUR,
-		INFANTRY_SUPPORT,		//Medics, engineers, scouts, etc.
+		INFANTRY_SUPPORT,	//Medics, engineers, scouts, etc.
 
-		VEHICLE_COMMON,			//MG Jeeps, etc.
-		VEHICLE_LIGHT,			//APVs, light tanks etc.
-		VEHICLE_HEAVY,			//Medium and heavy tanks, etc.
+		VEHICLE_COMMON,		//MG Jeeps, etc.
+		VEHICLE_LIGHT,		//APVs, light tanks etc.
+		VEHICLE_HEAVY,		//Medium and heavy tanks, etc.
 		VEHICLE_ARTILLERY,
-		VEHICLE_SUPPORT,		//Transport, repair
+		VEHICLE_SUPPORT,	//Transport, repair
 
-		HELICOPTER_SCOUT,		//Light helicopters
+		HELICOPTER_SCOUT,	//Light helicopters
 		HELICOPTER_ATTACK,
 
 		AIRPLANE_FIGHTER,
@@ -39,10 +39,10 @@ public partial class Unit : MobileObject
 		ULTIMATE
 	}
 
-	public Player _player_owner;
+	public Player owner;
 	public Inventory inventory;
 	protected List<DynamicObject> objects_nearby=new List<DynamicObject>();
-	protected UnitController _unit_controller;  //TODO to private
+	protected UnitController _unit_controller;  //TODO to private?
 	public AudioClip sound_voiceover, sound_idle, sound_move;
 	protected NavMeshPath navmesh_path;
 	protected NavMeshQueryFilter navmesh_query_filter;
@@ -63,6 +63,13 @@ public partial class Unit : MobileObject
 	protected UnitFollowState state_follow;
 	protected UnitEvadeState state_evade;
 
+	protected UnitSpawnedEventArgs _event_args_unit_spawned;
+	protected UnitDiedEventArgs _event_args_unit_died;
+
+	public override string Name 
+	{
+		get { return "Unit"; }
+	}
 	protected bool _is_grounded=false;
 	protected bool Is_Grounded
 	{
@@ -72,15 +79,10 @@ public partial class Unit : MobileObject
 		}
 		set { _is_grounded = value; }
 	}
-
-	public virtual string Name
-	{
-		get { return "Unit"; }
-	}
 	
 	public override void initialise(Player owner)
 	{
-		_player_owner=owner;
+		this.owner=owner;
 	}
 	protected override void Awake()
 	{
@@ -93,12 +95,14 @@ public partial class Unit : MobileObject
 	protected override void Start()
     {
         base.Start();
-		unitDied+=Game.GameData.instance.handleUnitDied;
+		//unitDied+=Game.GameData.instance.handleUnitDied;		//REVIEW this vs subscribe in GameData?
+		//unitSpawned+=Game.GameData.instance.handleUnitSpawned;
 		setStates();
 	}
 	public override void StartManual()
 	{
-
+		_event_args_unit_spawned=new UnitSpawnedEventArgs($"{Name} has spawned.");
+		unitSpawned?.Invoke(this, _event_args_unit_spawned);
 	}
 	protected override void Update()
     {
@@ -116,11 +120,13 @@ public partial class Unit : MobileObject
 	{
 		if (collision.gameObject.GetComponent<MobileObject>() is MobileObject mobile_object)
 		{
-			hurt((int)(collision.relativeVelocity.magnitude*(mobile_object.Rigidbody.getKineticEnergy()+_rigidbody.getKineticEnergy())));
+			if (!hurt((int)(collision.relativeVelocity.magnitude*(mobile_object.Rigidbody.getKineticEnergy()+_rigidbody.getKineticEnergy()))))
+				_event_args_unit_died=new UnitDiedEventArgs(this, mobile_object);
 		}
 		else if (collision.gameObject.GetComponent<Projectile>() is Projectile projectile)
 		{
-			hurt(projectile.damage);
+			if(!hurt(projectile.damage))
+				_event_args_unit_died=new UnitDiedEventArgs(this, projectile);
 		}
 	}
 	protected void OnCollisionStay(Collision collision)
@@ -142,6 +148,9 @@ public partial class Unit : MobileObject
 	protected override void OnDestroy()
 	{
 		base.OnDestroy();
+		if(_event_args_unit_died==null)
+			_event_args_unit_died=new UnitDiedEventArgs(this);
+		unitDied?.Invoke(this, _event_args_unit_died);
 	}
 	protected int GetNavMeshAgentID()
 	{
@@ -177,19 +186,15 @@ public partial class Unit : MobileObject
 	}
 	public virtual void setOrder(Vector3 position, DynamicObject target=null)
 	{
-		if(state_current==state_idle)
+		if (state_current==state_idle)
 		{
 			destination=position;
 			this.target=target;
 			if (target!=null)
 			{
 				if(target.GetComponent<Unit>() is Unit unit)
-				{
-					if(unit._player_owner.team==_player_owner.team)
+					if(unit.owner.team==owner.team)
 						changeState(state_follow);
-					/*else				//FIXME add all possible states in unit for derived to override?
-						changeState(state_engage);*/
-				}
 			}
 			else if(destination!=null)
 				changeState(state_evade);
@@ -209,29 +214,53 @@ public partial class Unit : MobileObject
 		if(hit_points!=hit_points_max)
 			hit_points+=repair_rate;
 	}
-	public void hurt(int damage)
+	public bool hurt(int damage)
 	{
 		hit_points-=damage;
 		if (hit_points<=0)
 		{
 			Destroy(gameObject);
-			unitDied?.Invoke(this, new UnitDiedEventArgs($"{Name} has died."));
+			return false;
 		}
-
+		return true;
 	}
 
+	public delegate void unitSpawnedEventHandler(Unit sender, UnitSpawnedEventArgs e);
+	public static event unitSpawnedEventHandler unitSpawned;
+	public class UnitSpawnedEventArgs : EventArgs
+	{
+		public readonly string message;
+		public UnitSpawnedEventArgs(string message)
+		{
+			this.message = message;
+		}
+	}
 	public delegate void unitDiedEventHandler(Unit sender, UnitDiedEventArgs e);
 	public static event unitDiedEventHandler unitDied;
 	public class UnitDiedEventArgs : EventArgs
 	{
+		public readonly MobileObject killer;
+
 		public string Message
 		{
 			get;
-			set;
+			private set;
 		}
-		public UnitDiedEventArgs(string message)
+
+		public UnitDiedEventArgs(Unit unit, MobileObject killer=null, string message_force_override=null)
 		{
-			Message = message;
+			this.killer=killer;
+			if (message_force_override!=null)
+				Message = message_force_override;
+			else if (killer!=null)
+				composeMessage(unit);
+			else
+				Message=$"{unit.Name} has died.";
+		}
+
+		protected virtual void composeMessage(Unit unit)
+		{
+			Message=$"{unit.Name} has been killed by {killer.Name}.";
 		}
 	}
 }

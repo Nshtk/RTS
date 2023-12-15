@@ -14,6 +14,8 @@ public class Demolition : Gamemode
 		}
 	}
 
+	public override string Description { get; }
+
 	public Demolition(int score_max) : base(score_max)
 	{
 	}
@@ -28,7 +30,12 @@ public class Demolition : Gamemode
 		throw new System.NotImplementedException();
 	}
 
-	public override void updateTeamGoals()
+	public override void update()
+	{
+		throw new System.NotImplementedException();
+	}
+
+	public override Player getWinner()
 	{
 		throw new System.NotImplementedException();
 	}

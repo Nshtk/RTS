@@ -1,13 +1,11 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using Libraries.Terrain;
-
 
 public class Game : MonoBehaviour	//Class containing main loop
 {
-	public class GameData          //Class for statistics
-	{                              //TODO event aggregator (e.g. flag captured -> update team's captured flags)  
+	public class GameData          //Class for log/statistics
+	{
 		public static GameData instance;
 		private Game _game;
 
@@ -19,6 +17,13 @@ public class Game : MonoBehaviour	//Class containing main loop
 		{
 			instance=this;
 			_game=game;
+			subscribe();
+		}
+		private void subscribe()
+		{
+			Unit.unitSpawned+=handleUnitSpawned;
+			Unit.unitDied+=handleUnitDied;
+			Flag.flagCaptured+=handleFlagCaptured;
 		}
 
 		public void update() 
@@ -30,24 +35,17 @@ public class Game : MonoBehaviour	//Class containing main loop
 				ticks++;
 			}
 		}
+		public void handleUnitSpawned(Unit sender, Unit.UnitSpawnedEventArgs e)
+		{
+			
+		}
 		public void handleUnitDied(Unit sender, Unit.UnitDiedEventArgs e)
 		{
 			count_units_died++;
 		}
-
-		public event FlagCapturedEventHandler flagCaptured;
-		public delegate void FlagCapturedEventHandler(Flag sender, FlagCapturedEventArgs e);
-		public class FlagCapturedEventArgs : EventArgs
+		public void handleFlagCaptured(Flag sender, Flag.FlagCapturedEventArgs e)
 		{
-			public string Message
-			{
-				get;
-				set;
-			}
-			public FlagCapturedEventArgs(string message)
-			{
-				Message = message;
-			}
+			//TODO update teams captured flags here?
 		}
 	}
 
@@ -63,7 +61,7 @@ public class Game : MonoBehaviour	//Class containing main loop
 	private List<Faction> _factions;
 	private List<Team> _teams;
 
-
+	public bool is_running=true;		//REVIEW temp
 
 	public LayerMask Layer_Mask_Terrain		//Singleton structs
 	{
@@ -135,13 +133,6 @@ public class Game : MonoBehaviour	//Class containing main loop
     private void Start()
     {
 		_prefab_terrain_generator.StartManual();
-		/*foreach(Team team in _teams)
-		{
-			foreach(Player player in team.players)
-			{
-				  // pass args
-			}
-		}*/
     }
     private void Update()
     {
@@ -150,8 +141,9 @@ public class Game : MonoBehaviour	//Class containing main loop
 		foreach(Team team in _teams)
 		{
 			team.updatePlayers();
-			/*if(team.goal.is_reached)	// TODO + stop updating
-				screen_end.show();*/
+			team.goal.update();
+			if (team.goal.is_reached)
+				is_running=false;		//TODO screen_end.show(); + stop updating
 		}
 		foreach (Team team in _teams)
 		{
@@ -172,6 +164,7 @@ public class Game : MonoBehaviour	//Class containing main loop
 
 	private void OnGUI()
 	{
-
+		if(!is_running)
+			GUI.Label(new Rect(Input.mousePosition.x, Screen.height-Input.mousePosition.y, 200, 200), "GAME HAS ENDED!");
 	}
 }

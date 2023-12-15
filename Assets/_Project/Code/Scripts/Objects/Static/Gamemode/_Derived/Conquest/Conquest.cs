@@ -2,6 +2,37 @@ using UnityEngine;
 
 public class Conquest : Gamemode
 {
+	public class ConquestBotData : GamemodeBotData
+	{
+		public class ConquestStrategy : Strategy 
+		{
+			public override Vector3 getPriorityDestination(int total_rate)
+			{
+				throw new System.NotImplementedException();
+			}
+
+			public override DynamicObject getPriorityTarget(int total_rate)
+			{
+				throw new System.NotImplementedException();
+			}
+
+			public override void updatePriorities()
+			{
+				throw new System.NotImplementedException();
+			}
+
+			private void getPriorityFlag(int total_rate)
+			{
+				foreach (Flag flag in Game.instance.Terrain_Generator.map.flags)
+				{
+
+				}
+			}
+			private void getSpecificFlag()
+			{
+			}
+		}
+	}
 	public override int Count_Teams
 	{
 		get { return _count_teams; }
@@ -13,6 +44,8 @@ public class Conquest : Gamemode
 				_count_teams=value;
 		}
 	}
+
+	public override string Description { get; }
 
 	public Conquest(int score_max) : base(score_max)
 	{
@@ -28,7 +61,12 @@ public class Conquest : Gamemode
 		throw new System.NotImplementedException();
 	}
 
-	public override void updateTeamGoals()
+	public override void update()
+	{
+		throw new System.NotImplementedException();
+	}
+
+	public override Player getWinner()
 	{
 		throw new System.NotImplementedException();
 	}

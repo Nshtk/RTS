@@ -1,8 +1,6 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using Unity.VisualScripting;
-
 using UnityEngine;
 
 public class Flag : Structure
@@ -25,19 +23,23 @@ public class Flag : Structure
     {
         transform.localScale = size;
     }
-    private void Awake()
+    protected override void Awake()
     {
 		flag_units=new HashSet<Unit>();
         progress=0;
 	}
-    private void Start()
+	protected override void Start()
     {
-        
+        base.Start();
     }
-    private void Update()
+	protected override void Update()
     {
-        
+        base.Update();
     }
+    public override void UpdateManual()
+    {
+		flagCaptured?.Invoke(this, new FlagCapturedEventArgs($"{Id} has been captured."));
+	}
 	private void OnTriggerEnter(Collider collider)
 	{
 		if (collider.gameObject.GetComponent<Unit>() is Unit unit && unit!=null) 
@@ -67,5 +69,20 @@ public class Flag : Structure
 	public List<Unit> getFlagUnits()
 	{
         return flag_units.ToList();
+	}
+
+	public delegate void FlagCapturedEventHandler(Flag sender, FlagCapturedEventArgs e);
+	public static event FlagCapturedEventHandler flagCaptured;
+	public class FlagCapturedEventArgs : EventArgs
+	{
+		public string Message
+		{
+			get;
+			set;
+		}
+		public FlagCapturedEventArgs(string message)
+		{
+			Message = message;
+		}
 	}
 }

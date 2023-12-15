@@ -82,7 +82,7 @@ public class HumanSelection : MonoBehaviour
 		{
 			if (obj is Unit unit)
 			{
-				if(unit._player_owner.id==_human.id)
+				if(unit.owner.id==_human.id)
 					selectObject(unit);
 			}
 			else

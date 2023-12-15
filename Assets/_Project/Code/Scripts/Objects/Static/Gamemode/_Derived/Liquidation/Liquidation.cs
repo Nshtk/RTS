@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 
+using Units.Air;
+
 public sealed partial class Liquidation : Gamemode
 {
 	public override int Count_Teams
@@ -14,71 +16,61 @@ public sealed partial class Liquidation : Gamemode
 		}
 	}
 
+	public override string Description 
+	{
+		get { return "Each team should score a higher number by killing enemy units!"; }
+	}
+
 	public Liquidation(List<Team> teams, int score_max) : base(score_max)
 	{
 		bot_data=new LiquidationBotData();
-		description="Each team should score a higher number by killing enemy units!";
 		Count_Teams=teams.Count;
 		this.teams = teams;
 		this.score_max=score_max;
+		//Unit.unitDied+=unitDiedEventHandler;  //REVIEW:
 	}
 	public override void setTeams()
 	{
 		GamemodeGoal[] team_goals = new GamemodeGoal[] {
-			new LiquidationGoal(this, "Kill them all!")
+			new LiquidationGoal(this, "Kill special unit to win faster!")
 		};
-		/*Action[] actions = new Action[] {	//REVIEW:
-			() => {  }
-		};*/
 		foreach(Team team in teams)		//TODO set goals by proportions
 		{
-			team.setGoal(team_goals[0], Team.TEAM_TYPE.TACTICIAN);
+			team.setGoal((GamemodeGoal)team_goals[0].Clone(), Team.TEAM_TYPE.TACTICIAN);
 		}
 	}
-	public override void updateTeamGoals()
+	/*public override void updateTeamGoals()
 	{
         foreach (Team team in teams)
         {
-            
+            if(team)
         }
-    }
+    }*/
 
 	public override void setGenerationParameters(TerrainGenerator terrain_generator)
 	{
-		
+		//TODO
 	}
 
-	/*public int minutes = 1;
-
-private float timeLeft = 0.0f;
-
-void Awake()
-{
-	timeLeft = minutes * 60;
-}
-
-void Update()
-{
-	timeLeft -= Time.deltaTime;
-}
-
-public override string GetDescription()
-{
-	return "Survival";
-}
-
-public override bool GameFinished()
-{
-	foreach(Player player in players)
+	public void handleUnitSpawned(Unit sender, Unit.UnitDiedEventArgs e)
 	{
-		if(player && player.human && player.IsDead())
-			return true;
-	}
-	return timeLeft < 0;
-}
+		if (sender is AirUnitExample air_unit_example)
+		{
+			foreach (Team team in teams)
+			{
+				if(air_unit_example.owner.team.id!=team.id)
+					air_unit_example.airUnitExampleDied+=((LiquidationGoal)teams[0].goal).handleAirExampleUnitDied;
+			}
+		}
 
-public override bool PlayerMeetsConditions(Player player)
+	}
+
+	public override Player getWinner()
+	{
+		throw new System.NotImplementedException();
+	}
+	/*public void handleUnitDied(Unit sender, Unit.UnitDiedEventArgs e)
 {
-	return player && player.human && !player.IsDead();
+	teams[sender._player_owner.team.id].goal.score+=sender.cost;
 }*/
 }
