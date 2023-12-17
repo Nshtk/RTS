@@ -86,7 +86,7 @@ public partial class MobileObject
 					return;
 			}
 
-			accelerate(_mobile_object.transform.forward, speed_move, speed_move_max);
+			accelerate(_mobile_object.transform.forward, speed_move, speed_move_max);//
 			_waypoint.updateRemainingDistance(_mobile_object.transform.position);
 		}
 		public virtual void stop()

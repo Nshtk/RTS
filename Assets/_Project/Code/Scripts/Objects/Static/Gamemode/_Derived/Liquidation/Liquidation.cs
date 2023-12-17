@@ -23,11 +23,12 @@ public sealed partial class Liquidation : Gamemode
 
 	public Liquidation(List<Team> teams, int score_max) : base(score_max)
 	{
-		bot_data=new LiquidationBotData();
+		bot_data=new LiquidationBotData(this);
 		Count_Teams=teams.Count;
 		this.teams = teams;
 		this.score_max=score_max;
 		//Unit.unitDied+=unitDiedEventHandler;  //REVIEW:
+		setTeams();
 	}
 	public override void setTeams()
 	{
@@ -39,13 +40,6 @@ public sealed partial class Liquidation : Gamemode
 			team.setGoal((GamemodeGoal)team_goals[0].Clone(), Team.TEAM_TYPE.TACTICIAN);
 		}
 	}
-	/*public override void updateTeamGoals()
-	{
-        foreach (Team team in teams)
-        {
-            if(team)
-        }
-    }*/
 
 	public override void setGenerationParameters(TerrainGenerator terrain_generator)
 	{

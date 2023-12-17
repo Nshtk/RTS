@@ -26,12 +26,11 @@ public abstract partial class Gamemode
 	protected Gamemode(int score_max)
     {
 		this.score_max=score_max;
-		time_left = 60f*60f;
 	}
 	public abstract void setTeams();
 	protected virtual bool updateTime()
 	{
-		time_left -= Time.deltaTime;
+		//time_left -= Time.deltaTime;
 		return time_left<0;
 	}
 	protected virtual bool updateTeamGoals()

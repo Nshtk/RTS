@@ -8,6 +8,7 @@ public abstract partial class Gamemode
 	{
 		public abstract class Strategy
 		{
+			GamemodeBotData bot_data;
 			protected List<(DynamicObject dynamic_object, int rate)> _targets=new List<(DynamicObject dynamic_object, int rate)>();
 			protected List<(Vector3, int rate)> _destinations = new List<(Vector3, int rate)>();
 
@@ -19,6 +20,7 @@ public abstract partial class Gamemode
 			public abstract void updatePriorities();
 			public abstract DynamicObject getPriorityTarget(int total_rate);	//TODO to one generic function in Utility?
 			public abstract Vector3 getPriorityDestination(int total_rate);
+			public abstract float getConfidenceCurrent();
 		}
 		public class Doctrine
 		{
@@ -56,11 +58,14 @@ public abstract partial class Gamemode
 			}
 		}
 
+		protected Gamemode _gamemode;
 		public Strategy[] strategies;
 		public Doctrine[] doctrines;
 
-		public GamemodeBotData()
-		{ }
+		public GamemodeBotData(Gamemode gamemode)
+		{ 
+			_gamemode = gamemode;
+		}
 	}
 	public abstract class GamemodeDifficulty
 	{
@@ -69,7 +74,7 @@ public abstract partial class Gamemode
 	}
 	public abstract class GamemodeGoal : ICloneable	//REVIEW to struct?
 	{
-		protected Gamemode gamemode;
+		protected Gamemode _gamemode;
 		public int score;
 		public bool is_reached = false;
 		public string description;
@@ -77,7 +82,7 @@ public abstract partial class Gamemode
 
 		public GamemodeGoal(Gamemode gamemode, string description)
 		{
-			this.gamemode = gamemode;
+			_gamemode = gamemode;
 			this.description=description;
 		}
 

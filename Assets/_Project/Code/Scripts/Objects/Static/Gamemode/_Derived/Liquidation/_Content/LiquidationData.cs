@@ -10,16 +10,16 @@ public sealed partial class Liquidation
 {
 	public sealed class LiquidationGoal : GamemodeGoal
 	{
-		new Liquidation gamemode;
+		private new Liquidation _gamemode;
 
 		public LiquidationGoal(Liquidation gamemode, string description) : base(gamemode, description)
 		{
-
+			_gamemode=gamemode;
 		}
 
 		public override bool update()
 		{
-			if (score>gamemode.score_max)
+			if (score>_gamemode.score_max)
 				return is_reached = true;
 			return false;
 		}
@@ -60,6 +60,12 @@ public sealed partial class Liquidation
 			{
 				throw new NotImplementedException();
 			}
+
+			public override float getConfidenceCurrent()
+			{
+				//if()
+				return 1f;
+			}
 		}
 		public sealed class LiqudationDoctrine : Doctrine
 		{
@@ -75,9 +81,13 @@ public sealed partial class Liquidation
 			}
 		}
 
-		public LiquidationBotData()
+		private new Liquidation _gamemode;
+
+		public LiquidationBotData(Liquidation liquidation) : base(liquidation)
 		{
-			strategies=new LiqudationStrategy[] {
+			_gamemode=liquidation;
+
+			strategies =new LiqudationStrategy[] {
 				new LiqudationStrategy(),
 			};
 			doctrines=new Doctrine[] {

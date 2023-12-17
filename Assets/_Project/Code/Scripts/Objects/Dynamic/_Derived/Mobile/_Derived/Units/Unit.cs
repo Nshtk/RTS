@@ -63,6 +63,8 @@ public partial class Unit : MobileObject
 	protected UnitFollowState state_follow;
 	protected UnitEvadeState state_evade;
 
+	//public UnitComponent[] components //Unit components/modifications go here (engine, weaponry, etc.)
+
 	protected UnitSpawnedEventArgs _event_args_unit_spawned;
 	protected UnitDiedEventArgs _event_args_unit_died;
 

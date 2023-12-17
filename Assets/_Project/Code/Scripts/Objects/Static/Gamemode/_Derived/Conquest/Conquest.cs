@@ -2,10 +2,15 @@ using UnityEngine;
 
 public class Conquest : Gamemode
 {
-	public class ConquestBotData : GamemodeBotData
+	/*public class ConquestBotData : GamemodeBotData
 	{
 		public class ConquestStrategy : Strategy 
 		{
+			public override float getConfidenceCurrent()
+			{
+				throw new System.NotImplementedException();
+			}
+
 			public override Vector3 getPriorityDestination(int total_rate)
 			{
 				throw new System.NotImplementedException();
@@ -32,7 +37,7 @@ public class Conquest : Gamemode
 			{
 			}
 		}
-	}
+	}*/
 	public override int Count_Teams
 	{
 		get { return _count_teams; }
@@ -70,27 +75,4 @@ public class Conquest : Gamemode
 	{
 		throw new System.NotImplementedException();
 	}
-
-	/*public override string GetDescription()
-	{
-		return "Conquest";
-	}
-
-	public override bool GameFinished()
-	{
-		if(players == null)
-			return true;
-		int playersLeft = players.Length;
-		foreach(Player player in players)
-		{
-			if(!PlayerMeetsConditions(player))
-				playersLeft--;
-		}
-		return playersLeft == 1;
-	}
-
-	public override bool PlayerMeetsConditions(Player player)
-	{
-		return player && !player.IsDead();
-	}*/
 }
