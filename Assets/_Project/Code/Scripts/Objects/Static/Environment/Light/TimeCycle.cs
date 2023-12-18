@@ -54,7 +54,7 @@ namespace Environment
 				_time_normalised=_time_current/24;
 				updateLights();
 			}
-			internal void updateLights()
+			private void updateLights()
 			{
 				if (_time_current>6f && _time_current<10f)
 					_sun_additional_data.EnableShadows(true);

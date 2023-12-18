@@ -4,7 +4,7 @@ using UnityEngine;
 
 public sealed partial class Human : Player
 {
-    private HumanInput _input;
+	private HumanInput _input;
 	private HumanSelection _selection;
 	private RaycastHit _raycast_hit;
 	public Dictionary<int, Unit> units_selected = new Dictionary<int, Unit>();
@@ -21,12 +21,12 @@ public sealed partial class Human : Player
 		base.Awake();
 	}
 	protected override void Start()
-    {
-        base.Start();
-    }
+	{
+		base.Start();
+	}
 	protected override void Update()
-    {
-        base.Update();
+	{
+		base.Update();
 		_input.updateManual();
 	}
 	public override void giveOrder(Vector3 position)

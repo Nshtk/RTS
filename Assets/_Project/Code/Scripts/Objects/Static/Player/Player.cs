@@ -7,17 +7,20 @@ public class Player : MonoBehaviour
 	public int id;
 	public string nickname;
 	public Team team;
-	public Faction faction;     //TODO: dont store it use gamedata
+	public Faction faction;     //TODO: dont store it, use gamedata?
 	public Spawn spawn;
 
-	public int money=0, money_income=5, money_pool = 1000;	//TODO set this by gamemode
-	public int difficulty_multiplier;
+	public int money=0, money_income=5, money_pool = 1000;
+	public int command_points=200;
 
-	public List<Dictionary<int, Unit>> units = new List<Dictionary<int, Unit>>();
+	public List<Dictionary<int, Unit>> units_by_id_in_faction_id_unit = new List<Dictionary<int, Unit>>();
 
 	protected virtual void Awake()
 	{
-
+		foreach (Unit unit in faction.units)
+		{
+			units_by_id_in_faction_id_unit.Add(new Dictionary<int, Unit>());
+		}
 	}
 	public virtual void AwakeManual(Team team, string? nickname, Faction faction)
 	{
@@ -32,10 +35,7 @@ public class Player : MonoBehaviour
 	}
 	protected virtual void Start()
 	{
-		foreach(Unit unit in faction.units)
-		{
-			units.Add(new Dictionary<int, Unit>());
-		}
+		Game.instance.gamemode.difficulty.money_pool = money_pool;
 	}
 	protected virtual void Update()
 	{
@@ -56,7 +56,7 @@ public class Player : MonoBehaviour
 	}
 	public virtual void updateUnits()
 	{
-		foreach (Dictionary<int, Unit> units_of_name in units)
+		foreach (Dictionary<int, Unit> units_of_name in units_by_id_in_faction_id_unit)
 		{
 			foreach(Unit unit in units_of_name.Values)
 			{
@@ -66,15 +66,15 @@ public class Player : MonoBehaviour
 	}
 	public virtual bool isAvailableUnit(Unit unit)
 	{
-		return money>=unit.cost && (unit.limit==-1 || unit.limit>units[id].Count);
+		return money>=unit.cost_money && command_points>=unit.cost_command_points && (unit.limit==-1 || unit.limit>units_by_id_in_faction_id_unit[id].Count);
 	}
 	public virtual void buyUnit(int id)
 	{
 		if (isAvailableUnit(faction.units[id]))
 		{
-			money-=faction.units[id].cost;
+			money-=faction.units[id].cost_money;
 			Unit unit=spawn.spawnUnit(faction.units[id]);
-			units[unit.id_in_faction].Add(unit.gameObject.GetInstanceID(), unit);
+			units_by_id_in_faction_id_unit[unit.id_in_faction].Add(unit.gameObject.GetInstanceID(), unit);
 		}
 
 	}

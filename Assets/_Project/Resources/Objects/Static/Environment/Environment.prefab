@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   time_cycle:
     _environment: {fileID: 3540986982428933679}
-    _time_current: 0.34945807
+    _time_current: 6.1
     _sun_speed: 0.8
     _sun_intensity: 1
     _sun_intensity_curve:
@@ -264,6 +264,6 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  _sun_prefab: {fileID: 0}
-  _moon_prefab: {fileID: 0}
-  _stars_prefab: {fileID: 0}
+  _sun_prefab: {fileID: 1405450132685327891, guid: 10256e2737ea89043b7353396bfc8fb8, type: 3}
+  _moon_prefab: {fileID: 4740230723146329591, guid: 1cc490cefbf4ea044b5280ee07865010, type: 3}
+  _stars_prefab: {fileID: 5910901789918466571, guid: ed866c8a2ead63c428be31c7d319d60d, type: 3}

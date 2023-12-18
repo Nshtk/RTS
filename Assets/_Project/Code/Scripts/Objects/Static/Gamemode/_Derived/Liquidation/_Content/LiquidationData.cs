@@ -8,6 +8,32 @@ using UnityEngine;
 
 public sealed partial class Liquidation
 {
+	public sealed class LiquidationDifficulty : GamemodeDifficulty
+	{
+		public LiquidationDifficulty(DIFFICULTY_PRESET preset) : base(preset)
+		{
+			switch(preset)
+			{
+				case DIFFICULTY_PRESET.CUSTOM:
+					break;
+				case DIFFICULTY_PRESET.EASY:
+					break;
+				case DIFFICULTY_PRESET.NORMAL:
+					money_income = 5; money_pool = 1000;
+					command_points = 200;
+					break;
+				case DIFFICULTY_PRESET.HARD:
+					break;
+				case DIFFICULTY_PRESET.VERY_HARD:
+					break;
+				case DIFFICULTY_PRESET.TEST:
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
 	public sealed class LiquidationGoal : GamemodeGoal
 	{
 		private new Liquidation _gamemode;
@@ -46,10 +72,6 @@ public sealed partial class Liquidation
 
 			}
 
-			public override void updatePriorities()
-			{
-
-			}
 
 			public override DynamicObject getPriorityTarget(int total_rate)
 			{
@@ -65,6 +87,16 @@ public sealed partial class Liquidation
 			{
 				//if()
 				return 1f;
+			}
+
+			protected override void updateDestinations()
+			{
+				throw new NotImplementedException();
+			}
+
+			protected override void updateTargets()
+			{
+				throw new NotImplementedException();
 			}
 		}
 		public sealed class LiqudationDoctrine : Doctrine

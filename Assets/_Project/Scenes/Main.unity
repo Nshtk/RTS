@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1305603989}
-  m_IndirectSpecularColor: {r: 0.031982172, g: 0.023340316, b: 0.02047822, a: 1}
+  m_IndirectSpecularColor: {r: 42.940968, g: 28.278324, b: 22.617739, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -286,7 +286,7 @@ PrefabInstance:
       objectReference: {fileID: 5860416398954111483}
     - target: {fileID: 3540986982428933679, guid: 8b0c37c4fcb13a94882b2cb3cb0f33b4, type: 3}
       propertyPath: time_cycle._time_current
-      value: 0.34945807
+      value: 16.028093
       objectReference: {fileID: 0}
     - target: {fileID: 4036106839077256987, guid: 8b0c37c4fcb13a94882b2cb3cb0f33b4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -662,7 +662,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1405450132685327891, guid: 10256e2737ea89043b7353396bfc8fb8, type: 3}
       propertyPath: m_ColorTemperature
-      value: 495.24658
+      value: 7712.5137
       objectReference: {fileID: 0}
     - target: {fileID: 1443643269485852575, guid: 10256e2737ea89043b7353396bfc8fb8, type: 3}
       propertyPath: m_Name
@@ -682,11 +682,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4998870511591364423, guid: 10256e2737ea89043b7353396bfc8fb8, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8299806
+      value: 0.4974501
       objectReference: {fileID: 0}
     - target: {fileID: 4998870511591364423, guid: 10256e2737ea89043b7353396bfc8fb8, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.55779225
+      value: 0.8674926
       objectReference: {fileID: 0}
     - target: {fileID: 4998870511591364423, guid: 10256e2737ea89043b7353396bfc8fb8, type: 3}
       propertyPath: m_LocalRotation.y
@@ -1059,7 +1059,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4740230723146329591, guid: 1cc490cefbf4ea044b5280ee07865010, type: 3}
       propertyPath: m_Intensity
-      value: 0.83150476
+      value: 12285.902
       objectReference: {fileID: 0}
     - target: {fileID: 4740230723146329591, guid: 1cc490cefbf4ea044b5280ee07865010, type: 3}
       propertyPath: m_ColorTemperature
@@ -1079,11 +1079,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4951484267752641339, guid: 1cc490cefbf4ea044b5280ee07865010, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.6740325
+      value: -0.9668711
       objectReference: {fileID: 0}
     - target: {fileID: 4951484267752641339, guid: 1cc490cefbf4ea044b5280ee07865010, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.7387017
+      value: 0.25526536
       objectReference: {fileID: 0}
     - target: {fileID: 4951484267752641339, guid: 1cc490cefbf4ea044b5280ee07865010, type: 3}
       propertyPath: m_LocalRotation.y

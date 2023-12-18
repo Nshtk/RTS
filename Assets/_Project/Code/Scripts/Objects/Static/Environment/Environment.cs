@@ -23,7 +23,7 @@ namespace Environment
 		}
 		private void OnValidate()
 		{
-			time_cycle.update();
+			//time_cycle.update();
 		}
 	}
 }

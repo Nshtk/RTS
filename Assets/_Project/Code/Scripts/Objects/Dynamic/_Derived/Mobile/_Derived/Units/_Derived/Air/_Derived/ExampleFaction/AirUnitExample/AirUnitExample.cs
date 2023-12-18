@@ -16,7 +16,7 @@ namespace Units.Air
 		protected override void Awake()
 		{
 			base.Awake();
-			cost=15;
+			cost_money=15;
 		}
 		protected override void Start()
         {

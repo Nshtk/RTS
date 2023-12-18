@@ -4,6 +4,7 @@ using UnityEngine;
 public abstract partial class Gamemode
 {
 	public GamemodeBotData bot_data;
+	public GamemodeDifficulty difficulty;
 	public int score_max;
 	public string description;
 	public List<Team> teams;
@@ -24,10 +25,11 @@ public abstract partial class Gamemode
 	}
 
 	protected Gamemode(int score_max)
-    {
+	{
 		this.score_max=score_max;
 	}
-	public abstract void setTeams();
+	public abstract void setupTeams();
+	protected abstract void setupPlayers(List<Player> players);
 	protected virtual bool updateTime()
 	{
 		//time_left -= Time.deltaTime;

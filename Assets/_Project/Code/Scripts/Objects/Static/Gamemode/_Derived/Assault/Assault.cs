@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 using UnityEngine;
 
 public class Assault : Gamemode
@@ -25,7 +27,7 @@ public class Assault : Gamemode
 		throw new System.NotImplementedException();
 	}
 
-	public override void setTeams()
+	public override void setupTeams()
 	{
 		throw new System.NotImplementedException();
 	}
@@ -36,6 +38,11 @@ public class Assault : Gamemode
 	}
 
 	public override Player getWinner()
+	{
+		throw new System.NotImplementedException();
+	}
+
+	protected override void setupPlayers(List<Player> players)
 	{
 		throw new System.NotImplementedException();
 	}

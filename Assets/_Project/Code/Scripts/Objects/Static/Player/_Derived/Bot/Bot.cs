@@ -6,13 +6,12 @@ using UnityEngine;
 
 public sealed class Bot : Player
 {
-	public string strategy;
-	public string doctrine;
+	public Gamemode.GamemodeBotData.Strategy strategy;
+	public Gamemode.GamemodeBotData.Doctrine doctrine;
 
 	private Queue<Unit> unit_spawn_buffer=new Queue<Unit>();
 	private Unit unit_to_spawn;
 	private Dictionary<Unit.UNIT_TYPE, (List<Unit> units, int rate)> units_by_type_available;
-
 
 	protected override void Awake()
 	{
@@ -24,6 +23,26 @@ public sealed class Bot : Player
 		base.AwakeManual(team, nickname, faction);
 		if (nickname==null)
 			this.nickname=GetInstanceID().ToString();
+
+		doctrine=Game.instance.gamemode.bot_data.doctrines[Utility.Random.Next(Game.instance.gamemode.bot_data.doctrines.Length)];
+		Dictionary<Gamemode.GamemodeBotData.Doctrine, float> doctrine_chance = new();
+		float chance_reduction = 0.5f/team.players.Count;	//FIXME bots.Count
+		foreach (var doctrine in Game.instance.gamemode.bot_data.doctrines)
+			doctrine_chance.Add(doctrine, 1f);
+		foreach (Player player in team.players)
+		{
+			if(player is Bot bot)
+			{
+				if(bot.doctrine!=null)
+				{
+					doctrine_chance[bot.doctrine]-=chance_reduction;
+					if (doctrine==bot.doctrine)
+						if (Utility.Random.Next()>doctrine_chance[bot.doctrine])
+							doctrine=Game.instance.gamemode.bot_data.doctrines[Utility.Random.Next(Game.instance.gamemode.bot_data.doctrines.Length)];
+				}
+				
+			}
+		}
 		foreach(Unit.UNIT_TYPE unit_type in faction.unit_types)
 		{
 			units_by_type_available.Add(unit_type, (new List<Unit>(), 0));
@@ -40,10 +59,13 @@ public sealed class Bot : Player
 	public override void UpdateManual()
 	{ 
 		base.UpdateManual();
-		if (unit_spawn_buffer.Count>0)
-			buyUnit(unit_spawn_buffer.Dequeue().id_in_faction);
-		else
-			getUnitToSpawn();		//TODO accumulate money instead of buying if not in danger
+		if(Game.instance.game_data.ticks%1000==0)
+		{
+			if (unit_spawn_buffer.Count>0)
+				buyUnit(unit_spawn_buffer.Dequeue().id_in_faction);
+			else
+				getUnitToSpawn();       //TODO accumulate money instead of buying if not in danger
+		}
 	}
 
 	public override bool isAvailableUnit(Unit unit)	
@@ -52,12 +74,11 @@ public sealed class Bot : Player
 	}
 	public override void giveOrder(Vector3 position)
 	{
-
+		//Game.instance.gamemode.bot_data.strategies
 	}
 	public override void buyUnit(int id)
 	{
 		base.buyUnit(id);
-
 	}
 	private Unit getRandomUnitByPriority(int total_rate)
 	{

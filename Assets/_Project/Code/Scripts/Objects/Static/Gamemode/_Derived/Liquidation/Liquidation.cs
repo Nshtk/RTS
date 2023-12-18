@@ -4,6 +4,8 @@ using Units.Air;
 
 public sealed partial class Liquidation : Gamemode
 {
+	public new LiquidationDifficulty difficulty;
+
 	public override int Count_Teams
 	{
 		get { return _count_teams; }
@@ -21,16 +23,26 @@ public sealed partial class Liquidation : Gamemode
 		get { return "Each team should score a higher number by killing enemy units!"; }
 	}
 
-	public Liquidation(List<Team> teams, int score_max) : base(score_max)
+	public Liquidation(List<Team> teams, int score_max, LiquidationDifficulty difficulty) : base(score_max)
 	{
-		bot_data=new LiquidationBotData(this);
+		this.difficulty=difficulty;
+		bot_data =new LiquidationBotData(this);
 		Count_Teams=teams.Count;
 		this.teams = teams;
 		this.score_max=score_max;
 		//Unit.unitDied+=unitDiedEventHandler;  //REVIEW:
-		setTeams();
+		this.difficulty=difficulty;
 	}
-	public override void setTeams()
+	protected override void setupPlayers(List<Player> players)
+	{
+		foreach (Player player in players)
+		{
+			player.money_income=difficulty.money_income;
+			player.money_pool=difficulty.money_pool;
+			player.command_points=difficulty.command_points;
+		}
+	}
+	public override void setupTeams()
 	{
 		GamemodeGoal[] team_goals = new GamemodeGoal[] {
 			new LiquidationGoal(this, "Kill special unit to win faster!")
@@ -38,6 +50,7 @@ public sealed partial class Liquidation : Gamemode
 		foreach(Team team in teams)		//TODO set goals by proportions
 		{
 			team.setGoal((GamemodeGoal)team_goals[0].Clone(), Team.TEAM_TYPE.TACTICIAN);
+			setupPlayers(team.players);
 		}
 	}
 
@@ -52,7 +65,7 @@ public sealed partial class Liquidation : Gamemode
 		{
 			foreach (Team team in teams)
 			{
-				if(air_unit_example.owner.team.id!=team.id)
+				if(air_unit_example.owner.team.Id!=team.Id)
 					air_unit_example.airUnitExampleDied+=((LiquidationGoal)teams[0].goal).handleAirExampleUnitDied;
 			}
 		}

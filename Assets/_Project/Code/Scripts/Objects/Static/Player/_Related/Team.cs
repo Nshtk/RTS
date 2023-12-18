@@ -21,15 +21,20 @@ public class Team
 
 	public string name;
 	public Gamemode.GamemodeGoal goal;
-	public int id;
+	private int _id;
 	public Color color;
 	public TEAM_TYPE type;
 	public List<Player> players=new List<Player>();
 	public TerrainGenerator.POSITION_DOCK_SIDE position_dock_side;
 
+	public int Id
+	{
+		get {  return _id; }
+	}
+
 	public Team(int id, string? name=null, Color? color=null, TerrainGenerator.POSITION_DOCK_SIDE? position_dock_side=null)
 	{
-		this.id=id;
+		_id=id;
 		if(name==null)
 			this.name=team_names[Utility.Random.Next(0, team_names.Length)];
 		else
@@ -60,7 +65,7 @@ public class Team
 	{
 		foreach(Player player in players)
 		{
-			foreach(Dictionary<int, Unit> units in player.units)
+			foreach(Dictionary<int, Unit> units in player.units_by_id_in_faction_id_unit)
 			{
 				foreach(Unit unit in units.Values)
 				{

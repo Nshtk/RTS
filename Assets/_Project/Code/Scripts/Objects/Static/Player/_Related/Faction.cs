@@ -4,7 +4,7 @@ using UnityEngine;
 public class Faction     // TODO faction-specific modifiers?
 {
 	public string name;
-    public Texture2D? flag;
+	public Texture2D? flag;
 	public List<Unit>? units=new List<Unit>();
 	public HashSet<Unit.UNIT_TYPE> unit_types=new HashSet<Unit.UNIT_TYPE>();
 	string path = "Objects\\Dynamic\\Derived\\Mobile\\Derived\\Units\\Derived\\";	//REVIEW pathing

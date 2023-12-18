@@ -4,6 +4,48 @@ using UnityEngine;
 
 public abstract partial class Gamemode
 {
+	public abstract class GamemodeDifficulty
+	{
+		public enum DIFFICULTY_PRESET
+		{
+			CUSTOM,
+			EASY,
+			NORMAL,
+			HARD,
+			VERY_HARD,
+			TEST
+		}
+
+		public DIFFICULTY_PRESET preset;
+		public int money_income=999999, money_pool=999999;
+		public int command_points=999999;
+
+		public GamemodeDifficulty(DIFFICULTY_PRESET preset)
+		{
+			this.preset = preset;
+		}
+	}
+	public abstract class GamemodeGoal : ICloneable //REVIEW to struct?
+	{
+		protected Gamemode _gamemode;
+		public int score;
+		public bool is_reached = false;
+		public string description;
+		//public Action setScore;
+
+		public GamemodeGoal(Gamemode gamemode, string description)
+		{
+			_gamemode = gamemode;
+			this.description=description;
+		}
+
+		public object Clone()
+		{
+			return MemberwiseClone();
+		}
+
+		public abstract bool update();
+	}
 	public abstract class GamemodeBotData
 	{
 		public abstract class Strategy
@@ -13,11 +55,18 @@ public abstract partial class Gamemode
 			protected List<(Vector3, int rate)> _destinations = new List<(Vector3, int rate)>();
 
 			public Strategy()
-			{
+			{ }
 
+			public virtual void update()
+			{
+				updateDestinations();
+				updateTargets();
 			}
 
-			public abstract void updatePriorities();
+			protected abstract void updateDestinations();
+			protected abstract void updateTargets();
+
+			//public abstract void updatePriorities();
 			public abstract DynamicObject getPriorityTarget(int total_rate);	//TODO to one generic function in Utility?
 			public abstract Vector3 getPriorityDestination(int total_rate);
 			public abstract float getConfidenceCurrent();
@@ -66,31 +115,5 @@ public abstract partial class Gamemode
 		{ 
 			_gamemode = gamemode;
 		}
-	}
-	public abstract class GamemodeDifficulty
-	{
-		public GamemodeDifficulty()
-		{ }
-	}
-	public abstract class GamemodeGoal : ICloneable	//REVIEW to struct?
-	{
-		protected Gamemode _gamemode;
-		public int score;
-		public bool is_reached = false;
-		public string description;
-		//public Action setScore;
-
-		public GamemodeGoal(Gamemode gamemode, string description)
-		{
-			_gamemode = gamemode;
-			this.description=description;
-		}
-
-		public object Clone()
-		{
-			return MemberwiseClone();
-		}
-
-		public abstract bool update();
 	}
 }

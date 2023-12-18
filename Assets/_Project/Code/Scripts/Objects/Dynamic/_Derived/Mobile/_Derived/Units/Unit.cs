@@ -8,6 +8,13 @@ using UnityEngine.AI;
 
 public partial class Unit : MobileObject
 {
+	public enum UNIT_STATUS
+	{
+		WAITING,	//Idle
+		MOVING,
+		ENGAGING,
+		WORKING		//Busy
+	}
 	public enum UNIT_STATE
 	{
 		IDLE,
@@ -46,13 +53,14 @@ public partial class Unit : MobileObject
 	public AudioClip sound_voiceover, sound_idle, sound_move;
 	protected NavMeshPath navmesh_path;
 	protected NavMeshQueryFilter navmesh_query_filter;
-	public UNIT_STATE state;
 	public UNIT_TYPE type;
+	public UNIT_STATE state;
+	public UNIT_STATUS status;
 	public string group;    //For group timers
 
 	public int id_in_faction;
 	public int limit=-1;
-	public int cost=5;
+	public int cost_money=5, cost_command_points=10;
 	public int charge_time=0, recharge_time=0;
 	public float experience=0f;
 	public float stealth=0f;
@@ -95,8 +103,8 @@ public partial class Unit : MobileObject
 		_unit_controller=new UnitController(this);
 	}
 	protected override void Start()
-    {
-        base.Start();
+	{
+		base.Start();
 		//unitDied+=Game.GameData.instance.handleUnitDied;		//REVIEW this vs subscribe in GameData?
 		//unitSpawned+=Game.GameData.instance.handleUnitSpawned;
 		setStates();
@@ -107,8 +115,8 @@ public partial class Unit : MobileObject
 		unitSpawned?.Invoke(this, _event_args_unit_spawned);
 	}
 	protected override void Update()
-    {
-        base.Update();
+	{
+		base.Update();
 		if(Game.instance.game_data.ticks%100==0)
 			detectNearbyObjects();
 	}
@@ -150,6 +158,7 @@ public partial class Unit : MobileObject
 	protected override void OnDestroy()
 	{
 		base.OnDestroy();
+		owner.units_by_id_in_faction_id_unit[id_in_faction].Remove(GetInstanceID());
 		if(_event_args_unit_died==null)
 			_event_args_unit_died=new UnitDiedEventArgs(this);
 		unitDied?.Invoke(this, _event_args_unit_died);

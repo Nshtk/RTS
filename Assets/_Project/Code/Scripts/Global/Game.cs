@@ -117,7 +117,7 @@ public class Game : MonoBehaviour	//Class containing main loop
 			new Team(0, null, Color.blue, TerrainGenerator.POSITION_DOCK_SIDE.SOUTH),
 			new Team(0, null, Color.red, TerrainGenerator.POSITION_DOCK_SIDE.NORTH)
 		};
-		gamemode=new Liquidation(_teams, 1000);
+		gamemode=new Liquidation(_teams, 1000, new Liquidation.LiquidationDifficulty(Gamemode.GamemodeDifficulty.DIFFICULTY_PRESET.NORMAL));
 
 		Human human = Instantiate(_prefab_human);
 		human.AwakeManual(_teams[0], "Товарищ",  _factions[0]);
@@ -128,14 +128,15 @@ public class Game : MonoBehaviour	//Class containing main loop
 			Bot bot = Instantiate(_prefab_bot);
 			bot.AwakeManual(team, null, _factions[0]);
 			team.players.Add(bot);
-		}	
+		}
 	}
-    private void Start()
-    {
+	private void Start()
+	{
+		gamemode.setupTeams();
 		_prefab_terrain_generator.StartManual();
-    }
-    private void Update()
-    {
+	}
+	private void Update()
+	{
 		game_data.update();
 
 		foreach(Team team in _teams)

@@ -12,7 +12,7 @@ namespace Units.Ground
 		protected override void Awake()
 		{
 			base.Awake();
-			cost=15;
+			cost_money=15;
 			movement_type=MOBILE_OBJECT_MOVEMENT_TYPE.TRACKED;
 			type=UNIT_TYPE.VEHICLE_LIGHT;
 		}
