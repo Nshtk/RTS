@@ -1,26 +1,23 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-	[Header("Player Body Parts")]
+	[Header("Player properties")]
 	public int id;
 	public string nickname;
 	public Team team;
 	public Faction faction;     //TODO: dont store it, use gamedata?
 	public Spawn spawn;
 
-	public int money=0, money_income=5, money_pool = 1000;
-	public int command_points=200;
+	public int money, money_income, money_pool;
+	public int command_points;
 
 	public List<Dictionary<int, Unit>> units_by_id_in_faction_id_unit = new List<Dictionary<int, Unit>>();
 
 	protected virtual void Awake()
 	{
-		foreach (Unit unit in faction.units)
-		{
-			units_by_id_in_faction_id_unit.Add(new Dictionary<int, Unit>());
-		}
 	}
 	public virtual void AwakeManual(Team team, string? nickname, Faction faction)
 	{
@@ -32,11 +29,13 @@ public class Player : MonoBehaviour
 			this.nickname=nickname;
 		this.nickname = nickname;
 		this.faction=faction;
+		foreach (Unit unit in faction.units)
+		{
+			units_by_id_in_faction_id_unit.Add(new Dictionary<int, Unit>());
+		}
 	}
 	protected virtual void Start()
-	{
-		Game.instance.gamemode.difficulty.money_pool = money_pool;
-	}
+	{}
 	protected virtual void Update()
 	{
 

@@ -11,7 +11,7 @@ namespace Environment
 
 		private void Awake()
 		{
-
+			time_cycle.initialise(this);
 		}
 		private void Start()
 		{

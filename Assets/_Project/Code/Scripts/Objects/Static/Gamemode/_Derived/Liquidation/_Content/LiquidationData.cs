@@ -72,6 +72,11 @@ public sealed partial class Liquidation
 
 			}
 
+			public override float getConfidenceCurrent()
+			{
+				//if()
+				return 1f;
+			}
 
 			public override DynamicObject getPriorityTarget(int total_rate)
 			{
@@ -82,13 +87,6 @@ public sealed partial class Liquidation
 			{
 				throw new NotImplementedException();
 			}
-
-			public override float getConfidenceCurrent()
-			{
-				//if()
-				return 1f;
-			}
-
 			protected override void updateDestinations()
 			{
 				throw new NotImplementedException();

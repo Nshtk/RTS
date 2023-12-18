@@ -115,7 +115,7 @@ public class Game : MonoBehaviour	//Class containing main loop
 		};
 		_teams= new List<Team>() { 
 			new Team(0, null, Color.blue, TerrainGenerator.POSITION_DOCK_SIDE.SOUTH),
-			new Team(0, null, Color.red, TerrainGenerator.POSITION_DOCK_SIDE.NORTH)
+			new Team(1, null, Color.red, TerrainGenerator.POSITION_DOCK_SIDE.NORTH)
 		};
 		gamemode=new Liquidation(_teams, 1000, new Liquidation.LiquidationDifficulty(Gamemode.GamemodeDifficulty.DIFFICULTY_PRESET.NORMAL));
 

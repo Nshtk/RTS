@@ -10,19 +10,21 @@ namespace Environment
 		[Serializable]
 		public class TimeCycle
 		{
-			[SerializeField]  private Environment _environment;
+			private Environment _environment;
+
+			[Header("Time settigns")]
 			[SerializeField, Range(0, 24)] private float _time_current;
 			private float _time_normalised;
 
 			[Header("Sun settigns")]
-			[SerializeField] private float _sun_speed;
-			[SerializeField] private float _sun_intensity=1f;
+			[SerializeReference] private float _sun_speed;
+			[SerializeReference] private float _sun_intensity;
 			[SerializeField] private AnimationCurve _sun_intensity_curve;
 			[SerializeField] private AnimationCurve _sun_color_temperature_curve;
 
 			[Header("Moon settigns")]
 			[SerializeField] private float _moon_speed;
-			[SerializeField] private float _moon_intensity = 1f;
+			[SerializeField] private float _moon_intensity;
 			[SerializeField] private AnimationCurve _moon_intensity_curve;
 			[SerializeField] private AnimationCurve _moon_color_temperature_curve;
 
@@ -40,9 +42,14 @@ namespace Environment
 				}
 			}
 
-			internal TimeCycle()
+			internal TimeCycle()	//NOTE not called if script is set through editor
 			{
-				_sun_additional_data=_environment._sun_prefab.GetComponent<HDAdditionalLightData>();
+
+			}
+			internal void initialise(Environment environment)
+			{
+				_environment=environment;
+				_sun_additional_data =_environment._sun_prefab.GetComponent<HDAdditionalLightData>();
 				_moon_additional_data=_environment._moon_prefab.GetComponent<HDAdditionalLightData>();
 			}
 

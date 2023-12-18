@@ -71,7 +71,7 @@ public partial class Unit : MobileObject
 	protected UnitFollowState state_follow;
 	protected UnitEvadeState state_evade;
 
-	//public UnitComponent[] components //Unit components/modifications go here (engine, weaponry, etc.)
+	//public UnitComponent[] unit_components //Unit components/modifications go here (engine, weaponry, etc.)
 
 	protected UnitSpawnedEventArgs _event_args_unit_spawned;
 	protected UnitDiedEventArgs _event_args_unit_died;
@@ -83,11 +83,11 @@ public partial class Unit : MobileObject
 	protected bool _is_grounded=false;
 	protected bool Is_Grounded
 	{
-		get 
+		get { return _is_grounded; }
+		set 
 		{
-			return _is_grounded;
+			_is_grounded = value;
 		}
-		set { _is_grounded = value; }
 	}
 	
 	public override void initialise(Player owner)

@@ -4,7 +4,7 @@ using Units.Air;
 
 public sealed partial class Liquidation : Gamemode
 {
-	public new LiquidationDifficulty difficulty;
+	public new LiquidationDifficulty difficulty;	//NOTE hidden member is null
 
 	public override int Count_Teams
 	{

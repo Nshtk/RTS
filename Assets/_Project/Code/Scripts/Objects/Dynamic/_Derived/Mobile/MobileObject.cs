@@ -21,11 +21,11 @@ public partial class MobileObject : DynamicObject
 		base.Awake();
 	}
 	protected override void Start()
-    {
+	{
 		base.Start();
 	}
-    protected override void Update()
-    {
+	protected override void Update()
+	{
 		base.Update();
 	}
 }
