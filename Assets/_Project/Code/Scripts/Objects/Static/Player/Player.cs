@@ -35,7 +35,9 @@ public class Player : MonoBehaviour
 		}
 	}
 	protected virtual void Start()
-	{}
+	{
+		id=GetInstanceID();
+	}
 	protected virtual void Update()
 	{
 
@@ -65,17 +67,19 @@ public class Player : MonoBehaviour
 	}
 	public virtual bool isAvailableUnit(Unit unit)
 	{
-		return money>=unit.cost_money && command_points>=unit.cost_command_points && (unit.limit==-1 || unit.limit>units_by_id_in_faction_id_unit[id].Count);
+		return money>=unit.cost_money && command_points>=unit.cost_command_points && (unit.limit==-1 || unit.limit>units_by_id_in_faction_id_unit[unit.id_in_faction].Count);
 	}
-	public virtual void buyUnit(int id)
+	public virtual int? buyUnit(int id)
 	{
 		if (isAvailableUnit(faction.units[id]))
 		{
 			money-=faction.units[id].cost_money;
 			Unit unit=spawn.spawnUnit(faction.units[id]);
-			units_by_id_in_faction_id_unit[unit.id_in_faction].Add(unit.gameObject.GetInstanceID(), unit);
+			int unit_id=unit.gameObject.GetInstanceID();
+			units_by_id_in_faction_id_unit[unit.id_in_faction].Add(unit_id, unit);
+			return unit_id;
 		}
-
+		return null;
 	}
 	public virtual void giveOrder(Vector3 position)
 	{

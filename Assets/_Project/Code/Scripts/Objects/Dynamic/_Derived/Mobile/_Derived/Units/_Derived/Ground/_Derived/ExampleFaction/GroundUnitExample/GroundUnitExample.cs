@@ -12,9 +12,6 @@ namespace Units.Ground
 		protected override void Awake()
 		{
 			base.Awake();
-			cost_money=15;
-			movement_type=MOBILE_OBJECT_MOVEMENT_TYPE.TRACKED;
-			type=UNIT_TYPE.VEHICLE_LIGHT;
 		}
 		protected override void Start()
 		{
@@ -38,7 +35,7 @@ namespace Units.Ground
 						if (unit.owner.team==owner.team)
 							changeState(state_follow);
 						else
-							changeState(state_engage);
+							changeState(state_follow);	//TEMP change to engage?
 					}
 				}
 				else if (destination!=null)

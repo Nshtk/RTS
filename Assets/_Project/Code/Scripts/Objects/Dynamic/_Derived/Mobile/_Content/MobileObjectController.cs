@@ -86,6 +86,7 @@ public partial class MobileObject
 					return;
 			}
 
+			_mobile_object._audio_source.PlayOneShot(_mobile_object.sound_move);
 			accelerate(_mobile_object.transform.forward, speed_move, speed_move_max);//
 			_waypoint.updateRemainingDistance(_mobile_object.transform.position);
 		}

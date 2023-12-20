@@ -91,7 +91,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
   select_sound: {fileID: 0}
-  id: 0
   hit_points: 100
   hit_points_max: 100
   repair_rate: 0
@@ -102,16 +101,19 @@ MonoBehaviour:
   select_volume: 1
   movement_type: 0
   maneuverability: 0
-  _player_owner: {fileID: 0}
+  owner: {fileID: 0}
   inventory: {fileID: 0}
   sound_voiceover: {fileID: 0}
   sound_idle: {fileID: 0}
   sound_move: {fileID: 0}
-  layerNames: []
+  type: 12
   state: 0
-  type: 0
+  status: 0
+  group: 
+  id_in_faction: 0
   limit: 5
-  cost: 15
+  cost_money: 30
+  cost_command_points: 10
   charge_time: 0
   recharge_time: 0
   experience: 0

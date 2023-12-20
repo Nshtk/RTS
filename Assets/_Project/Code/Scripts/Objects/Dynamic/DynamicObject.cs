@@ -3,17 +3,17 @@ using UnityEngine;
 
 public class DynamicObject : MonoBehaviour
 {
-	protected string[] actions = { };
-	protected Rect playingArea = new Rect(0.0f, 0.0f, 0.0f, 0.0f);
-	protected GUIStyle healthStyle = new GUIStyle();
 	protected Rigidbody _rigidbody;
+	protected AudioSource _audio_source;
+	protected GUIStyle style_health = new GUIStyle();
+	protected string[] actions = { };
 
 	public Texture2D icon;
-	public AudioClip select_sound;
-	private List<Material> oldMaterials = new List<Material>();
+	public AudioClip sound_select;
+	private List<Material> materials_old = new List<Material>();
 
 	public int hit_points = 100, hit_points_max = 100;
-	protected float healthPercentage = 1.0f;
+	protected float _hit_points_percentage = 1.0f;
 	public int repair_rate;
 	public float hardness;
 	public float resistance;
@@ -39,9 +39,24 @@ public class DynamicObject : MonoBehaviour
 	{
 		get { return _rigidbody; }
 	}
+	public AudioSource Audio_Source
+	{
+		get { return _audio_source; }
+	}
+	public int Hit_Points
+	{
+		get { return hit_points; }
+		private set 
+		{
+			hit_points=value;
+			_hit_points_percentage=hit_points/hit_points_max*100;
+		}
+	}
+		
 	protected virtual void Awake()
 	{
 		_rigidbody=GetComponent<Rigidbody>();
+		_audio_source=gameObject.AddComponent<AudioSource>();
 	}
 	protected virtual void Start()
 	{
@@ -76,26 +91,7 @@ public class DynamicObject : MonoBehaviour
 	protected virtual void InitialiseAudio()
 	{
 		List<AudioClip> sounds = new List<AudioClip>();
-		List<float> volumes = new List<float>();
-		/*if(attackVolume < 0.0f)
-			attackVolume = 0.0f;
-		if(attackVolume > 1.0f)
-			attackVolume = 1.0f;
-		sounds.Add(attackSound);
-		volumes.Add(attackVolume);
-		if(selectVolume < 0.0f)
-			selectVolume = 0.0f;
-		if(selectVolume > 1.0f)
-			selectVolume = 1.0f;
-		sounds.Add(selectSound);
-		volumes.Add(selectVolume);
-		if(useWeaponVolume < 0.0f)
-			useWeaponVolume = 0.0f;
-		if(useWeaponVolume > 1.0f)
-			useWeaponVolume = 1.0f;
-		sounds.Add(useWeaponSound);
-		volumes.Add(useWeaponVolume);
-		audioElement = new AudioElement(sounds, volumes, objectName + ObjectId, this.transform);*/
+		List<float> volumes = new List<float>();	//TODO dynamicaly change volumes if they exceed 1f or 0f
 	}
 	public void setSelected(bool is_selected)
 	{
@@ -104,12 +100,12 @@ public class DynamicObject : MonoBehaviour
 	public void SetTransparentMaterial(Material material, bool storeExistingMaterial)
 	{
 		if(storeExistingMaterial)
-			oldMaterials.Clear();
+			materials_old.Clear();
 		Renderer[] renderers = GetComponentsInChildren<Renderer>();
 		foreach(Renderer renderer in renderers)
 		{
 			if(storeExistingMaterial)
-				oldMaterials.Add(renderer.material);
+				materials_old.Add(renderer.material);
 			renderer.material = material;
 		}
 	}
@@ -117,11 +113,11 @@ public class DynamicObject : MonoBehaviour
 	public void RestoreMaterials()
 	{
 		Renderer[] renderers = GetComponentsInChildren<Renderer>();
-		if(oldMaterials.Count == renderers.Length)
+		if(materials_old.Count == renderers.Length)
 		{
 			for(int i = 0; i<renderers.Length; i++)
 			{
-				renderers[i].material = oldMaterials[i];
+				renderers[i].material = materials_old[i];
 			}
 		}
 	}

@@ -132,13 +132,13 @@ public class HumanSelection : MonoBehaviour
 	{
 		yield return new WaitForSeconds(1f);
 		_selection_collider.enabled = false;
-		is_select_on_click=true; //REVIEW
+		is_select_on_click=true;
 	}
 	public void selectObject(DynamicObject obj, bool is_adding_to_current_selection=false)
 	{
 		if(obj!=null)
 		{
-			if (obj is Unit unit)
+			if (obj is Unit unit && unit.owner.id==_human.id)
 			{
 				int id = unit.GetInstanceID();
 				if (!_human.units_selected.ContainsKey(id))
@@ -149,6 +149,7 @@ public class HumanSelection : MonoBehaviour
 			}
 			else
 				_human.object_selected=obj;
+			obj.Audio_Source.PlayOneShot(obj.sound_select);
 			obj.gameObject.AddComponent<SelectionComponent>();
 		}
 	}

@@ -6,12 +6,15 @@ public partial class MobileObject : DynamicObject
 	{
 		FREE,
 		TRACKED,
-		FOOTED,		//TODO add terrain deformation on heavy unit step
+		FOOTED,     //TODO add terrain deformation on heavy unit step
 		WHEELED,
 	}
 
-	protected DynamicObject target = null;
 	public MOBILE_OBJECT_MOVEMENT_TYPE movement_type;
+	protected DynamicObject target = null;
+
+	public AudioClip sound_move;
+	public AudioClip sound_impact;
 
 	public float maneuverability;
 	public Vector3? destination = null;
@@ -27,5 +30,10 @@ public partial class MobileObject : DynamicObject
 	protected override void Update()
 	{
 		base.Update();
+	}
+
+	protected virtual void OnCollisionEnter(Collision collision)
+	{
+		_audio_source.PlayOneShot(sound_impact);
 	}
 }

@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System;
 using Libraries.Utility;
 
 public class Team
@@ -59,7 +58,13 @@ public class Team
 	}
 	public void getUnitInfo()
 	{
-	
+		foreach(Player player in players)
+		{
+			foreach(var unit_by_type in player.units_by_id_in_faction_id_unit)
+			{
+				//TODO
+			}
+		}
 	}
 	public bool haveUnit(int count, string property_name, params string[] values) // args find units by such properties as name, cost etc
 	{

@@ -5,11 +5,11 @@ public class Structure : StationaryObject
 	public Vector3 size;
 
 	protected override void Start()
-    {
-        base.Start();
-    }
+	{
+		base.Start();
+	}
 	protected override void Update()
-    {
-        base.Update();
-    }
+	{
+		base.Update();
+	}
 }

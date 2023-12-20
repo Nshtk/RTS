@@ -1,3 +1,5 @@
+using Libraries.Utility;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,34 +69,51 @@ public sealed partial class Liquidation
 				}
 			}
 
-			public LiqudationStrategy()
+			public LiqudationStrategy(float confidence)
 			{
-
+				_confidence = confidence;
 			}
 
-			public override float getConfidenceCurrent()
+			protected override void updateConfidence()
 			{
-				//if()
-				return 1f;
+				//if(team_my.units.count<5)		//TODO
+				_confidence=0.1f;
 			}
 
 			public override DynamicObject getPriorityTarget(int total_rate)
 			{
-				throw new NotImplementedException();
+				var team_enemy_id = Utility.Random.Next(teams_enemy.Count);     //TEMP
+				var player_enemy_id = Utility.Random.Next(teams_enemy[team_enemy_id].players.Count);
+				List<Unit> units = new();
+				foreach(var dict_units in teams_enemy[team_enemy_id].players[player_enemy_id].units_by_id_in_faction_id_unit)
+				{
+					foreach(var kv in dict_units)
+					{
+						units.Add(kv.Value);
+					}
+				}
+				if (units.Count==0)
+					return null;
+				return units[Utility.Random.Next(units.Count)];
 			}
 
 			public override Vector3 getPriorityDestination(int total_rate)
 			{
-				throw new NotImplementedException();
+				return Utility.getRangedVector3(0, 256, 0,0,0,256);
 			}
 			protected override void updateDestinations()
 			{
-				throw new NotImplementedException();
+
 			}
 
 			protected override void updateTargets()
 			{
-				throw new NotImplementedException();
+
+			}
+
+			public override object Clone()
+			{
+				return new LiqudationStrategy(_confidence);
 			}
 		}
 		public sealed class LiqudationDoctrine : Doctrine
@@ -118,7 +137,7 @@ public sealed partial class Liquidation
 			_gamemode=liquidation;
 
 			strategies =new LiqudationStrategy[] {
-				new LiqudationStrategy(),
+				new LiqudationStrategy(0.5f),
 			};
 			doctrines=new Doctrine[] {
 				new LiqudationDoctrine(),	//Universal doctrine

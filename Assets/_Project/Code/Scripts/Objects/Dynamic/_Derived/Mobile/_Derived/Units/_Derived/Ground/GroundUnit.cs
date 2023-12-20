@@ -17,17 +17,17 @@ public partial class GroundUnit : Unit
 		base.Awake();
 	}
 	protected override void Start()
-    {
-        base.Start();
+	{
+		base.Start();
 	}
-    protected override void Update()
-    {
-        base.Update();
+	protected override void Update()
+	{
+		base.Update();
 		state_current?.update();	//REVIEW move to updateManual
 	}
 
-    public override void setStates()
-    {
+	public override void setStates()
+	{
 		state_idle=     new UnitIdleState(this);//TODO new GroundUnitIdleState(this);
 		state_evade=    new UnitEvadeState(this);
 		state_follow=   new UnitFollowState(this);

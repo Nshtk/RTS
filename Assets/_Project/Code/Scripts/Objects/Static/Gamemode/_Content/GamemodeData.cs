@@ -31,7 +31,6 @@ public abstract partial class Gamemode
 		public int score;
 		public bool is_reached = false;
 		public string description;
-		//public Action setScore;
 
 		public GamemodeGoal(Gamemode gamemode, string description)
 		{
@@ -50,26 +49,47 @@ public abstract partial class Gamemode
 	{
 		public abstract class Strategy
 		{
-			GamemodeBotData bot_data;
+			//private GamemodeBotData _bot_data;
+			protected Team team_my;
+			protected List<Team> teams_enemy;
 			protected List<(DynamicObject dynamic_object, int rate)> _targets=new List<(DynamicObject dynamic_object, int rate)>();
 			protected List<(Vector3, int rate)> _destinations = new List<(Vector3, int rate)>();
 
-			public Strategy()
-			{ }
+			protected float _confidence=1f;
 
+			public float Confidence
+			{
+				get { return _confidence; }
+			}
+
+			public Strategy()
+			{
+
+			}
+
+			public void initialise(Team team_my)
+			{
+				this.team_my=team_my;
+				teams_enemy=new List<Team>(Game.instance.Teams);
+				teams_enemy.Remove(team_my);
+			}
 			public virtual void update()
 			{
-				updateDestinations();
+				if(Game.instance.game_data.ticks%200==0)
+					updateDestinations();
 				updateTargets();
+				updateConfidence();
 			}
 
 			protected abstract void updateDestinations();
 			protected abstract void updateTargets();
+			//public abstract void updatePriorities();		//TODO ?
+			protected abstract void updateConfidence();
 
-			//public abstract void updatePriorities();
 			public abstract DynamicObject getPriorityTarget(int total_rate);	//TODO to one generic function in Utility?
 			public abstract Vector3 getPriorityDestination(int total_rate);
-			public abstract float getConfidenceCurrent();
+
+			public abstract object Clone();
 		}
 		public class Doctrine
 		{
@@ -108,8 +128,8 @@ public abstract partial class Gamemode
 		}
 
 		protected Gamemode _gamemode;
-		public Strategy[] strategies;
-		public Doctrine[] doctrines;
+		public Strategy[] strategies;	//Not singleton 
+		public Doctrine[] doctrines;	//Singleton
 
 		public GamemodeBotData(Gamemode gamemode)
 		{ 

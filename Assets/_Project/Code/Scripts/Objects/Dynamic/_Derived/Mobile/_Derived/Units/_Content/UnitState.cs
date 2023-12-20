@@ -45,6 +45,7 @@ public partial class Unit : MobileObject
 		public override void update()
 		{
 			base.update();
+			_unit._audio_source.PlayOneShot(_unit.sound_idle);
 			_unit._unit_controller.stop();
 		}
 	}

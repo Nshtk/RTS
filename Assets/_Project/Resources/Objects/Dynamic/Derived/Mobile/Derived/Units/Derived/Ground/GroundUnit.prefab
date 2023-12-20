@@ -90,28 +90,34 @@ MonoBehaviour:
   select_sound: {fileID: 0}
   hit_points: 100
   hit_points_max: 100
-  repair_rate: 0
-  hardness: 0
-  resistance: 0
-  mass: 0
+  repair_rate: 5
+  hardness: 0.5
+  resistance: 1
+  mass: 1
   temperature: 0
   select_volume: 1
-  maneuverability: 0
-  _player_owner: {fileID: 0}
+  movement_type: 1
+  maneuverability: 0.5
+  owner: {fileID: 0}
   inventory: {fileID: 0}
   sound_voiceover: {fileID: 0}
   sound_idle: {fileID: 0}
   sound_move: {fileID: 0}
-  layerNames: []
+  type: 6
+  state: 0
+  status: 0
+  group: 
+  id_in_faction: 0
   limit: 0
-  cost: 0
+  cost_money: 15
+  cost_command_points: 10
   charge_time: 0
   recharge_time: 0
   experience: 0
   stealth: 0
-  detection_range: 0
-  detection_chance: 0
-  grip: 0
+  detection_range: 20
+  detection_chance: 0.5
+  grip: 1
 --- !u!65 &8615172667869942314
 BoxCollider:
   m_ObjectHideFlags: 0

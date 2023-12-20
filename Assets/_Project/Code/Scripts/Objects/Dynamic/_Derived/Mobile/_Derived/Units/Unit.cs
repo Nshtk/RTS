@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public partial class Unit : MobileObject
+public partial class Unit : MobileObject		//TODO to scriptable object? 
 {
 	public enum UNIT_STATUS
 	{
@@ -50,7 +50,7 @@ public partial class Unit : MobileObject
 	public Inventory inventory;
 	protected List<DynamicObject> objects_nearby=new List<DynamicObject>();
 	protected UnitController _unit_controller;  //TODO to private?
-	public AudioClip sound_voiceover, sound_idle, sound_move;
+	public AudioClip sound_voice, sound_idle;
 	protected NavMeshPath navmesh_path;
 	protected NavMeshQueryFilter navmesh_query_filter;
 	public UNIT_TYPE type;
@@ -97,7 +97,7 @@ public partial class Unit : MobileObject
 	protected override void Awake()
 	{
 		base.Awake();
-		_rigidbody = GetComponent<Rigidbody>();
+		_audio_source.PlayOneShot(sound_voice);
 		navmesh_query_filter=new NavMeshQueryFilter() { agentTypeID=GetNavMeshAgentID(), areaMask= 1<<0 | 1<<3};
 		navmesh_path =new NavMeshPath();
 		_unit_controller=new UnitController(this);
@@ -126,8 +126,9 @@ public partial class Unit : MobileObject
 	}
 	protected override void FixedUpdate()
 	{}
-	protected void OnCollisionEnter(Collision collision)
+	protected override void OnCollisionEnter(Collision collision)
 	{
+		base.OnCollisionEnter(collision);
 		if (collision.gameObject.GetComponent<MobileObject>() is MobileObject mobile_object)
 		{
 			if (!hurt((int)(collision.relativeVelocity.magnitude*(mobile_object.Rigidbody.getKineticEnergy()+_rigidbody.getKineticEnergy()))))
@@ -197,6 +198,7 @@ public partial class Unit : MobileObject
 	}
 	public virtual void setOrder(Vector3 position, DynamicObject target=null)
 	{
+		_audio_source.PlayOneShot(sound_voice);
 		if (state_current==state_idle)
 		{
 			destination=position;

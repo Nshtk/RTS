@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Units.Air
 {
-    public sealed class AirUnitExample : AirUnit
-    {
+	public sealed class AirUnitExample : AirUnit
+	{
 		AirUnitExampleDiedEventArgs _event_args_air_unit_example_died;
 
 		public override string Name
@@ -16,16 +16,15 @@ namespace Units.Air
 		protected override void Awake()
 		{
 			base.Awake();
-			cost_money=15;
 		}
 		protected override void Start()
-        {
-            base.Start();
-        }
+		{
+			base.Start();
+		}
 		protected override void Update()
-        {
-            base.Update();
-        }
+		{
+			base.Update();
+		}
 
 		protected override void OnDestroy()
 		{

@@ -26,6 +26,7 @@ public partial class Unit : MobileObject
 		protected override void move()
 		{
 			base.move();
+			_unit._audio_source.Play();
 		}
 		public override void stop()
 		{

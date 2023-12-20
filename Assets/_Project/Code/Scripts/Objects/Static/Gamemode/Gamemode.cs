@@ -11,7 +11,7 @@ public abstract partial class Gamemode
 	public readonly int count_teams_max;
 	protected int _count_teams;
 
-	protected float time_left = 0f;
+	protected float time_left = 600000f;
 
 	public abstract string Description
 	{
@@ -32,7 +32,7 @@ public abstract partial class Gamemode
 	protected abstract void setupPlayers(List<Player> players);
 	protected virtual bool updateTime()
 	{
-		//time_left -= Time.deltaTime;
+		time_left -= Time.deltaTime;
 		return time_left<0;
 	}
 	protected virtual bool updateTeamGoals()
