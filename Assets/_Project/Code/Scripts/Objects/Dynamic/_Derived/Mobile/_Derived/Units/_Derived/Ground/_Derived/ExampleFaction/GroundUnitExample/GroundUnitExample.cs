@@ -35,7 +35,7 @@ namespace Units.Ground
 						if (unit.owner.team==owner.team)
 							changeState(state_follow);
 						else
-							changeState(state_follow);	//TEMP change to engage?
+							changeState(state_follow);	//TEMP change it to engage?
 					}
 				}
 				else if (destination!=null)
