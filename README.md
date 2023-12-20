@@ -3,9 +3,7 @@
 Real-time strategy с процедурной генерацией карт и объектов на ней, а также физикой и модификацией юнитов (гравитация, параметры проходимости terrain'а и проч.). Возможно потом будет введена глобальный карта (World map) с пошаговыми боями. Проект скорее всего PvE-only. 
 - Windows
 
-## Отчет о проделанной работе
-
-### [Отчет](https://docs.google.com/document/d/1yOr9s3Wo12NlkmkRBlFl4B1qNyripnG1k1xbsJi_Jd0/edit#heading=h.d0qe7etss4ij)
+### [Отчет о проделанной работе](https://docs.google.com/document/d/1yOr9s3Wo12NlkmkRBlFl4B1qNyripnG1k1xbsJi_Jd0/edit#heading=h.d0qe7etss4ij)
 
 ## GDD
 
