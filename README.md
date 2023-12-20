@@ -4,7 +4,8 @@ Real-time strategy с процедурной генерацией карт и о
 - Windows
 
 ## Отчет о проделанной работе
-## [Отчет](https://docs.google.com/document/d/1yOr9s3Wo12NlkmkRBlFl4B1qNyripnG1k1xbsJi_Jd0/edit#heading=h.d0qe7etss4ij)
+
+### [Отчет](https://docs.google.com/document/d/1yOr9s3Wo12NlkmkRBlFl4B1qNyripnG1k1xbsJi_Jd0/edit#heading=h.d0qe7etss4ij)
 
 ## GDD
 
