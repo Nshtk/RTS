@@ -127,5 +127,5 @@ NavMeshProjectSettings:
       m_Flags: 0
   m_SettingNames:
   - Infantry
-  - VehicleGround
-  - VehicleAir
+  - GroundUnitExample
+  - AirUnitExample

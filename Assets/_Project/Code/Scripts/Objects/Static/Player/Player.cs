@@ -1,28 +1,23 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-	[Header("Player Body Parts")]
+	[Header("Player properties")]
 	public int id;
 	public string nickname;
 	public Team team;
-	public Faction faction;     //TODO: dont store it use gamedata
+	public Faction faction;     //TODO: dont store it, use gamedata?
 	public Spawn spawn;
 
-	public int money, money_income, money_pool = 1000;
-	public int difficulty_multiplier;
+	public int money, money_income, money_pool;
+	public int command_points;
 
-	public List<Unit> units = new List<Unit>();
-
+	public List<Dictionary<int, Unit>> units_by_id_in_faction_id_unit = new List<Dictionary<int, Unit>>();
 
 	protected virtual void Awake()
 	{
-
-	}
-	protected virtual void Start()
-	{
-
 	}
 	public virtual void AwakeManual(Team team, string? nickname, Faction faction)
 	{
@@ -34,6 +29,14 @@ public class Player : MonoBehaviour
 			this.nickname=nickname;
 		this.nickname = nickname;
 		this.faction=faction;
+		foreach (Unit unit in faction.units)
+		{
+			units_by_id_in_faction_id_unit.Add(new Dictionary<int, Unit>());
+		}
+	}
+	protected virtual void Start()
+	{
+		id=GetInstanceID();
 	}
 	protected virtual void Update()
 	{
@@ -46,80 +49,40 @@ public class Player : MonoBehaviour
 			money+=money_income;
 			money_pool-=money_income;
 		}
-	}
-	public virtual void buyUnit(int id)
-	{
-		if (money>=faction.units[id].cost)
+		else
 		{
-			money-=faction.units[id].cost;
-			spawn.spawnUnit(faction.units[id]);
+			money+=money_pool;
+			money_pool=0;
 		}
-
+	}
+	public virtual void updateUnits()
+	{
+		foreach (Dictionary<int, Unit> units_of_name in units_by_id_in_faction_id_unit)
+		{
+			foreach(Unit unit in units_of_name.Values)
+			{
+				unit.UpdateManual();
+			}
+		}
+	}
+	public virtual bool isAvailableUnit(Unit unit)
+	{
+		return money>=unit.cost_money && command_points>=unit.cost_command_points && (unit.limit==-1 || unit.limit>units_by_id_in_faction_id_unit[unit.id_in_faction].Count);
+	}
+	public virtual int? buyUnit(int id)
+	{
+		if (isAvailableUnit(faction.units[id]))
+		{
+			money-=faction.units[id].cost_money;
+			Unit unit=spawn.spawnUnit(faction.units[id]);
+			int unit_id=unit.gameObject.GetInstanceID();
+			units_by_id_in_faction_id_unit[unit.id_in_faction].Add(unit_id, unit);
+			return unit_id;
+		}
+		return null;
 	}
 	public virtual void giveOrder(Vector3 position)
 	{
 		
 	}
-	/*public void SaveDetails(JsonWriter writer)
-	{
-		SaveManager.WriteString(writer, "Username", username);
-		SaveManager.WriteBoolean(writer, "Human", human);
-		SaveManager.WriteColor(writer, "TeamColor", teamColor);
-		SaveManager.SavePlayerResources(writer, resources, resourceLimits);
-		SaveManager.SavePlayerBuildings(writer, GetComponentsInChildren<Building>());
-		SaveManager.SavePlayerUnits(writer, GetComponentsInChildren<Unit>());
-	}*/
-
-	/*public void LoadDetails(JsonTextReader reader)
-	{
-		if(reader == null)
-			return;
-		string currValue = "";
-		while(reader.Read())
-		{
-			if(reader.Value!=null)
-			{
-				if(reader.TokenType == JsonToken.PropertyName)
-				{
-					currValue = (string)reader.Value;
-				}
-				else
-				{
-					switch(currValue)
-					{
-						case "Username":
-							username = (string)reader.Value;
-							break;
-						case "Human":
-							human = (bool)reader.Value;
-							break;
-						default:
-							break;
-					}
-				}
-			}
-			else if(reader.TokenType == JsonToken.StartObject || reader.TokenType == JsonToken.StartArray)
-			{
-				switch(currValue)
-				{
-					case "TeamColor":
-						teamColor = LoadManager.LoadColor(reader);
-						break;
-					case "Resources":
-						LoadResources(reader);
-						break;
-					case "Buildings":
-						LoadBuildings(reader);
-						break;
-					case "Units":
-						LoadUnits(reader);
-						break;
-					default:
-						break;
-				}
-			}
-			else if(reader.TokenType==JsonToken.EndObject)
-				return;
-		}
-	}*/
 }

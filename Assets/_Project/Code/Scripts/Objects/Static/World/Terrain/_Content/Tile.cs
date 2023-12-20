@@ -5,6 +5,10 @@ namespace Libraries.Terrain
 {
 	public abstract class Tile
 	{
+		public abstract class TileCreator
+		{
+			public abstract Tile create(Point location, float height = 0);
+		}
 		public enum TYPE
 		{
 			VOID=0,
@@ -19,15 +23,12 @@ namespace Libraries.Terrain
 			LAVA=9,
 			ACID=10
 		}
-		public abstract class TileCreator
-		{
-			public abstract Tile create(Point location, float height = 0);
-		}
 
 		public Point location;
 		public float height;
 		public float alpha;
-		public sbyte durability;
+		public sbyte durability=1;
+		public float traction=1;
 		public readonly bool is_destructible;
 
 		public abstract TYPE Type
@@ -38,9 +39,9 @@ namespace Libraries.Terrain
 		public Tile(Point location, float height = 0, float alpha=1)
 		{
 			this.location=location;
-			TerrainGenerator.height_map[location.X, location.Y]=this.height=height;
-			TerrainGenerator.alpha_map[location.X, location.Y, 0]=0;
-			TerrainGenerator.alpha_map[location.X, location.Y, (int)Type]=this.alpha=alpha;
+			Game.instance.Terrain_Generator.height_map[location.X, location.Y]=this.height=height;
+			Game.instance.Terrain_Generator.alpha_map[location.X, location.Y, 0]=0;
+			Game.instance.Terrain_Generator.alpha_map[location.X, location.Y, (int)Type]=this.alpha=alpha;
 		}
 
 
@@ -67,6 +68,7 @@ namespace Libraries.Terrain
 		public TileTest(Point location, float height = 0) : base(location)
 		{
 			this.location=location;
+			traction=1;
 			durability=1;
 		}
 
@@ -92,6 +94,7 @@ namespace Libraries.Terrain
 
 		public TileGround(Point location, float height = 0) : base(location, height)
 		{
+			traction=1;
 			durability=1;
 		}
 

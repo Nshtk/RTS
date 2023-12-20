@@ -79,10 +79,10 @@ namespace Libraries.Terrain
 					proportions=new Vector2(1, 1);
 					break;
 				case FORM.RECTANGLE_HORIZONTAL:
-					proportions=new Vector2(Utility.Random.Next(2, 6), 1);
+					proportions=new Vector2(Utility.Utility.Random.Next(2, 6), 1);
 					break;
 				case FORM.RECTANGLE_VERTICAL:
-					proportions=new Vector2(1, Utility.Random.Next(2, 6));
+					proportions=new Vector2(1, Utility.Utility.Random.Next(2, 6));
 					break;
 				default:
 					break;
@@ -101,14 +101,14 @@ namespace Libraries.Terrain
 				case SectorFiller.SHAPE.TRIANGLE:
 					return fillTriangle(tiles_map, tile_creators);
 				case SectorFiller.SHAPE.SQUARE:
-					Sector_Filler.radius.X=Utility.Random.Next(1, (int)size/5);
+					Sector_Filler.radius.X=Utility.Utility.Random.Next(1, (int)size/5);
 					Sector_Filler.radius.Y=Sector_Filler.radius.X;
 					return fillSquare(tiles_map, tile_creators);
 				case SectorFiller.SHAPE.RECTANGLE:
 					return fillRectangle(tiles_map, tile_creators);
 				case SectorFiller.SHAPE.ELLIPSE:
-					Sector_Filler.radius.X=Utility.Random.Next((int)proportions.x/2, (int)proportions.x);
-					Sector_Filler.radius.Y=Utility.Random.Next((int)proportions.y/2, (int)proportions.y);
+					Sector_Filler.radius.X=Utility.Utility.Random.Next((int)proportions.x/2, (int)proportions.x);
+					Sector_Filler.radius.Y=Utility.Utility.Random.Next((int)proportions.y/2, (int)proportions.y);
 					Sector_Filler.center.X = location.X+(int)proportions.x/2;
 					Sector_Filler.center.Y = location.Y+(int)proportions.y/2;
 					return fillEllipse(tiles_map, tile_creators);

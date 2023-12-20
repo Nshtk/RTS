@@ -46,11 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   nickname: 
-  team: {fileID: 0}
-  faction: {fileID: 0}
   spawn: {fileID: 8676175143632865250, guid: 8350b8f16bc53ec499f51d2b91ddeca3, type: 3}
   money: 0
-  money_income: 0
+  money_income: 5
   money_pool: 1000
   difficulty_multiplier: 0
-  units: []

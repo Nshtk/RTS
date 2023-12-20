@@ -1,0 +1,122 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &1595921564551208511
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5459302984857755592, guid: f97b60fbfe9151e4f9c2d90f7f0d533c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5459302984857755592, guid: f97b60fbfe9151e4f9c2d90f7f0d533c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5459302984857755592, guid: f97b60fbfe9151e4f9c2d90f7f0d533c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5459302984857755592, guid: f97b60fbfe9151e4f9c2d90f7f0d533c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5459302984857755592, guid: f97b60fbfe9151e4f9c2d90f7f0d533c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5459302984857755592, guid: f97b60fbfe9151e4f9c2d90f7f0d533c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5459302984857755592, guid: f97b60fbfe9151e4f9c2d90f7f0d533c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5459302984857755592, guid: f97b60fbfe9151e4f9c2d90f7f0d533c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5459302984857755592, guid: f97b60fbfe9151e4f9c2d90f7f0d533c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5459302984857755592, guid: f97b60fbfe9151e4f9c2d90f7f0d533c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6474304828690615015, guid: f97b60fbfe9151e4f9c2d90f7f0d533c, type: 3}
+      propertyPath: m_Name
+      value: AirUnitExample
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: -6590177642610813930, guid: f97b60fbfe9151e4f9c2d90f7f0d533c, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6474304828690615015, guid: f97b60fbfe9151e4f9c2d90f7f0d533c, type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 8774280893539032069}
+    - targetCorrespondingSourceObject: {fileID: 6474304828690615015, guid: f97b60fbfe9151e4f9c2d90f7f0d533c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -269951211508378383}
+  m_SourcePrefab: {fileID: 100100000, guid: f97b60fbfe9151e4f9c2d90f7f0d533c, type: 3}
+--- !u!1 &5763626506899592408 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6474304828690615015, guid: f97b60fbfe9151e4f9c2d90f7f0d533c, type: 3}
+  m_PrefabInstance: {fileID: 1595921564551208511}
+  m_PrefabAsset: {fileID: 0}
+--- !u!33 &8774280893539032069
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5763626506899592408}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &-269951211508378383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5763626506899592408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 601501e501d4a044ca69be137128a1da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  icon: {fileID: 0}
+  select_sound: {fileID: 0}
+  hit_points: 100
+  hit_points_max: 100
+  repair_rate: 0
+  hardness: 0
+  resistance: 0
+  mass: 0
+  temperature: 0
+  select_volume: 1
+  movement_type: 0
+  maneuverability: 0
+  owner: {fileID: 0}
+  inventory: {fileID: 0}
+  sound_voiceover: {fileID: 0}
+  sound_idle: {fileID: 0}
+  sound_move: {fileID: 0}
+  type: 12
+  state: 0
+  status: 0
+  group: 
+  id_in_faction: 0
+  limit: 5
+  cost_money: 30
+  cost_command_points: 10
+  charge_time: 0
+  recharge_time: 0
+  experience: 0
+  stealth: 0
+  detection_range: 20
+  detection_chance: 0.8

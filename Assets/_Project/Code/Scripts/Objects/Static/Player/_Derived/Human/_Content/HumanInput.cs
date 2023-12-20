@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Libraries.Utility;
 
 public partial class Human
 {
@@ -31,7 +32,7 @@ public partial class Human
 		{
 			_human=human;
 			transform_camera=Camera.main.GetComponentsInParent<Transform>()[1];
-			_limits = new Vector3(TerrainGenerator.instance.length, TerrainGenerator.instance.width, TerrainGenerator.instance.height);
+			_limits = new Vector3(Game.instance.Terrain_Generator.length, Game.instance.Terrain_Generator.width, Game.instance.Terrain_Generator.height);
 			transform_camera.position = new Vector3(10, 15, 10);
 		}
 
@@ -40,7 +41,7 @@ public partial class Human
 			updateCamera();
 			if(Input.GetKey(KeyCode.LeftControl))
 				if(Input.GetMouseButtonUp(0))
-					_human.buyUnit(Libraries.Utility.Random.Next(_human.faction.units.Count));
+					_human.buyUnit(Utility.Random.Next(_human.faction.units.Count));
 			updateSelection();
 			updateControls();
 		}
@@ -62,7 +63,7 @@ public partial class Human
 				_position_increment.z*=3f;
 			}
 			_position_next=transform_camera.position+_position_increment;
-			if(_position_next.x<_limits.x && _position_next.x>0 && _position_next.y<_limits.y && _position_next.z<_limits.z&&_position_next.z>0 && _position_next.y>TerrainGenerator.height_map[(int)_position_next.x, (int)_position_next.z]*_limits.y+5)
+			if(_position_next.x<_limits.x && _position_next.x>0 && _position_next.y<_limits.y && _position_next.z<_limits.z&&_position_next.z>0 && _position_next.y>Game.instance.Terrain_Generator.height_map[(int)_position_next.x, (int)_position_next.z]*_limits.y+5)
 			{
 				//if(_position_next.y<=TerrainGenerator.height_map[(int)_position_next.x, (int)_position_next.z])	//REVIEW:
 				//	_position_next.y=Math.Min(TerrainGenerator.height_map[(int)_position_next.x, (int)_position_next.z]+5, _limits.y);

@@ -85,10 +85,9 @@ MonoBehaviour:
   nickname: 
   spawn: {fileID: 8676175143632865250, guid: 8350b8f16bc53ec499f51d2b91ddeca3, type: 3}
   money: 0
-  money_income: 0
+  money_income: 10
   money_pool: 1000
   difficulty_multiplier: 0
-  units: []
   object_selected: {fileID: 0}
 --- !u!114 &6846248514143308805
 MonoBehaviour:

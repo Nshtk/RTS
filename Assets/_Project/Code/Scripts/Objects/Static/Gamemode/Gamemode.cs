@@ -1,65 +1,57 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Gamemode		//TODO: nested class difficulty
+public abstract partial class Gamemode
 {
+	public GamemodeBotData bot_data;
+	public GamemodeDifficulty difficulty;
 	public int score_max;
 	public string description;
 	public List<Team> teams;
 	public readonly int count_teams_max;
+	protected int _count_teams;
 
-	/*protected int _count_teams;
+	protected float time_left = 600000f;
+
+	public abstract string Description
+	{
+		get;
+	}
+
 	public abstract int Count_Teams
 	{
 		get;
 		protected set;
-	}*/
+	}
 
 	protected Gamemode(int score_max)
-    {
-		//Game.GameData.instance;
+	{
 		this.score_max=score_max;
-    }
-	public abstract void setTeams();
-	public abstract void updateTeamGoals();
-	public abstract void setGenerationParameters(TerrainGenerator terrain_generator);
-    /*protected Player[] players;
-
-	public void SetPlayers(Player[] players)
-	{
-		this.players = players;
 	}
-
-	public Player[] GetPlayers()
+	public abstract void setupTeams();
+	protected abstract void setupPlayers(List<Player> players);
+	protected virtual bool updateTime()
 	{
-		return players;
+		time_left -= Time.deltaTime;
+		return time_left<0;
 	}
-
-	public virtual bool GameFinished()
+	protected virtual bool updateTeamGoals()
 	{
-		if(players == null)
-			return true;
-		foreach(Player player in players)
+		foreach (Team team in teams)
 		{
-			if(PlayerMeetsConditions(player))
+			team.goal.update();
+			if (team.goal.is_reached)
+			{
 				return true;
+			}
 		}
 		return false;
 	}
-
-	public Player GetWinner()
+	public virtual void update()
 	{
-		if(players == null)
-			return null;
-		foreach(Player player in players)
-		{
-			if(PlayerMeetsConditions(player))
-				return player;
-		}
-		return null;
+		if(updateTime() || updateTeamGoals())
+			getWinner();
 	}
-
-	public abstract string GetDescription();
-
-	public abstract bool PlayerMeetsConditions(Player player);*/
+	public abstract void setGenerationParameters(TerrainGenerator terrain_generator);
+	public abstract Player getWinner();
 }
