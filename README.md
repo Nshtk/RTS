@@ -3,6 +3,9 @@
 Real-time strategy с процедурной генерацией карт и объектов на ней, а также физикой и модификацией юнитов (гравитация, параметры проходимости terrain'а и проч.). Возможно потом будет введена глобальный карта (World map) с пошаговыми боями. Проект скорее всего PvE-only. 
 - Windows
 
+## Отчет о проделанной работе
+[Отчет](https://docs.google.com/document/d/1yOr9s3Wo12NlkmkRBlFl4B1qNyripnG1k1xbsJi_Jd0/edit#heading=h.d0qe7etss4ij)
+
 ## GDD
 
 ### Концепция
@@ -44,7 +47,7 @@ Real-time strategy с процедурной генерацией карт и о
 ![ ](https://cncseries.ru/wp-content/uploads/2017/02/tw-screen45.jpg)
 
 ## Билд
-[Build](https://drive.google.com/drive/folders/1ELiILyNOlEFE2lCO078aJKK19IEXCZgR?usp=sharing)
+[Гугл Диск](https://drive.google.com/drive/folders/1ELiILyNOlEFE2lCO078aJKK19IEXCZgR?usp=sharing)
 
 ## Инструкция по запуску
 При запуске игры пользователя встречает меню с 4-мя кнопками: "Начать игру", "Настройки боя", "Настройки" и "Выход из игры". На данном этапе для начала боя пользователю требуется нажать на кнопку "Начать игру", в меню "Настройки" пользователь может изменить параметры графики.
