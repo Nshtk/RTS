@@ -44,7 +44,7 @@ Real-time strategy с процедурной генерацией карт и о
 ![ ](https://cncseries.ru/wp-content/uploads/2017/02/tw-screen45.jpg)
 
 ## Билд
-_
+[Build](https://drive.google.com/drive/folders/1ELiILyNOlEFE2lCO078aJKK19IEXCZgR?usp=sharing)
 
 ## Инструкция по запуску
 _
